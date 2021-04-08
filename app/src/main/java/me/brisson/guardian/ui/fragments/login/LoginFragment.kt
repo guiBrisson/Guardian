@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentLoginBinding
+import me.brisson.guardian.ui.activities.main.MainActivity
 import me.brisson.guardian.ui.base.BaseFragment
 
 @AndroidEntryPoint
@@ -25,6 +26,10 @@ class LoginFragment : BaseFragment() {
     ): View {
         binding = FragmentLoginBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+
+        binding.enterButton.setOnClickListener {
+            startActivity(MainActivity())
+        }
 
         return binding.root
     }

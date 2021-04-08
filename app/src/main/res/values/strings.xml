@@ -8,4 +8,11 @@
     <string name="enter">Entrar</string>
     <string name="register">Cadastrar</string>
     <string name="or_socials_login">- ou entre com -</string>
+    
+    //menu
+    <string name="menu">Menu</string>
+    <string name="tools">Ferramentas</string>
+    <string name="notifications">Notificações</string>
+    <string name="messages">Mensagens</string>
+    <string name="location">Localização</string>
 </resources>
