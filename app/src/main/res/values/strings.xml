@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Guardian</string>
+
+    <string name="name">Nome</string>
+    <string name="email">Email</string>
+    <string name="password">Senha</string>
+    <string name="forgot_password">Esqueci a senha</string>
+    <string name="enter">Entrar</string>
+    <string name="register">Cadastrar</string>
+    <string name="or_socials_login">- ou entre com -</string>
 </resources>

@@ -3,7 +3,7 @@ package me.brisson.guardian.di.modules
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import me.brisson.guardian.BuildConfig
 import me.brisson.guardian.data.api.ApiHelper
 import me.brisson.guardian.data.api.ApiHelperImpl
@@ -15,7 +15,7 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 class ApplicationModule {
 
     private val okHttpClient: OkHttpClient = if (BuildConfig.DEBUG) {

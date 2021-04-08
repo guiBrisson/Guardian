@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Guardian" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="Theme.Guardian" parent="Theme.MaterialComponents.DayNight.NoActionBar">
 
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryVariant">@color/color_primary_variant</item>
@@ -31,8 +31,8 @@
         </item>
 
         <item name="materialCardViewStyle">@style/Widget.Rally.CardView</item>
-        <item name="tabStyle">@style/Widget.Rally.TabLayout</item>
         <item name="switchStyle">@style/Widget.Rally.CompoundButton.Switch</item>
+        <item name="tabStyle">@style/Widget.App.TabLayout</item>
 
     </style>
 
