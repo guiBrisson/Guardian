@@ -60,8 +60,8 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.1'
     implementation 'androidx.activity:activity-ktx:1.2.2'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
-    implementation 'com.github.fatihsokmen:pulltodismiss:1.1'
     implementation 'com.squareup.picasso:picasso:2.71828'
+    implementation 'com.raycoarana.codeinputview:codeinputview:2.1.1'
 
     //Page indicator
     implementation 'com.romandanylyk:pageindicatorview:1.0.3'

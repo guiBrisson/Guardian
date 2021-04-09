@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentLoginBinding
+import me.brisson.guardian.ui.activities.forgotpassword.ForgotPasswordActivity
 import me.brisson.guardian.ui.activities.main.MainActivity
 import me.brisson.guardian.ui.base.BaseFragment
 
@@ -29,6 +30,10 @@ class LoginFragment : BaseFragment() {
 
         binding.enterButton.setOnClickListener {
             startActivity(MainActivity())
+        }
+
+        binding.forgotPasswordButton.setOnClickListener {
+            startActivity(ForgotPasswordActivity())
         }
 
         return binding.root

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.databinding.FragmentSignUpBinding
+import me.brisson.guardian.ui.activities.forgotpassword.ForgotPasswordActivity
 import me.brisson.guardian.ui.activities.main.MainActivity
 import me.brisson.guardian.ui.base.BaseFragment
 
@@ -30,6 +31,9 @@ class SignUpFragment : BaseFragment() {
             startActivity(MainActivity())
         }
 
+        binding.forgotPasswordButton.setOnClickListener {
+            startActivity(ForgotPasswordActivity())
+        }
         return binding.root
     }
 

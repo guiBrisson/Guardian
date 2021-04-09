@@ -9,6 +9,14 @@
     <string name="register">Cadastrar</string>
     <string name="or_socials_login">- ou entre com -</string>
 
+    <string name="password_recovery">Recuperar a senha</string>
+    <string name="type_your_email">Digite seu email\nEnviaremos um código de verificação</string>
+    <string name="validation">Validação</string>
+    <string name="type_your_code">Digite o código que enviamos para você</string>
+    <string name="send">Enviar</string>
+    <string name="did_not_get_code">Não recebou o código?</string>
+    <string name="send_again">Enviar novamente</string>
+
     //menu
     <string name="menu">Menu</string>
     <string name="tools">Ferramentas</string>
