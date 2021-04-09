@@ -27,14 +27,17 @@ class FirstScreenActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_first_screen)
 
         binding.viewModel = viewModel
+
+
+
         openFragment(login)
 
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab!!.position) {
-                    0 -> openFragment(login)
-                    1 -> openFragment(signUp)
+                    0 -> openFragment(login, 1)
+                    1 -> openFragment(signUp, 2)
                 }
             }
 
@@ -42,10 +45,15 @@ class FirstScreenActivity : BaseActivity() {
             override fun onTabReselected(tab: TabLayout.Tab?) {}
 
         })
+
     }
 
-    private fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment, id: Int = 0) {
         val transaction = supportFragmentManager.beginTransaction()
+        when (id){
+            1 -> transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+            2 -> transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+        }
         transaction.replace(R.id.container, fragment)
         transaction.commit()
     }

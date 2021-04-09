@@ -41,8 +41,8 @@ class NotificationsActivity : BaseActivity() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab!!.position) {
-                    0 -> openFragment(recent)
-                    1 -> openFragment(historic)
+                    0 -> openFragment(recent, 1)
+                    1 -> openFragment(historic, 2)
                 }
             }
 
@@ -52,8 +52,12 @@ class NotificationsActivity : BaseActivity() {
         })
     }
 
-    private fun openFragment(fragment: Fragment) {
+    private fun openFragment(fragment: Fragment, id: Int = 0) {
         val transaction = supportFragmentManager.beginTransaction()
+        when (id){
+            1 -> transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
+            2 -> transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
+        }
         transaction.replace(R.id.notificationContainer, fragment)
         transaction.commit()
     }
