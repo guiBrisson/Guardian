@@ -27,6 +27,7 @@
                 android:src="@color/color_background"
                 app:civ_border_width="0.8dp"
                 app:civ_border_color="@color/rally_purple"
+                android:transitionName="logoTransition"
                 android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"/>
 

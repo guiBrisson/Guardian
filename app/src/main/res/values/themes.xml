@@ -36,6 +36,8 @@
         <item name="floatingActionButtonStyle">@style/Widget.App.FloatingActionButton</item>
         <item name="toolbarStyle">@style/Widget.App.Toolbar</item>
 
+        <item name="android:windowContentTransitions">true</item>
+
     </style>
 
 

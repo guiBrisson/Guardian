@@ -39,7 +39,7 @@ abstract class BaseActivity : AppCompatActivity() {
         dialog?.dismiss()
     }
 
-    fun startActivity(activity: Activity, bundle: Bundle = Bundle()) {
+    fun startActivity(activity: Activity, bundle: Bundle? = Bundle()) {
         val it = Intent(this, activity::class.java)
         it.putExtra("", bundle)
         startActivity(it)
