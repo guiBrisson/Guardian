@@ -29,6 +29,7 @@ class SplashActivity : BaseActivity() {
         Handler(Looper.myLooper()!!).postDelayed({
             transition()
         }, timeOut)
+
     }
 
     private fun transition() {
@@ -40,6 +41,5 @@ class SplashActivity : BaseActivity() {
         )
         startActivity(intent, options.toBundle())
     }
-
 
 }
