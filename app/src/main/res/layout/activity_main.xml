@@ -1,13 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <data>
+
         <variable
             name="viewModel"
             type="me.brisson.guardian.ui.activities.main.MainViewModel" />
     </data>
+
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -18,23 +20,21 @@
 
             <com.google.android.material.appbar.MaterialToolbar
                 android:id="@+id/topAppBar"
+                style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                app:menu="@menu/top_app_bar"
-                tools:title="@string/location"
-                app:navigationIcon="@drawable/ic_baseline_menu_24"
                 android:paddingHorizontal="10dp"
-                style="@style/Widget.MaterialComponents.Toolbar.Primary"
-                />
+                app:menu="@menu/top_app_bar"
+                app:navigationIcon="@drawable/ic_baseline_menu_24"
+                tools:title="@string/location" />
 
         </com.google.android.material.appbar.AppBarLayout>
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="100dp"
-            android:clipToPadding="false">
-
+            android:clipToPadding="false"
+            android:paddingBottom="100dp">
 
         </androidx.core.widget.NestedScrollView>
 
@@ -43,24 +43,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
-            app:fabAlignmentMode="end" >
+            app:fabAlignmentMode="end">
 
             <com.google.android.material.bottomnavigation.BottomNavigationView
                 android:id="@+id/bottomNavigationView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:menu="@menu/bottom_app_bar"
                 android:layout_marginEnd="100dp"
                 app:labelVisibilityMode="unlabeled"
-                />
+                app:menu="@menu/bottom_app_bar" />
 
         </com.google.android.material.bottomappbar.BottomAppBar>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:srcCompat="@drawable/ic_baseline_priority_high_24"
-            app:layout_anchor="@id/bottomAppBar" />
+            app:layout_anchor="@id/bottomAppBar"
+            app:srcCompat="@drawable/ic_baseline_priority_high_24" />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

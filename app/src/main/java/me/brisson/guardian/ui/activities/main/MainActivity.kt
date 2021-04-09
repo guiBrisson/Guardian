@@ -7,6 +7,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivityMainBinding
+import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseActivity
 
 @AndroidEntryPoint
@@ -22,6 +23,16 @@ class MainActivity : BaseActivity() {
         binding.viewModel = viewModel
 
         bottomNavigationSetUp()
+
+        binding.topAppBar.setOnMenuItemClickListener {
+            when(it.itemId) {
+                R.id.notifications -> {
+                    startActivity(NotificationsActivity())
+                    true
+                }
+                else -> false
+            }
+        }
     }
 
     private fun bottomNavigationSetUp() {

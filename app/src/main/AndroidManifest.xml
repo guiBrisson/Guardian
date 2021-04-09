@@ -10,7 +10,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Guardian">
-        <activity android:name=".ui.activities.main.MainActivity"/>
+        <activity android:name=".ui.activities.notifications.NotificationsActivity"></activity>
+        <activity android:name=".ui.activities.main.MainActivity" />
         <activity android:name=".ui.activities.firstscreen.FirstScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
