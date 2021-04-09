@@ -68,4 +68,12 @@
         <item name="android:fontFamily">@font/roboto_condensed_regular</item>
     </style>
 
+    <style name="Widget.App.CircularProgressIndicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.CircularProgressIndicator</item>
+    </style>
+
+    <style name="ThemeOverlay.App.CircularProgressIndicator" parent="">
+        <item name="colorPrimary">@color/rally_purple_50</item>
+    </style>
+
 </resources>

@@ -23,7 +23,7 @@ abstract class BaseFragment : Fragment() {
             activity, R.layout.item_progress, null
         )
 
-        dialog = Dialog(activity!!, R.style.Theme_AppCompat_Light)
+        dialog = Dialog(requireActivity(), R.style.Theme_AppCompat_Light)
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setContentView(view)
         dialog?.window?.setBackgroundDrawableResource(R.color.transparent)

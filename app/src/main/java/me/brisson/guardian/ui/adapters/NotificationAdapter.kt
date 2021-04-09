@@ -19,12 +19,15 @@ class NotificationAdapter(
     ) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(item: Notification){
-            Picasso
-                .get()
-                .load(item.image)
-                .centerCrop()
-                .fit()
-                .into(binding.image)
+
+            if (item.image.isNotEmpty()){
+                Picasso
+                    .get()
+                    .load(item.image)
+                    .centerCrop()
+                    .fit()
+                    .into(binding.image)
+            }
 
             binding.notificationText.text = item.text
             binding.daysText.text = item.days

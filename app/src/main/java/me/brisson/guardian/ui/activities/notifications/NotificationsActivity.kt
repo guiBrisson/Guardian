@@ -41,8 +41,8 @@ class NotificationsActivity : BaseActivity() {
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 when (tab!!.position) {
-                    0 -> openFragment(historic)
-                    1 -> openFragment(recent)
+                    0 -> openFragment(recent)
+                    1 -> openFragment(historic)
                 }
             }
 

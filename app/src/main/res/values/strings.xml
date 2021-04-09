@@ -19,4 +19,7 @@
     //notifications
     <string name="recent">Recente</string>
     <string name="historic">Histórico</string>
+
+    //place holders
+    <string name="notification_placeholder">Você não possui\nnenhuma notificação</string>
 </resources>
