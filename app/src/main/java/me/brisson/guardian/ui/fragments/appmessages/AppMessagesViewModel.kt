@@ -22,7 +22,7 @@ class AppMessagesViewModel @Inject constructor() : BaseViewModel() {
         return listOf(
             Message(
                 name = "Dwayne The Rock",
-                image = "https://s2.glbimg.com/Ha2q-YYa3pCWtwM4E51zi_p-POI=/940x523/e.glbimg.com/og/ed/f/original/2019/02/20/blow-dry-bar-del-mar-chairs-counter-853427.jpg",
+                image = "",
                 message = "Recebi sua mensagem, ta tudo bem?",
                 timeAgo = "15 min",
                 newMessages = 1,
