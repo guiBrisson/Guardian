@@ -1,6 +1,8 @@
 package me.brisson.guardian.ui.activities.main
 
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -11,6 +13,7 @@ import me.brisson.guardian.databinding.ActivityMainBinding
 import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.ui.fragments.messages.MessagesFragment
+
 
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
@@ -75,5 +78,20 @@ class MainActivity : BaseActivity() {
         }
         transaction.replace(R.id.mainContainer, fragment)
         transaction.commit()
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            1 -> {
+                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    //granted
+                } else {
+                    Toast.makeText(this, "Permission denied to read your contacts", Toast.LENGTH_SHORT).show();
+                }
+                return
+            }
+        }
     }
 }
