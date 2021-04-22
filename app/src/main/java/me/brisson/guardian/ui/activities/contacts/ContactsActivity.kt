@@ -6,10 +6,13 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ActivityContactsBinding
+import me.brisson.guardian.ui.adapters.ContactAdapter
 import me.brisson.guardian.ui.base.BaseActivity
 
 @AndroidEntryPoint
@@ -18,15 +21,20 @@ class ContactsActivity : BaseActivity() {
     private lateinit var binding: ActivityContactsBinding
     private val viewModel: ContactsViewModel by viewModels()
 
+    private lateinit var adapter: ContactAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contacts)
 
         binding.viewModel = viewModel
 
-        getContactList()
-
         binding.topAppBar.menu.removeItem(R.id.notifications)
+
+        binding.topAppBar.setNavigationOnClickListener { onBackPressed() }
+
+        getContactList()
+        setupUI()
 
     }
 
@@ -96,9 +104,30 @@ class ContactsActivity : BaseActivity() {
                 }
             }
         }
-        viewModel.setContacts(contacts)
+        viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
         hideDialog()
         cur?.close()
+    }
+
+    private fun sortListInAlphabeticalOrder(list: List<Contact>): List<Contact>{
+        return list.sortedBy { it.name }
+    }
+
+    private fun setupUI (){
+        adapter = ContactAdapter(arrayListOf())
+
+        viewModel.getContacts().observe(this, Observer {
+            if (it.isNotEmpty()){
+                adapter.addData(it)
+            }
+        })
+        adapter.onAddGuardianClickListener = {  }
+
+        binding.recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false )
+        binding.recycler.adapter = adapter
+
+        binding.fastScroll.setRecyclerView(binding.recycler)
+
     }
 
 

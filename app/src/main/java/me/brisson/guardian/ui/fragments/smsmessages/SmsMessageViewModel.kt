@@ -9,13 +9,5 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SmsMessageViewModel @Inject constructor() : BaseViewModel() {
-    private val contacts = MutableLiveData<List<Contact>>()
-
-    fun getContacts() : LiveData<List<Contact>> = contacts
-
-    fun setContacts(items: ArrayList<Contact>){
-        contacts.postValue(items)
-    }
-
 
 }
