@@ -1,0 +1,105 @@
+package me.brisson.guardian.ui.activities.contacts
+
+import android.content.ContentResolver
+import android.database.Cursor
+import android.os.Bundle
+import android.provider.ContactsContract
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
+import dagger.hilt.android.AndroidEntryPoint
+import me.brisson.guardian.R
+import me.brisson.guardian.data.model.Contact
+import me.brisson.guardian.databinding.ActivityContactsBinding
+import me.brisson.guardian.ui.base.BaseActivity
+
+@AndroidEntryPoint
+class ContactsActivity : BaseActivity() {
+
+    private lateinit var binding: ActivityContactsBinding
+    private val viewModel: ContactsViewModel by viewModels()
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_contacts)
+
+        binding.viewModel = viewModel
+
+        getContactList()
+
+        binding.topAppBar.menu.removeItem(R.id.notifications)
+
+    }
+
+    private fun getContactList() {
+        showDialog()
+        val cr: ContentResolver = this.contentResolver
+        val cur: Cursor? = cr.query(
+            ContactsContract.Contacts.CONTENT_URI,
+            null, null, null, null
+        )
+
+        var id: String
+        var name: String
+        var photo: String?
+        var phoneNo: String
+
+        val contacts = ArrayList<Contact>()
+
+        if ((cur?.count ?: 0) > 0) {
+            while (cur != null && cur.moveToNext()) {
+                id = cur.getString(
+                    cur.getColumnIndex(ContactsContract.Contacts._ID)
+                )
+                name = cur.getString(
+                    cur.getColumnIndex(
+                        ContactsContract.Contacts.DISPLAY_NAME
+                    )
+                )
+
+                photo = cur.getString(
+                    cur.getColumnIndex(
+                        ContactsContract.CommonDataKinds.Photo.PHOTO_URI
+                    )
+                )
+
+                if (cur.getInt(
+                        cur.getColumnIndex(
+                            ContactsContract.Contacts.HAS_PHONE_NUMBER
+                        )
+                    ) > 0) {
+                    val pCur: Cursor? = cr.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                        arrayOf(id),
+                        null
+                    )
+                    while (pCur!!.moveToNext()) {
+                        phoneNo = pCur.getString(
+                            pCur.getColumnIndex(
+                                ContactsContract.CommonDataKinds.Phone.NUMBER
+                            )
+                        )
+
+                        contacts.add(
+                            Contact(
+                                id = id,
+                                name = name,
+                                phoneNo = phoneNo,
+                                photo = photo
+                            )
+                        )
+
+                    }
+
+                    pCur.close()
+                }
+            }
+        }
+        viewModel.setContacts(contacts)
+        hideDialog()
+        cur?.close()
+    }
+
+
+}

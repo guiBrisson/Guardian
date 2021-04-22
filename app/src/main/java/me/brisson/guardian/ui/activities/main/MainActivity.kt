@@ -45,6 +45,7 @@ class MainActivity : BaseActivity() {
     private fun bottomNavigationSetUp() {
         binding.bottomNavigationView.selectedItemId = R.id.location
         binding.topAppBar.title = getString(R.string.location)
+        binding.topAppBar.menu.removeItem(R.id.search)
         binding.bottomNavigationView.background = null
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -88,6 +89,7 @@ class MainActivity : BaseActivity() {
                 if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //granted
                 } else {
+                    //TODO MAKE THIS TOAST AN SNACK BAR
                     Toast.makeText(this, "Permission denied to read your contacts", Toast.LENGTH_SHORT).show();
                 }
                 return

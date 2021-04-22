@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Guardian">
+        <activity android:name=".ui.activities.contacts.ContactsActivity"></activity>
         <activity android:name=".ui.activities.forgotpassword.ForgotPasswordActivity" />
         <activity android:name=".ui.activities.slpash.SplashActivity">
             <intent-filter>

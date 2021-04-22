@@ -23,6 +23,7 @@
     <string name="notifications">Notificações</string>
     <string name="messages">Mensagens</string>
     <string name="location">Localização</string>
+    <string name="search">Pesquisar</string>
 
     //notifications
     <string name="recent">Recente</string>
@@ -32,6 +33,7 @@
     <string name="app">App</string>
     <string name="Sms">Sms</string>
     <string name="add_contact_as_guardian">Adicionar contato como Guardian.</string>
+    <string name="contacts">Contatos</string>
 
     //place holders
     <string name="notification_placeholder">Você não possui\nnenhuma notificação</string>
