@@ -76,4 +76,18 @@
         <item name="colorPrimary">@color/rally_purple_50</item>
     </style>
 
+    <style name="cursorColor" parent="Widget.AppCompat.Light.AutoCompleteTextView">
+        <item name="android:textCursorDrawable">@drawable/cursor</item>
+    </style>
+
+    <style name="SearchViewTheme" parent="Widget.AppCompat.SearchView.ActionBar">
+        <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
+        <item name="android:maxWidth">9999dp</item>
+    </style>
+
+    <style name="ToolbarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="searchViewStyle">@style/SearchViewTheme</item>
+    </style>
+
+
 </resources>

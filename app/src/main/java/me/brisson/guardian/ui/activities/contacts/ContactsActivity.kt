@@ -1,9 +1,14 @@
 package me.brisson.guardian.ui.activities.contacts
 
+import android.app.SearchManager
 import android.content.ContentResolver
+import android.content.Context
+import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.view.Menu
+import android.widget.SearchView
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
@@ -14,6 +19,7 @@ import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ActivityContactsBinding
 import me.brisson.guardian.ui.adapters.ContactAdapter
 import me.brisson.guardian.ui.base.BaseActivity
+
 
 @AndroidEntryPoint
 class ContactsActivity : BaseActivity() {
@@ -28,14 +34,12 @@ class ContactsActivity : BaseActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contacts)
 
         binding.viewModel = viewModel
-
-        binding.topAppBar.menu.removeItem(R.id.notifications)
-
-        binding.topAppBar.setNavigationOnClickListener { onBackPressed() }
-
+        
+        setupAppbar()
         getContactList()
         setupUI()
 
+        handleIntent(intent!!)
     }
 
     private fun getContactList() {
@@ -117,18 +121,50 @@ class ContactsActivity : BaseActivity() {
         adapter = ContactAdapter(arrayListOf())
 
         viewModel.getContacts().observe(this, Observer {
-            if (it.isNotEmpty()){
+            if (it.isNotEmpty()) {
                 adapter.addData(it)
             }
         })
         adapter.onAddGuardianClickListener = {  }
 
-        binding.recycler.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false )
+        binding.recycler.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
         binding.recycler.adapter = adapter
 
         binding.fastScroll.setRecyclerView(binding.recycler)
 
     }
+    
+    private fun setupAppbar(){
+        binding.topAppBar.menu.removeItem(R.id.notifications)
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        (menu.findItem(R.id.search).actionView as SearchView).apply {
+            setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        }
+        return true
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        handleIntent(intent!!)
+    }
+
+    private fun handleIntent(intent: Intent) {
+        if (Intent.ACTION_SEARCH == intent.action) {
+            val query = intent.getStringExtra(SearchManager.QUERY)
+
+        }
+    }
+
 
 
 }
