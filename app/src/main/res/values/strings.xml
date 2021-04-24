@@ -9,6 +9,7 @@
     <string name="register">Cadastrar</string>
     <string name="or_socials_login">- ou entre com -</string>
     <string name="save">Salvar</string>
+    <string name="retry">Novamente</string>
 
     <string name="password_recovery">Recuperar a senha</string>
     <string name="type_your_email">Digite seu email\nEnviaremos um código de verificação</string>
@@ -45,4 +46,8 @@
 
     //place holders
     <string name="notification_placeholder">Você não possui\nnenhuma notificação</string>
+
+    //permissions
+    <string name="permission_read_contacts_granted">Permissão para ler os contatos garantida</string>
+    <string name="permission_read_contacts_denied">Permissão para ler os contatos negada</string>
 </resources>
