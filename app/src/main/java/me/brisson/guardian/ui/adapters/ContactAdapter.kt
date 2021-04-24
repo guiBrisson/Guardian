@@ -4,6 +4,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import me.brisson.guardian.R
@@ -23,11 +24,11 @@ class ContactAdapter :
 
     class ViewHolder(
             private val binding: ItemContactBinding,
+            private val parent: ViewGroup,
             private val onAddGuardianClickListener: (item: Contact) -> Unit?
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Contact) {
-
             if (!item.photo.isNullOrEmpty()) {
                 Picasso
                         .get()
@@ -47,7 +48,21 @@ class ContactAdapter :
             binding.contactName.text = item.name
             binding.contactPhoneNumber.text = item.phoneNo
 
-            binding.addGuardian.setOnClickListener {
+            if (item.isAdded){
+                binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.rally_green_300), android.graphics.PorterDuff.Mode.SRC_IN)
+            } else {
+                binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.gray), android.graphics.PorterDuff.Mode.SRC_IN)
+            }
+
+            binding.addGuardianImageView.setOnClickListener {
+                if (item.isAdded){
+                    item.isAdded = false
+                    binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.gray), android.graphics.PorterDuff.Mode.SRC_IN)
+                } else {
+                    item.isAdded = true
+                    binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.rally_green_300), android.graphics.PorterDuff.Mode.SRC_IN)
+                }
+
                 onAddGuardianClickListener.invoke(item)
             }
 
@@ -61,7 +76,7 @@ class ContactAdapter :
                         LayoutInflater.from(parent.context),
                         parent,
                         false
-                ), onAddGuardianClickListener
+                ), parent ,onAddGuardianClickListener
         )
     }
 

@@ -6,6 +6,7 @@ import android.content.Context
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
@@ -23,8 +24,8 @@ class ContactsActivity : BaseActivity() {
 
     private lateinit var binding: ActivityContactsBinding
     private val viewModel: ContactsViewModel by viewModels()
-
     private val adapter = ContactAdapter()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -115,14 +116,16 @@ class ContactsActivity : BaseActivity() {
         return list.sortedBy { it.name }
     }
 
-    // Setting up RecyclerView
+    // Setting up UI
     private fun setUpUI() {
         viewModel.getContacts().observe(this, Observer {
             if (it.isNotEmpty()) {
                 adapter.addData(it)
             }
         })
-        adapter.onAddGuardianClickListener = { }
+        adapter.onAddGuardianClickListener = {
+            viewModel.setSelectedContacts(it)
+        }
 
         binding.recycler.layoutManager = LinearLayoutManager(
                 this,
@@ -130,6 +133,11 @@ class ContactsActivity : BaseActivity() {
                 false
         )
         binding.recycler.adapter = adapter
+
+        binding.fab.setOnClickListener {
+            Log.d("selectedContacts", "setUpUI: ${viewModel.getSelectedContacts()}")
+            onBackPressed()
+        }
 
     }
 
@@ -158,6 +166,7 @@ class ContactsActivity : BaseActivity() {
         }
 
     }
+
 
 
 }
