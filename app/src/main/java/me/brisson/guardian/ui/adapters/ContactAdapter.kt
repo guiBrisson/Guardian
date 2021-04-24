@@ -1,23 +1,19 @@
 package me.brisson.guardian.ui.adapters
 
-import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
 import androidx.recyclerview.widget.RecyclerView
-import com.futuremind.recyclerviewfastscroll.SectionTitleProvider
 import com.squareup.picasso.Picasso
 import me.brisson.guardian.R
 import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ItemContactBinding
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.contracts.Returns
 
 class ContactAdapter :
         RecyclerView.Adapter<ContactAdapter.ViewHolder>(),
-        SectionTitleProvider,
         Filterable {
 
     private val contacts: ArrayList<Contact> = arrayListOf()
@@ -81,11 +77,6 @@ class ContactAdapter :
         contacts.addAll(items)
         contactsFiltered.addAll(items)
         notifyDataSetChanged()
-    }
-
-    override fun getSectionTitle(position: Int): String {
-        //todo not working ????
-        return contacts[position].name.substring(0, 1)
     }
 
     override fun getFilter(): Filter {

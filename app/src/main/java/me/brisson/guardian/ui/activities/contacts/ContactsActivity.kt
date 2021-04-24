@@ -3,11 +3,9 @@ package me.brisson.guardian.ui.activities.contacts
 import android.app.SearchManager
 import android.content.ContentResolver
 import android.content.Context
-import android.content.Intent
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
-import android.view.Menu
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.databinding.DataBindingUtil
@@ -19,7 +17,6 @@ import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ActivityContactsBinding
 import me.brisson.guardian.ui.adapters.ContactAdapter
 import me.brisson.guardian.ui.base.BaseActivity
-
 
 @AndroidEntryPoint
 class ContactsActivity : BaseActivity() {
@@ -35,12 +32,13 @@ class ContactsActivity : BaseActivity() {
 
         binding.viewModel = viewModel
 
-        setupAppbar()
+        setUpAppbar()
         getContactList()
-        setupUI()
+        setUpUI()
 
     }
 
+    // Getting all users phone contacts
     private fun getContactList() {
         showDialog()
         val cr: ContentResolver = this.contentResolver
@@ -112,11 +110,13 @@ class ContactsActivity : BaseActivity() {
         cur?.close()
     }
 
+    // Sorting the list of contacts in alphabetical order
     private fun sortListInAlphabeticalOrder(list: List<Contact>): List<Contact> {
         return list.sortedBy { it.name }
     }
 
-    private fun setupUI() {
+    // Setting up RecyclerView
+    private fun setUpUI() {
         viewModel.getContacts().observe(this, Observer {
             if (it.isNotEmpty()) {
                 adapter.addData(it)
@@ -131,11 +131,10 @@ class ContactsActivity : BaseActivity() {
         )
         binding.recycler.adapter = adapter
 
-        binding.fastScroll.setRecyclerView(binding.recycler)
-
     }
 
-    private fun setupAppbar() {
+    // Handling AppBar (NavigationClick and SearchView)
+    private fun setUpAppbar() {
         binding.topAppBar.setNavigationOnClickListener {
             onBackPressed()
         }
