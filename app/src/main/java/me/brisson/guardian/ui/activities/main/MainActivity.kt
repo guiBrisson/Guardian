@@ -45,7 +45,6 @@ class MainActivity : BaseActivity() {
     private fun bottomNavigationSetUp() {
         binding.bottomNavigationView.selectedItemId = R.id.location
         binding.topAppBar.title = getString(R.string.location)
-        binding.topAppBar.menu.removeItem(R.id.search)
         binding.bottomNavigationView.background = null
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="Widget.Rally.CardView" parent="Widget.MaterialComponents.CardView">
         <item name="cardElevation">@dimen/card_elevation</item>
         <item name="cardBackgroundColor">?attr/colorSurface</item>
@@ -23,8 +24,8 @@
 
     <style name="ThemeOverlay.App.TabLayout" parent="">
         <item name="colorPrimary">@color/rally_purple</item>
-<!--        <item name="colorSurface">@color/white</item>-->
-<!--        <item name="colorOnSurface">@color/white</item>-->
+        <!--        <item name="colorSurface">@color/white</item>-->
+        <!--        <item name="colorOnSurface">@color/white</item>-->
     </style>
 
     <style name="TextAppearance.App.Button" parent="TextAppearance.MaterialComponents.Button">
@@ -58,7 +59,7 @@
         <item name="colorOnPrimary">@color/white</item>
     </style>
 
-    <style name="TextAppearance.Shrine.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
+    <style name="TextAppearance.App.Headline6" parent="TextAppearance.MaterialComponents.Headline6">
         <item name="fontFamily">@font/roboto_condensed_regular</item>
         <item name="android:fontFamily">@font/roboto_condensed_regular</item>
     </style>
@@ -67,6 +68,7 @@
         <item name="fontFamily">@font/roboto_condensed_regular</item>
         <item name="android:fontFamily">@font/roboto_condensed_regular</item>
     </style>
+
 
     <style name="Widget.App.CircularProgressIndicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.CircularProgressIndicator</item>

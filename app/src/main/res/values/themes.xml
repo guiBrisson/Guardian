@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
-    <style name="Theme.Guardian" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <style name="Theme.Guardian" parent="Theme.MaterialComponents.Light.NoActionBar">
 
         <item name="colorPrimary">@color/color_primary</item>
         <item name="colorPrimaryVariant">@color/color_primary_variant</item>
@@ -39,6 +39,9 @@
         <item name="autoCompleteTextViewStyle">@style/cursorColor</item>
 
         <item name="android:windowContentTransitions">true</item>
+
+        <item name="textAppearanceHeadline6">@style/TextAppearance.App.Headline6</item>
+        <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
 
     </style>
 
