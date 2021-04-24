@@ -10,6 +10,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivityMainBinding
+import me.brisson.guardian.ui.activities.firstscreen.FirstScreenActivity
 import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.ui.fragments.messages.MessagesFragment
@@ -30,6 +31,7 @@ class MainActivity : BaseActivity() {
         binding.viewModel = viewModel
 
         bottomNavigationSetUp()
+        topAppBarSetUp()
 
         binding.topAppBar.setOnMenuItemClickListener {
             when(it.itemId) {
@@ -44,7 +46,6 @@ class MainActivity : BaseActivity() {
 
     private fun bottomNavigationSetUp() {
         binding.bottomNavigationView.selectedItemId = R.id.location
-        binding.topAppBar.title = getString(R.string.location)
         binding.bottomNavigationView.background = null
 
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
@@ -67,6 +68,36 @@ class MainActivity : BaseActivity() {
                 else -> false
             }
 
+        }
+    }
+
+    private fun topAppBarSetUp(){
+        binding.topAppBar.title = getString(R.string.location)
+
+        binding.topAppBar.setNavigationOnClickListener {
+            binding.drawerLayout.openDrawer(binding.navigationView)
+        }
+
+        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
+
+            when (menuItem.itemId){
+                R.id.profile -> {
+                    Toast.makeText(this, menuItem.itemId, Toast.LENGTH_SHORT).show()
+                }
+                R.id.guardians -> {
+                    Toast.makeText(this, menuItem.itemId, Toast.LENGTH_SHORT).show()
+                }
+                R.id.settings -> {
+                    Toast.makeText(this, menuItem.itemId, Toast.LENGTH_SHORT).show()
+                }
+                R.id.leave -> {
+                    startActivity(FirstScreenActivity())
+                }
+            }
+
+            menuItem.isChecked = true
+            binding.drawerLayout.closeDrawer(binding.navigationView)
+            true
         }
     }
 
