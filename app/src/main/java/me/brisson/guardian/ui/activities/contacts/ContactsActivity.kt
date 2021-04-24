@@ -121,6 +121,8 @@ class ContactsActivity : BaseActivity() {
         viewModel.getContacts().observe(this, Observer {
             if (it.isNotEmpty()) {
                 adapter.addData(it)
+            } else {
+                //TODO make a placeholder when the list is empty
             }
         })
         adapter.onAddGuardianClickListener = {
