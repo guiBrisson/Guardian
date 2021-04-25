@@ -124,7 +124,7 @@ class MainActivity : BaseActivity() {
 
         /* REQUEST CODE MENU
            1 = Read contacts
-
+           2 = Access Fine Location
            */
         when (requestCode) {
             1 -> {
@@ -141,6 +141,16 @@ class MainActivity : BaseActivity() {
                             ::askForReadContactPermission)
                 }
                 return
+            }
+            2 -> {
+                if (grantResults.isNotEmpty() &&
+                        grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    locationPermissionGranted = true
+                    makeSnackBar(
+                            binding.mainContainer,
+                            "Permissão para localização garantida"
+                    )
+                }
             }
         }
     }
