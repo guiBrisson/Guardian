@@ -17,6 +17,7 @@ import me.brisson.guardian.databinding.ActivityMainBinding
 import me.brisson.guardian.ui.activities.firstscreen.FirstScreenActivity
 import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseActivity
+import me.brisson.guardian.ui.fragments.location.MapsFragment
 import me.brisson.guardian.ui.fragments.messages.MessagesFragment
 
 
@@ -26,6 +27,7 @@ class MainActivity : BaseActivity() {
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
+    private val location = MapsFragment.newInstance()
     private val messages = MessagesFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,6 +36,7 @@ class MainActivity : BaseActivity() {
 
         binding.viewModel = viewModel
 
+        openFragment(location)
         bottomNavigationSetUp()
         topAppBarSetUp()
 
@@ -47,7 +50,7 @@ class MainActivity : BaseActivity() {
             when (item.itemId) {
                 R.id.location -> {
                     binding.topAppBar.title = item.title
-
+                    openFragment(location)
                     true
                 }
                 R.id.tools -> {

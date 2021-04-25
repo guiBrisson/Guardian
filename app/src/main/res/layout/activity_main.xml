@@ -57,10 +57,9 @@
                 android:id="@+id/mainContainer"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="100dp"
+                android:layout_marginBottom="60dp"
                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/fab"
@@ -68,6 +67,7 @@
                 android:layout_height="wrap_content"
                 app:fabCustomSize="@dimen/main_fab_size"
                 app:layout_anchor="@id/bottomAppBar"
+                style="@style/Widget.App.FloatingActionButton"
                 app:srcCompat="@drawable/ic_baseline_priority_high_24" />
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
