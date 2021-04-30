@@ -2,6 +2,7 @@ package me.brisson.guardian.ui.fragments.location
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -18,9 +19,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.CameraPosition
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentMapsBinding
-import me.brisson.guardian.ui.activities.main.MainActivity
 import me.brisson.guardian.ui.base.BaseFragment
 
 
@@ -29,7 +30,7 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
     companion object {
         fun newInstance() = MapsFragment()
 
-        private val TAG = MainActivity::class.java.simpleName
+        private val TAG = MapsFragment::class.java.simpleName
         private const val DEFAULT_ZOOM = 15
         private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
 
@@ -53,10 +54,12 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
 
     private lateinit var fusedLocationProviderClient: FusedLocationProviderClient
 
+    private var noLabelMapStyle: Boolean = false
+
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 
@@ -75,6 +78,17 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
 
     override fun onMapReady(p0: GoogleMap) {
         map = p0
+
+        try {
+            val success: Boolean = map!!.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            requireContext(), R.raw.map_style_no_labels))
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.")
+            }
+        } catch (e: Resources.NotFoundException) {
+            Log.e(TAG, "Can't find style. Error: ", e)
+        }
 
         // Prompt the user for permission.
         getLocationPermission()
@@ -107,14 +121,19 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
             centerCamera(LatLng(lastKnownLocation!!.latitude,
                     lastKnownLocation!!.longitude))
         }
+
+        binding.noLabelsFAB.setOnClickListener {
+            //todo change map style noLabel/label
+        }
     }
+
 
     private fun centerCamera(location: LatLng){
             val cameraPosition = CameraPosition.Builder()
             .target(location)     // Sets the center of the map to Mountain View
             .zoom(17f)            // Sets the zoom
             .bearing(90f)         // Sets the orientation of the camera to east
-            .tilt(30f)            // Sets the tilt of the camera to 30 degrees
+//            .tilt(30f)            // Sets the tilt of the camera to 30 degrees
             .build()
 
         map?.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition))
