@@ -38,7 +38,6 @@ class MainActivity : BaseActivity() {
 
         openFragment(location)
         bottomNavigationSetUp()
-        topAppBarSetUp()
 
     }
 
@@ -49,63 +48,24 @@ class MainActivity : BaseActivity() {
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.location -> {
-                    binding.topAppBar.title = item.title
                     openFragment(location)
                     true
                 }
                 R.id.tools -> {
-                    binding.topAppBar.title = item.title
-
+                    //todo
                     true
                 }
                 R.id.messages -> {
-                    binding.topAppBar.title = item.title
                     openFragment(messages)
                     true
                 }
-                else -> false
-            }
-
-        }
-    }
-
-    private fun topAppBarSetUp() {
-        binding.topAppBar.title = getString(R.string.location)
-
-        binding.topAppBar.setNavigationOnClickListener {
-            binding.drawerLayout.openDrawer(binding.navigationView)
-        }
-
-        binding.topAppBar.setOnMenuItemClickListener {
-            when (it.itemId) {
-                R.id.notifications -> {
-                    startActivity(NotificationsActivity())
+                R.id.my_profile -> {
+                    //todo
                     true
                 }
                 else -> false
             }
-        }
 
-        binding.navigationView.setNavigationItemSelectedListener { menuItem ->
-
-            when (menuItem.itemId) {
-                R.id.profile -> {
-                    Toast.makeText(this, menuItem.itemId, Toast.LENGTH_SHORT).show()
-                }
-                R.id.guardians -> {
-                    Toast.makeText(this, menuItem.itemId, Toast.LENGTH_SHORT).show()
-                }
-                R.id.settings -> {
-                    Toast.makeText(this, menuItem.itemId, Toast.LENGTH_SHORT).show()
-                }
-                R.id.leave -> {
-                    startActivity(FirstScreenActivity())
-                }
-            }
-
-            menuItem.isChecked = true
-            binding.drawerLayout.closeDrawer(binding.navigationView)
-            true
         }
     }
 

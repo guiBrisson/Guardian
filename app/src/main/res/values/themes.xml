@@ -40,6 +40,7 @@
         <item name="android:windowContentTransitions">true</item>
 
         <item name="textAppearanceHeadline6">@style/TextAppearance.App.Headline6</item>
+        <item name="textAppearanceHeadline5">@style/TextAppearance.App.Headline5</item>
         <item name="textAppearanceSubtitle1">@style/TextAppearance.App.Subtitle1</item>
 
     </style>

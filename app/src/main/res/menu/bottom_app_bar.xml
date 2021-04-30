@@ -22,4 +22,11 @@
         android:icon="@drawable/ic_baseline_message_24"
         />
 
+    <item
+        android:id="@+id/my_profile"
+        android:title="@string/my_profile"
+        android:contentDescription="@string/my_profile"
+        android:icon="@drawable/ic_baseline_person_24"
+        />
+
 </menu>

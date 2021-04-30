@@ -27,8 +27,6 @@
     <string name="location">Localização</string>
     <string name="search">Pesquisar</string>
     <string name="search_hint">Pesquisar…</string>
-
-    //navigation menu
     <string name="my_profile">Meu perfil</string>
     <string name="my_guardians">Meus Guardians</string>
     <string name="settings">Configuração</string>
