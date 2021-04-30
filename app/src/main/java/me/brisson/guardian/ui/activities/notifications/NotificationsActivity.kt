@@ -62,4 +62,8 @@ class NotificationsActivity : BaseActivity() {
         transaction.commit()
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.stay_put, R.anim.exit_to_right)
+    }
 }

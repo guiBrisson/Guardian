@@ -4,7 +4,6 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -14,11 +13,10 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivityMainBinding
-import me.brisson.guardian.ui.activities.firstscreen.FirstScreenActivity
-import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.ui.fragments.location.MapsFragment
 import me.brisson.guardian.ui.fragments.messages.MessagesFragment
+import me.brisson.guardian.ui.fragments.myprofile.MyProfileFragment
 
 
 @AndroidEntryPoint
@@ -29,6 +27,7 @@ class MainActivity : BaseActivity() {
 
     private val location = MapsFragment.newInstance()
     private val messages = MessagesFragment.newInstance()
+    private val profile = MyProfileFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -60,7 +59,7 @@ class MainActivity : BaseActivity() {
                     true
                 }
                 R.id.my_profile -> {
-                    //todo
+                    openFragment(profile)
                     true
                 }
                 else -> false

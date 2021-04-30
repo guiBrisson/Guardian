@@ -19,18 +19,20 @@
     <string name="did_not_get_code">Não recebou o código?</string>
     <string name="send_again">Enviar novamente</string>
 
+    <string name="edit_profile">Editar perfil</string>
+    <string name="my_guardians">Meus Guardians</string>
+    <string name="settings">Configuração</string>
+    <string name="notifications">Notificações</string>
+    <string name="leave">Sair</string>
+
     //menu
     <string name="menu">Menu</string>
     <string name="tools">Ferramentas</string>
-    <string name="notifications">Notificações</string>
     <string name="messages">Mensagens</string>
     <string name="location">Localização</string>
     <string name="search">Pesquisar</string>
     <string name="search_hint">Pesquisar…</string>
     <string name="my_profile">Meu perfil</string>
-    <string name="my_guardians">Meus Guardians</string>
-    <string name="settings">Configuração</string>
-    <string name="leave">Sair</string>
 
     //notifications
     <string name="recent">Recente</string>
