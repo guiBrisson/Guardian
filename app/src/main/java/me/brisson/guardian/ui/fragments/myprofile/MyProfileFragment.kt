@@ -8,6 +8,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_my_profile.*
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentMyProfileBinding
+import me.brisson.guardian.ui.activities.editprofile.EditProfileActivity
 import me.brisson.guardian.ui.activities.myguardians.MyGuardiansActivity
 import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseFragment
@@ -33,6 +34,11 @@ class MyProfileFragment : BaseFragment() {
     }
 
     private fun setupUI(){
+        binding.editProfileLayout.setOnClickListener {
+            startActivity(EditProfileActivity())
+            requireActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.stay_put)
+        }
+
         binding.myGuardiansLayout.setOnClickListener {
             startActivity(MyGuardiansActivity())
             requireActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.stay_put)

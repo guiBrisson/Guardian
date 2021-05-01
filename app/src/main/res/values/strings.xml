@@ -3,8 +3,12 @@
 
     <string name="name">Nome</string>
     <string name="email">Email</string>
+    <string name="phone">Telefone (opcional)</string>
     <string name="password">Senha</string>
     <string name="forgot_password">Esqueci a senha</string>
+    <string name="current_password">Senha atual</string>
+    <string name="new_password">Nova senha</string>
+    <string name="change_password">Mudar Senha</string>
     <string name="enter">Entrar</string>
     <string name="register">Cadastrar</string>
     <string name="or_socials_login">- ou entre com -</string>

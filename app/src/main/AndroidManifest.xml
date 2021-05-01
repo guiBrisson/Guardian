@@ -46,6 +46,7 @@
         <activity android:name=".ui.activities.notifications.NotificationsActivity" />
         <activity android:name=".ui.activities.main.MainActivity" />
         <activity android:name=".ui.activities.firstscreen.FirstScreenActivity" />
+        <activity android:name=".ui.activities.editprofile.EditProfileActivity" />
     </application>
 
 </manifest>
