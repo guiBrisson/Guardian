@@ -15,7 +15,6 @@ import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivityMainBinding
 import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.ui.fragments.location.MapsFragment
-import me.brisson.guardian.ui.fragments.messages.MessagesFragment
 import me.brisson.guardian.ui.fragments.myprofile.MyProfileFragment
 
 
@@ -26,7 +25,6 @@ class MainActivity : BaseActivity() {
     private val viewModel: MainViewModel by viewModels()
 
     private val location = MapsFragment.newInstance()
-    private val messages = MessagesFragment.newInstance()
     private val profile = MyProfileFragment.newInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,10 +50,6 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.tools -> {
                     //todo
-                    true
-                }
-                R.id.messages -> {
-                    openFragment(messages)
                     true
                 }
                 R.id.my_profile -> {

@@ -16,13 +16,6 @@
         />
 
     <item
-        android:id="@+id/messages"
-        android:title="@string/messages"
-        android:contentDescription="@string/messages"
-        android:icon="@drawable/ic_baseline_message_24"
-        />
-
-    <item
         android:id="@+id/my_profile"
         android:title="@string/my_profile"
         android:contentDescription="@string/my_profile"

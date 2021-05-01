@@ -1,44 +1,41 @@
-package me.brisson.guardian.ui.fragments.messages
+package me.brisson.guardian.ui.activities.myguardians
 
 import android.os.Bundle
+import androidx.activity.viewModels
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
-import me.brisson.guardian.databinding.FragmentMessagesBinding
-import me.brisson.guardian.ui.base.BaseFragment
+import me.brisson.guardian.databinding.ActivityMyGuardiansBinding
+import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.ui.fragments.appmessages.AppMessagesFragment
 import me.brisson.guardian.ui.fragments.smsmessages.SmsMessageFragment
 
 @AndroidEntryPoint
-class MessagesFragment : BaseFragment() {
+class MyGuardiansActivity : BaseActivity() {
 
-    companion object {
-        fun newInstance() = MessagesFragment()
-    }
+    private lateinit var binding: ActivityMyGuardiansBinding
+    private val viewModel: MyGuardiansViewModel by viewModels()
 
     private val app = AppMessagesFragment.newInstance()
     private val sms = SmsMessageFragment.newInstance()
 
-    private lateinit var binding: FragmentMessagesBinding
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View {
-        binding = FragmentMessagesBinding.inflate(inflater, container, false)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_my_guardians)
+        binding.viewModel = viewModel
 
         setUpTabLayout()
 
-
-        return binding.root
     }
 
     private fun setUpTabLayout(){
         openFragment(app)
+
+        binding.topAppBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabSelected(tab: TabLayout.Tab) {
@@ -54,7 +51,7 @@ class MessagesFragment : BaseFragment() {
     }
 
     private fun openFragment(fragment: Fragment, id: Int = 0) {
-        val transaction = parentFragmentManager.beginTransaction()
+        val transaction = supportFragmentManager.beginTransaction()
         when (id){
             1 -> transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
             2 -> transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
@@ -63,6 +60,8 @@ class MessagesFragment : BaseFragment() {
         transaction.commit()
     }
 
-
-
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.stay_put, R.anim.exit_to_right)
+    }
 }
