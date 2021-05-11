@@ -22,12 +22,12 @@ class SignUpFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = SignUpFragment()
+        private val TAG = SignUpFragment::class.java.simpleName
     }
 
     private lateinit var binding: FragmentSignUpBinding
     private val viewModel = SignUpViewModel()
 
-    private val TAG = SignUpFragment::class.java.simpleName
     private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
@@ -39,12 +39,12 @@ class SignUpFragment : BaseFragment() {
 
         auth = Firebase.auth
 
-        handleClicks()
+        handleClickListener()
 
         return binding.root
     }
 
-    private fun handleClicks() {
+    private fun handleClickListener() {
         binding.enterButton.setOnClickListener {
             if (!checkingEditTextErrors()) {
                 firebaseAuth()
