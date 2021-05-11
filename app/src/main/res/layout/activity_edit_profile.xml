@@ -63,6 +63,7 @@
                         app:layout_constraintTop_toTopOf="parent" />
 
                     <LinearLayout
+                        android:id="@+id/changePhotoLayout"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@drawable/circle_view"
@@ -87,6 +88,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
                     android:layout_marginTop="30dp"
+                    app:errorEnabled="true"
                     android:hint="@string/name">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -94,6 +96,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_condensed_regular"
                         android:inputType="textPersonName"
+                        android:text="@={viewModel.name}"
                         tools:text="Guilherme Brisson" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -104,7 +107,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
-                    android:layout_marginTop="10dp"
+                    app:errorEnabled="true"
                     android:hint="@string/email">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -112,6 +115,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_condensed_regular"
                         android:inputType="textEmailAddress"
+                        android:text="@={viewModel.email}"
                         tools:text="guibrisson@hotmail.com" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -122,7 +126,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="30dp"
-                    android:layout_marginTop="10dp"
+                    app:errorEnabled="true"
                     android:hint="@string/phone">
 
                     <com.google.android.material.textfield.TextInputEditText
@@ -130,6 +134,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_condensed_regular"
                         android:inputType="phone"
+                        android:text="@={viewModel.phoneNumber}"
                         tools:text="(21) 96766-4361" />
 
                 </com.google.android.material.textfield.TextInputLayout>
@@ -140,7 +145,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="20dp"
-                    android:layout_marginTop="15dp"
                     android:onClick="@{() -> viewModel.onChangePasswordClick()}"
                     android:text="@string/change_password"
                     android:textAllCaps="false"
@@ -163,6 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
                         android:hint="@string/current_password"
+                        android:visibility="gone"
                         app:endIconDrawable="@drawable/ic_baseline_remove_red_eye_24"
                         app:endIconMode="password_toggle">
 
@@ -180,13 +185,16 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="15dp"
+                        app:errorEnabled="true"
                         android:hint="@string/new_password"
                         app:endIconDrawable="@drawable/ic_baseline_remove_red_eye_24"
                         app:endIconMode="password_toggle">
 
                         <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/newPasswordEditText"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:text="@={viewModel.newPassword}"
                             android:fontFamily="@font/roboto_condensed_regular"
                             android:inputType="textPassword" />
 

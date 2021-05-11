@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="40dp"
+        android:background="@color/color_on_primary"
+        android:padding="20dp"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            style="?attr/textAppearanceHeadline6"
+            android:textAlignment="center"
+            android:text="@string/re_auth_dialog_text"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/currentPasswordTextField"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:errorEnabled="true"
+            android:hint="@string/current_password"
+            app:endIconDrawable="@drawable/ic_baseline_remove_red_eye_24"
+            app:endIconMode="password_toggle">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/currentPasswordEditText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/sendButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            android:backgroundTint="@color/rally_purple"
+            android:fontFamily="@font/roboto_condensed_bold"
+            android:paddingHorizontal="50dp"
+            android:paddingVertical="12dp"
+            android:text="@string/send"
+            android:textAllCaps="false"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+</layout>

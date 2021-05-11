@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
@@ -25,20 +26,19 @@ class MyProfileFragment : BaseFragment() {
     private lateinit var binding : FragmentMyProfileBinding
     private var viewModel = MyProfileViewModel()
 
-    private val user = Firebase.auth.currentUser
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentMyProfileBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
-        setupUI()
+        setupUI(Firebase.auth.currentUser)
         handleClickListeners()
 
         return binding.root
     }
 
-    private fun setupUI(){
+    private fun setupUI(user: FirebaseUser?){
         if (user != null){
             viewModel.name.value = user.displayName
             viewModel.email.value = user.email
@@ -49,6 +49,11 @@ class MyProfileFragment : BaseFragment() {
                     .fit()
                     .centerCrop()
                     .into(binding.userImageView)
+            }
+
+            binding.let {
+                it.userNameTextView.text = user.displayName
+                it.userEmailTextView.text = user.email
             }
 
         }
@@ -69,6 +74,11 @@ class MyProfileFragment : BaseFragment() {
             startActivity(NotificationsActivity())
             requireActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.stay_put)
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        setupUI(Firebase.auth.currentUser)
     }
 
 
