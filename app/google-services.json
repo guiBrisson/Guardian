@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "14205379414",
+    "project_id": "guardian-5ac13",
+    "storage_bucket": "guardian-5ac13.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:14205379414:android:d99cc1b4a11c5dc36c6cf7",
+        "android_client_info": {
+          "package_name": "me.brisson.guardian"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "14205379414-c76qsf7r9svq1j64c5onu5ko0jtoalo5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA-MWRAnTQDOiAW7ncPxAMxPrR-KOhAFao"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "14205379414-c76qsf7r9svq1j64c5onu5ko0jtoalo5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

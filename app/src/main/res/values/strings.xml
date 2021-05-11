@@ -54,4 +54,7 @@
     //permissions
     <string name="permission_read_contacts_granted">Permissão para ler os contatos garantida</string>
     <string name="permission_read_contacts_denied">Permissão para ler os contatos negada</string>
+
+    //errors
+    <string name="empty_field">Campo vazio</string>
 </resources>

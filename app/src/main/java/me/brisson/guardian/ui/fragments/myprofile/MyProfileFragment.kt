@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_my_profile.*
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentMyProfileBinding
 import me.brisson.guardian.ui.activities.editprofile.EditProfileActivity
