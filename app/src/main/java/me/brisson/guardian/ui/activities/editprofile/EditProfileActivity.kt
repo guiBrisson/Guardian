@@ -4,26 +4,25 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
-import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
-import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivityEditProfileBinding
 import me.brisson.guardian.ui.activities.dialogs.ReAuthDialog
 import me.brisson.guardian.ui.base.BaseActivity
-import me.brisson.guardian.ui.fragments.signup.SignUpFragment
+import me.brisson.guardian.R
+
 
 @AndroidEntryPoint
 class EditProfileActivity : BaseActivity() {
 
     companion object {
         private val TAG = EditProfileActivity::class.java.simpleName
-        private var dialogCalled = false
     }
 
     private val viewModel = EditProfileViewModel()
@@ -48,6 +47,18 @@ class EditProfileActivity : BaseActivity() {
                 vm.name.value = user.displayName
                 vm.email.value = user.email
                 vm.phoneNumber.value = user.phoneNumber
+
+                binding.nameEditText.addTextChangedListener {
+                    vm.name.value = it.toString()
+                }
+
+                binding.emailEditText.addTextChangedListener {
+                    vm.email.value = it.toString()
+                }
+
+                binding.phoneEditText.addTextChangedListener {
+                    vm.phoneNumber.value = it.toString()
+                }
 
                 if (vm.photo.value != null) {
                     Picasso.get()
@@ -101,29 +112,36 @@ class EditProfileActivity : BaseActivity() {
         binding.saveFAB.setOnClickListener {
             if (!checkTextInputErrors()) {
 
-                if (viewModel.changePassword.value!!) {
-                    changePassword()
-                    callDialog()
-                }
-
                 if (viewModel.name.value != user!!.displayName ||
                     viewModel.photo.value != user.photoUrl
                 ) {
                     profileChangeRequest()
                 }
 
-                if (viewModel.email.value != user.email) {
-                    changeUserEmail()
-                    callDialog()
-                }
-
                 if (viewModel.phoneNumber.value != user.phoneNumber) {
                     changePhoneNumber()
                 }
 
-                if (dialogCalled) {
-                    onBackPressed()
-                } else return@setOnClickListener
+                if (viewModel.changePassword.value!!) {
+                    changePassword()
+                }
+
+                if (viewModel.email.value != user.email) {
+                    changeUserEmail()
+                }
+
+                viewModel.reAuthRequest.observe(this, Observer {
+                    when (it) {
+                        true -> {
+                            callDialog()
+                        }
+                        false -> {
+                            onBackPressed()
+                        }
+                        null -> { }
+                    }
+                })
+
             }
         }
 
@@ -133,21 +151,33 @@ class EditProfileActivity : BaseActivity() {
     }
 
     private fun callDialog() {
-        if (!dialogCalled) {
-            ReAuthDialog {
-                dialogCalled = true
+        ReAuthDialog {
+            if (it.isNotBlank()){
                 reAuth(it)
-            }.show(supportFragmentManager, "ReAuthDialog")
-        }
+            }
+        }.show(supportFragmentManager, "ReAuthDialog")
     }
 
     private fun changePassword() {
         user!!.updatePassword(viewModel.newPassword.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    viewModel.reAuthRequest.value = false
                     Log.d(TAG, "User password updated.")
                 } else {
-                    Log.w(TAG, "User password updated failed", task.exception)
+                    try {
+                        throw task.exception!!
+                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
+                        viewModel.reAuthRequest.value = true
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this,
+                            task.exception!!.message,
+                            Toast.LENGTH_SHORT
+                        ).show()
+
+                        Log.w(TAG, e.message!!)
+                    }
                 }
             }
     }
@@ -164,7 +194,14 @@ class EditProfileActivity : BaseActivity() {
         user!!.updateProfile(profileUpdates)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    viewModel.reAuthRequest.value = false
                     Log.d(TAG, "User name and photo updated.")
+                } else {
+                    Toast.makeText(
+                        this,
+                        task.exception!!.message,
+                        Toast.LENGTH_LONG
+                    ).show()
                 }
             }
     }
@@ -173,9 +210,22 @@ class EditProfileActivity : BaseActivity() {
         user!!.updateEmail(viewModel.email.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    viewModel.reAuthRequest.value = false
                     Log.d(TAG, "User email updated")
                 } else {
-                    Log.w(TAG, "User email updated failed", task.exception)
+                    try {
+                        throw task.exception!!
+                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
+                        viewModel.reAuthRequest.value = true
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this,
+                            task.exception!!.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+                        Log.e(TAG, e.message!!)
+                    }
+
                 }
             }
     }
@@ -190,6 +240,11 @@ class EditProfileActivity : BaseActivity() {
                 if (task.isSuccessful) {
                     Log.d(TAG, "User re-authenticated.")
                 } else {
+                    Toast.makeText(
+                        this,
+                        task.exception!!.message,
+                        Toast.LENGTH_LONG
+                    ).show()
                     Log.w(TAG, "User re-authenticated failed.", task.exception)
                 }
             }

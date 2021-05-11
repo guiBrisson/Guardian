@@ -21,6 +21,8 @@ class EditProfileViewModel @Inject constructor(): BaseViewModel() {
 
     val changePassword = MutableLiveData<Boolean>().apply { value = false }
 
+    val reAuthRequest = MutableLiveData<Boolean>().apply { value = null }
+
     fun onChangePasswordClick(){
         changePassword.value = !changePassword.value!!
     }

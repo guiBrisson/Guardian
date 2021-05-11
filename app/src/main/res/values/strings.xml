@@ -22,6 +22,7 @@
     <string name="send">Enviar</string>
     <string name="did_not_get_code">Não recebou o código?</string>
     <string name="send_again">Enviar novamente</string>
+    <string name="type_your_password">Digite sua senha</string>
     <string name="re_auth_dialog_text">Para editar seu email ou senha é necessário digitar sua senha atual</string>
 
     <string name="edit_profile">Editar perfil</string>
