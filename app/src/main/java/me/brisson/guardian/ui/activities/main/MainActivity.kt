@@ -135,4 +135,14 @@ class MainActivity : BaseActivity() {
                 1
         )
     }
+
+    override fun onBackPressed() {
+        // Don't send back to login
+        if (binding.bottomNavigationView.selectedItemId != R.id.location){
+            binding.bottomNavigationView.selectedItemId = R.id.location
+        } else {
+            finishAffinity()
+        }
+
+    }
 }

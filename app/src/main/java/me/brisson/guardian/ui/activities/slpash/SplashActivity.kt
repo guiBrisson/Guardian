@@ -7,19 +7,24 @@ import android.os.Looper
 import androidx.activity.viewModels
 import androidx.core.app.ActivityOptionsCompat
 import androidx.databinding.DataBindingUtil
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivitySplashBinding
 import me.brisson.guardian.ui.activities.firstscreen.FirstScreenActivity
+import me.brisson.guardian.ui.activities.main.MainActivity
 import me.brisson.guardian.ui.base.BaseActivity
 
 @AndroidEntryPoint
 class SplashActivity : BaseActivity() {
 
+    private var timeOut: Long = 2000
+
     private lateinit var binding: ActivitySplashBinding
     private val viewModel: SplashViewModel by viewModels()
 
-    private var timeOut: Long = 3000
+    private val user = Firebase.auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,8 +32,14 @@ class SplashActivity : BaseActivity() {
         binding.viewModel = viewModel
 
         Handler(Looper.myLooper()!!).postDelayed({
-            transition()
+            if (user != null){
+                startActivity(MainActivity())
+            } else {
+                transition()
+            }
         }, timeOut)
+
+
 
     }
 
