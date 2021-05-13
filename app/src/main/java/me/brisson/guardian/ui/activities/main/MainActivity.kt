@@ -14,7 +14,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivityMainBinding
 import me.brisson.guardian.ui.base.BaseActivity
-import me.brisson.guardian.ui.base.FragmentStateHelper
+import me.brisson.guardian.utils.FragmentStateHelper
 import me.brisson.guardian.ui.fragments.location.MapsFragment
 import me.brisson.guardian.ui.fragments.myprofile.MyProfileFragment
 import me.brisson.guardian.ui.fragments.tools.ToolsFragment

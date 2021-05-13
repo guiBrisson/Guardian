@@ -6,11 +6,7 @@ import me.brisson.guardian.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class FirstScreenViewModel @Inject constructor(
-    private val mainRepository: MainRepository
-) : BaseViewModel() {
-
-
+class FirstScreenViewModel @Inject constructor() : BaseViewModel() {
 
 
 }

@@ -1,4 +1,4 @@
-package me.brisson.guardian.ui.base
+package me.brisson.guardian.utils
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

@@ -8,6 +8,7 @@
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
         android:name=".App"
@@ -29,11 +30,16 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="@string/google_maps_key" />
 
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
         <activity android:name=".ui.activities.myguardians.MyGuardiansActivity" />
         <activity android:name=".ui.activities.contacts.ContactsActivity">
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
+
         </activity>
         <activity android:name=".ui.activities.forgotpassword.ForgotPasswordActivity" />
         <activity android:name=".ui.activities.slpash.SplashActivity">
