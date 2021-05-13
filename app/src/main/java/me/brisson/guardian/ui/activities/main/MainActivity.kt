@@ -25,6 +25,7 @@ class MainActivity : BaseActivity() {
 
     companion object {
         private const val STATE_HELPER = "helper"
+
         private const val READ_CONTACT_REQUEST_CODE = 1
         private const val ACCESS_FINE_LOCATION_REQUEST_CODE = 2
     }
@@ -161,7 +162,10 @@ class MainActivity : BaseActivity() {
 
     }
 
-    private fun makeSnackBar(contextView: View, text: CharSequence) {
+    private fun makeSnackBar(
+        contextView: View,
+        text: CharSequence
+    ) {
         val snackBar = Snackbar.make(contextView, text, Snackbar.LENGTH_SHORT)
         snackBar.setActionTextColor(
             ContextCompat.getColor(

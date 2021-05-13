@@ -247,6 +247,33 @@
             android:layout_height="1dp"
             android:layout_marginVertical="5dp"
             android:background="@color/color_surface" />
+        
+       <LinearLayout
+           android:id="@+id/logoutLayout"
+           android:layout_width="wrap_content"
+           android:layout_height="50dp"
+           android:orientation="horizontal"
+           android:gravity="center"
+           android:layout_gravity="end"
+           android:paddingHorizontal="15dp">
+
+           <ImageView
+               android:layout_width="24dp"
+               android:layout_height="24dp"
+               android:src="@drawable/logout"
+               app:tint="@color/color_primary_variant" />
+
+           <TextView
+               android:layout_width="wrap_content"
+               android:layout_height="wrap_content"
+               android:textAllCaps="false"
+               android:text="@string/leave"
+               android:layout_marginStart="20dp"
+               android:letterSpacing="0.15"
+               android:fontFamily="@font/roboto_condensed_regular"
+               android:textSize="16sp" />
+
+       </LinearLayout>
 
 
     </LinearLayout>

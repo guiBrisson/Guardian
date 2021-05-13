@@ -12,6 +12,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentMyProfileBinding
 import me.brisson.guardian.ui.activities.editprofile.EditProfileActivity
+import me.brisson.guardian.ui.activities.firstscreen.FirstScreenActivity
 import me.brisson.guardian.ui.activities.myguardians.MyGuardiansActivity
 import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseFragment
@@ -73,6 +74,11 @@ class MyProfileFragment : BaseFragment() {
         binding.notificationsLayout.setOnClickListener {
             startActivity(NotificationsActivity())
             requireActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.stay_put)
+        }
+
+        binding.logoutLayout.setOnClickListener {
+            startActivity(FirstScreenActivity())
+            Firebase.auth.signOut()
         }
     }
 

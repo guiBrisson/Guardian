@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "14205379414",
+    "firebase_url": "https://guardian-5ac13-default-rtdb.firebaseio.com",
     "project_id": "guardian-5ac13",
     "storage_bucket": "guardian-5ac13.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "14205379414-lh6ri8gel1vum64tdia6knsj2gkme29d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "me.brisson.guardian",
+            "certificate_hash": "b9b5b808e21ee6fd84e6c260799182ab19f4f1df"
+          }
+        },
         {
           "client_id": "14205379414-c76qsf7r9svq1j64c5onu5ko0jtoalo5.apps.googleusercontent.com",
           "client_type": 3
