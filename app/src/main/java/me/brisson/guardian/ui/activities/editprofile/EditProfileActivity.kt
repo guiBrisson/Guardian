@@ -138,7 +138,8 @@ class EditProfileActivity : BaseActivity() {
                         false -> {
                             onBackPressed()
                         }
-                        null -> { }
+                        null -> {
+                        }
                     }
                 })
 
@@ -152,7 +153,7 @@ class EditProfileActivity : BaseActivity() {
 
     private fun callDialog() {
         ReAuthDialog {
-            if (it.isNotBlank()){
+            if (it.isNotBlank()) {
                 reAuth(it)
             }
         }.show(supportFragmentManager, "ReAuthDialog")
