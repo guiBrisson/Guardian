@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:background="@color/transparent">
+    android:background="@color/transparent"
+    android:orientation="vertical">
 
-    <com.google.android.material.progressindicator.LinearProgressIndicator
+    <com.google.android.material.progressindicator.CircularProgressIndicator
         android:id="@+id/progressBar"
+        style="@style/Widget.App.CircularProgressIndicator"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="200dp"
         android:indeterminate="true"
-        style="@style/Widget.App.CircularProgressIndicator"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="?attr/actionBarSize"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </LinearLayout>

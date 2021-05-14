@@ -23,10 +23,6 @@ import me.brisson.guardian.utils.SocialsLogin
 @AndroidEntryPoint
 class FirstScreenActivity : BaseActivity() {
 
-    companion object {
-        private val TAG = FirstScreenActivity::class.java.simpleName
-    }
-
     lateinit var socialsLogin: SocialsLogin
 
     private lateinit var binding: ActivityFirstScreenBinding
@@ -51,7 +47,10 @@ class FirstScreenActivity : BaseActivity() {
     private fun initializeSocialsLogin() {
         socialsLogin = SocialsLogin(this)
 
+        // Google
         socialsLogin.initializeGoogleButton()
+
+        //Facebook
         socialsLogin.initializeFacebookButton(binding.fbLoginButton)
         socialsLogin.registerFacebookCallback { isSuccessFull ->
             if (isSuccessFull) {
@@ -64,6 +63,9 @@ class FirstScreenActivity : BaseActivity() {
                 ).show()
             }
         }
+
+        // Twitter
+        socialsLogin.initializeTwitterButton()
     }
 
     private fun setupUI() {
@@ -73,6 +75,14 @@ class FirstScreenActivity : BaseActivity() {
 
         binding.facebookImageView.setOnClickListener {
             binding.fbLoginButton.performClick()
+        }
+
+        binding.twitterImageView.setOnClickListener {
+            socialsLogin.signInWithProvider{
+                if (it){
+                    startActivity(MainActivity())
+                }
+            }
         }
 
         binding.tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
@@ -92,6 +102,7 @@ class FirstScreenActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
+        // Handling google result
         socialsLogin.handleGoogleResult(requestCode, data) { isSuccessful ->
             if (isSuccessful) {
                 startActivity(MainActivity())
@@ -106,6 +117,9 @@ class FirstScreenActivity : BaseActivity() {
 
         // Pass the activity result back to the Facebook SDK
         socialsLogin.handleFacebookResult(requestCode, resultCode, data)
+
+        // Checking Twitter pending result
+        socialsLogin.checkPendingResult()
     }
 
     private fun openFragment(fragment: Fragment, id: Int = 0) {
@@ -133,6 +147,5 @@ class FirstScreenActivity : BaseActivity() {
             startActivity(MainActivity())
         }
     }
-
 
 }

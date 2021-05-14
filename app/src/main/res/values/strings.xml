@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Guardian</string>
     <string name="facebook_app_id">179926714009370</string>
+    <string name="twitter_provider">twitter.com</string>
 
     <string name="name">Nome</string>
     <string name="email">Email</string>

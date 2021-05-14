@@ -14,11 +14,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FacebookAuthProvider
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import me.brisson.guardian.R
+import me.brisson.guardian.ui.activities.main.MainActivity
 
 open class SocialsLogin(val activity: Activity) {
 
@@ -26,7 +28,8 @@ open class SocialsLogin(val activity: Activity) {
 
     private lateinit var callbackManager: CallbackManager
     private lateinit var buttonFacebookLogin: LoginButton
-
+    private lateinit var twitterProvider: OAuthProvider.Builder
+    private lateinit var auth: FirebaseAuth
 
     //[START Google Sign In]
     fun initializeGoogleButton() {
@@ -64,7 +67,7 @@ open class SocialsLogin(val activity: Activity) {
 
     private fun firebaseAuthWithGoogle(idToken: String, isSuccessful: (Boolean) -> Unit) {
         val credential = GoogleAuthProvider.getCredential(idToken, null)
-        val auth = Firebase.auth
+        auth = Firebase.auth
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
                 if (task.isSuccessful) {
@@ -113,7 +116,7 @@ open class SocialsLogin(val activity: Activity) {
     private fun handleFacebookAccessToken(token: AccessToken, isSuccessful: (Boolean) -> Unit) {
         Log.d(TAG, "handleFacebookAccessToken:$token")
 
-        val auth = Firebase.auth
+        auth = Firebase.auth
         val credential = FacebookAuthProvider.getCredential(token.token)
         auth.signInWithCredential(credential)
             .addOnCompleteListener(activity) { task ->
@@ -133,12 +136,61 @@ open class SocialsLogin(val activity: Activity) {
             }
     }
 
-
     fun handleFacebookResult(requestCode: Int, resultCode: Int, data: Intent?) {
         callbackManager.onActivityResult(requestCode, resultCode, data)
     }
-
     //[END Facebook Sign In]
+
+    //[START Twitter Sign In]
+    fun initializeTwitterButton() {
+        twitterProvider = OAuthProvider.newBuilder(activity.getString(R.string.twitter_provider))
+    }
+
+    fun checkPendingResult() {
+        val pendingResultTask: Task<AuthResult>? = auth.pendingAuthResult
+        if (pendingResultTask != null) {
+            // There's something already here! Finish the sign-in for your user.
+            pendingResultTask
+                .addOnSuccessListener(
+                    OnSuccessListener {
+                        Log.d(TAG, "checkPendingResult: Success")
+                    })
+                .addOnFailureListener {
+//                        Toast.makeText(
+//                            activity,
+//                            it.message,
+//                            Toast.LENGTH_LONG
+//                        ).show()
+                    Log.w(TAG, "checkPendingResult: ", it)
+                }
+        } else {
+            // There's no pending result so you need to start the sign-in flow.
+            signInWithProvider {
+                val intent = Intent(activity, MainActivity::class.java)
+                activity.startActivity(intent)
+            }
+        }
+    }
+
+    fun signInWithProvider(isSuccessful: (Boolean) -> Unit) {
+        auth = Firebase.auth
+        auth
+            .startActivityForSignInWithProvider(activity, twitterProvider.build())
+            .addOnSuccessListener {
+                Log.d(TAG, "signInWithProvider: Success")
+                isSuccessful(true)
+            }
+            .addOnFailureListener {
+                isSuccessful(false)
+                Log.w(TAG, "signInWithProvider: ", it)
+                Toast.makeText(
+                    activity,
+                    it.message,
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+    }
+    //[END Twitter Sign In]
 
     companion object {
         private val TAG = SocialsLogin::class.java.simpleName
