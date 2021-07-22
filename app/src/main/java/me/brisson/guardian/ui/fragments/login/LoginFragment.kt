@@ -1,6 +1,5 @@
 package me.brisson.guardian.ui.fragments.login
 
-import android.R.attr.password
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
