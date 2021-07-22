@@ -10,6 +10,7 @@
             type="me.brisson.guardian.ui.activities.firstscreen.FirstScreenViewModel" />
     </data>
 
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -17,19 +18,20 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            app:layout_constraintTop_toTopOf="parent">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/appLogoImageView"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
                 android:layout_gravity="center"
-                android:src="@color/color_background"
-                app:civ_border_width="0.8dp"
-                app:civ_border_color="@color/rally_purple"
-                android:transitionName="logoTransition"
                 android:layout_marginTop="30dp"
-                android:layout_marginBottom="10dp"/>
+                android:layout_marginBottom="10dp"
+                android:src="@color/color_background"
+                android:transitionName="logoTransition"
+                app:civ_border_color="@color/rally_purple"
+                app:civ_border_width="0.8dp" />
 
             <com.google.android.material.tabs.TabLayout
                 android:id="@+id/tabLayout"
@@ -72,7 +74,8 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center">
+                android:layout_gravity="center"
+                android:layout_marginBottom="20dp">
 
 
                 <ImageView
@@ -81,7 +84,7 @@
                     android:layout_height="55dp"
                     android:background="@drawable/bg_facebook_rounded"
                     android:padding="15dp"
-                    android:src="@drawable/icon_facebook"/>
+                    android:src="@drawable/icon_facebook" />
 
                 <ImageView
                     android:id="@+id/googleImageView"
@@ -106,5 +109,6 @@
         </LinearLayout>
 
     </ScrollView>
+
 
 </layout>
