@@ -8,7 +8,7 @@
 
         <variable
             name="viewModel"
-            type="me.brisson.guardian.ui.activities.slpash.SplashViewModel" />
+            type="me.brisson.guardian.ui.activities.splash.SplashViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +18,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintTop_toTopOf="parent"
-        tools:context=".ui.activities.slpash.SplashActivity">
+        tools:context=".ui.activities.splash.SplashActivity">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/appLogoImageView"
@@ -28,7 +28,8 @@
             android:transitionName="logoTransition"
             app:civ_border_color="@color/rally_purple"
             app:civ_border_width="0.8dp"
-            app:layout_constraintDimensionRatio="1:0.8"
+            app:layout_constraintDimensionRatio="1:1"
+            app:layout_constraintBottom_toBottomOf="@id/guideline4"
             app:layout_constraintTop_toTopOf="@id/guideline"
             app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintEnd_toEndOf="@id/guideline3"/>
@@ -39,6 +40,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             app:layout_constraintGuide_percent="0.08"/>
+
+        <androidx.constraintlayout.widget.Guideline
+            android:id="@+id/guideline4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.4"/>
 
         <androidx.constraintlayout.widget.Guideline
             android:id="@+id/guideline2"

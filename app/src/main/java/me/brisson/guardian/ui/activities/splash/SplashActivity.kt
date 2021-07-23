@@ -1,4 +1,4 @@
-package me.brisson.guardian.ui.activities.slpash
+package me.brisson.guardian.ui.activities.splash
 
 import android.content.Intent
 import android.os.Bundle

@@ -42,7 +42,7 @@
 
         </activity>
         <activity android:name=".ui.activities.forgotpassword.ForgotPasswordActivity" />
-        <activity android:name=".ui.activities.slpash.SplashActivity">
+        <activity android:name=".ui.activities.splash.SplashActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

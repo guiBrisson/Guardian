@@ -1,4 +1,4 @@
-package me.brisson.guardian.ui.activities.slpash
+package me.brisson.guardian.ui.activities.splash
 
 import dagger.hilt.android.lifecycle.HiltViewModel
 import me.brisson.guardian.ui.base.BaseViewModel
