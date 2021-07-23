@@ -40,10 +40,10 @@
             android:layout_marginTop="10dp"
             android:ellipsize="end"
             android:maxLines="2"
+            android:text="@={viewModel.name}"
             android:textAlignment="center"
             android:textAppearance="?attr/textAppearanceHeadline6"
-            tools:text="Guilherme Brisson"
-            android:text="@={viewModel.name}"/>
+            tools:text="Guilherme Brisson" />
 
         <TextView
             android:id="@+id/userEmailTextView"
@@ -53,10 +53,10 @@
             android:layout_marginHorizontal="40dp"
             android:ellipsize="end"
             android:maxLines="1"
+            android:text="@={viewModel.email}"
             android:textAppearance="?attr/textAppearanceBody2"
             android:textColor="@color/material_on_surface_emphasis_medium"
-            tools:text="guibrisson@hotmail.com"
-            android:text="@={viewModel.email}"/>
+            tools:text="guibrisson@hotmail.com" />
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -71,33 +71,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_edit_24"
-                app:tint="@color/color_primary_variant"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:tint="@color/color_primary_variant" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:letterSpacing="0.15"
-                android:textAllCaps="false"
-                android:text="@string/edit_profile"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/roboto_condensed_regular"
+                android:letterSpacing="0.15"
+                android:text="@string/edit_profile"
+                android:textAllCaps="false"
                 android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/editIcon" />
+                app:layout_constraintStart_toEndOf="@id/editIcon"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_back_24"
                 android:rotation="180"
-                app:tint="@color/rally_purple_200"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:tint="@color/rally_purple_200" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -119,33 +119,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_admin_panel_settings_24"
-                app:tint="@color/color_primary_variant"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:tint="@color/color_primary_variant" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:letterSpacing="0.15"
-                android:textAllCaps="false"
-                android:text="@string/my_guardians"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/roboto_condensed_regular"
+                android:letterSpacing="0.15"
+                android:text="@string/my_guardians"
+                android:textAllCaps="false"
                 android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/myGuardiansIcon" />
+                app:layout_constraintStart_toEndOf="@id/myGuardiansIcon"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_back_24"
                 android:rotation="180"
-                app:tint="@color/rally_purple_200"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:tint="@color/rally_purple_200" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -165,33 +165,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_settings_24"
-                app:tint="@color/color_primary_variant"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:tint="@color/color_primary_variant" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:letterSpacing="0.15"
-                android:textAllCaps="false"
-                android:text="@string/settings"
                 android:layout_marginStart="20dp"
                 android:fontFamily="@font/roboto_condensed_regular"
+                android:letterSpacing="0.15"
+                android:text="@string/settings"
+                android:textAllCaps="false"
                 android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/settingsIcon" />
+                app:layout_constraintStart_toEndOf="@id/settingsIcon"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_back_24"
                 android:rotation="180"
-                app:tint="@color/rally_purple_200"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:tint="@color/rally_purple_200" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -212,33 +212,33 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_baseline_notifications_24"
-                app:tint="@color/color_primary_variant"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent"/>
+                app:tint="@color/color_primary_variant" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textAllCaps="false"
-                android:text="@string/notifications"
                 android:layout_marginStart="20dp"
-                android:letterSpacing="0.15"
                 android:fontFamily="@font/roboto_condensed_regular"
+                android:letterSpacing="0.15"
+                android:text="@string/notifications"
+                android:textAllCaps="false"
                 android:textSize="16sp"
-                app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@id/notificationIcon" />
+                app:layout_constraintStart_toEndOf="@id/notificationIcon"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_baseline_arrow_back_24"
                 android:rotation="180"
-                app:tint="@color/rally_purple_200"
+                android:src="@drawable/ic_baseline_arrow_back_24"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintBottom_toBottomOf="parent" />
+                app:tint="@color/rally_purple_200" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -247,33 +247,33 @@
             android:layout_height="1dp"
             android:layout_marginVertical="5dp"
             android:background="@color/color_surface" />
-        
-       <LinearLayout
-           android:id="@+id/logoutLayout"
-           android:layout_width="wrap_content"
-           android:layout_height="50dp"
-           android:orientation="horizontal"
-           android:gravity="center"
-           android:layout_gravity="end"
-           android:paddingHorizontal="15dp">
 
-           <ImageView
-               android:layout_width="24dp"
-               android:layout_height="24dp"
-               android:src="@drawable/logout"
-               app:tint="@color/color_primary_variant" />
+        <LinearLayout
+            android:id="@+id/logoutLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:layout_gravity="end"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="15dp">
 
-           <TextView
-               android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               android:textAllCaps="false"
-               android:text="@string/leave"
-               android:layout_marginStart="20dp"
-               android:letterSpacing="0.15"
-               android:fontFamily="@font/roboto_condensed_regular"
-               android:textSize="16sp" />
+            <ImageView
+                android:layout_width="24dp"
+                android:layout_height="24dp"
+                android:src="@drawable/logout"
+                app:tint="@color/color_primary_variant" />
 
-       </LinearLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:fontFamily="@font/roboto_condensed_regular"
+                android:letterSpacing="0.15"
+                android:text="@string/leave"
+                android:textAllCaps="false"
+                android:textSize="16sp" />
+
+        </LinearLayout>
 
 
     </LinearLayout>
