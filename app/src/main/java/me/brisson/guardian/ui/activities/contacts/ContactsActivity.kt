@@ -124,20 +124,25 @@ class ContactsActivity : BaseActivity() {
     private fun setUpUI() {
         if (checkReadContactPermission()){
             binding.allowContactsButton.visibility = View.GONE
+            binding.fab.visibility = View.VISIBLE
 
             getContactList()
 
             viewModel.getContacts().observe(this, Observer {
                 if (it.isNotEmpty()) {
                     adapter.addData(it)
+                    binding.noContactsPlaceholder.visibility = View.GONE
                 } else {
-                    //TODO make a placeholder when the list is empty
+                    binding.fab.visibility = View.GONE
+                    binding.noContactsPlaceholder.visibility = View.VISIBLE
                 }
             })
             setupAdapter()
 
         } else {
+            binding.fab.visibility = View.GONE
             binding.allowContactsButton.visibility = View.VISIBLE
+            binding.noContactsPlaceholder.visibility = View.GONE
         }
 
         binding.fab.setOnClickListener {
