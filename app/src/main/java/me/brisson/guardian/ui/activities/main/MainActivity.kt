@@ -23,13 +23,6 @@ import me.brisson.guardian.ui.fragments.tools.ToolsFragment
 @AndroidEntryPoint
 class MainActivity : BaseActivity() {
 
-    companion object {
-        private const val STATE_HELPER = "helper"
-
-        private const val READ_CONTACT_REQUEST_CODE = 1
-        private const val ACCESS_FINE_LOCATION_REQUEST_CODE = 2
-    }
-
     private lateinit var binding: ActivityMainBinding
     private val viewModel: MainViewModel by viewModels()
 
@@ -51,11 +44,24 @@ class MainActivity : BaseActivity() {
             stateHelper.restoreHelperState(helperState!!)
         } else {
             binding.bottomNavigationView.selectedItemId = R.id.home
-            openFragment(location)
         }
 
         bottomNavigationSetUp()
+        setupUI()
 
+    }
+
+    private fun setupUI() {
+        binding.allowLocationButton.setOnClickListener {
+            askForLocationPermission()
+        }
+
+        if (getLocationPermission()) {
+            binding.allowLocationButton.visibility = View.GONE
+            openFragment(location)
+        } else {
+            binding.allowLocationButton.visibility = View.VISIBLE
+        }
     }
 
     private fun bottomNavigationSetUp() {
@@ -65,15 +71,23 @@ class MainActivity : BaseActivity() {
         binding.bottomNavigationView.setOnNavigationItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.location -> {
-                    openFragment(location)
+                    if (getLocationPermission()) {
+                        openFragment(location)
 
-                    fragments[item.itemId] ?: location
-                    stateHelper.restoreState(location, item.itemId)
-                    saveCurrentState(item.itemId)
+                        fragments[item.itemId] ?: location
+                        stateHelper.restoreState(location, item.itemId)
+                        saveCurrentState(item.itemId)
+
+                        binding.allowLocationButton.visibility = View.GONE
+                    } else {
+                        binding.mainContainer.removeAllViews()
+                        binding.allowLocationButton.visibility = View.VISIBLE
+                    }
                     true
                 }
                 R.id.tools -> {
                     openFragment(tools)
+                    binding.allowLocationButton.visibility = View.GONE
 
                     fragments[item.itemId] ?: tools
                     stateHelper.restoreState(tools, item.itemId)
@@ -82,6 +96,7 @@ class MainActivity : BaseActivity() {
                 }
                 R.id.my_profile -> {
                     openFragment(profile)
+                    binding.allowLocationButton.visibility = View.GONE
 
                     fragments[item.itemId] ?: profile
                     stateHelper.restoreState(profile, item.itemId)
@@ -94,14 +109,19 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun openFragment(fragment: Fragment, id: Int = 0) {
+    private fun openFragment(fragment: Fragment) {
         val transaction = supportFragmentManager.beginTransaction()
-        when (id) {
-            1 -> transaction.setCustomAnimations(R.anim.enter_from_left, R.anim.exit_to_right)
-            2 -> transaction.setCustomAnimations(R.anim.enter_from_right, R.anim.exit_to_left)
-        }
         transaction.replace(R.id.mainContainer, fragment)
         transaction.commit()
+    }
+
+    private fun getLocationPermission(): Boolean {
+        // Return true if location permission is granted, else false.
+        return (ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.ACCESS_FINE_LOCATION
+        )
+                == PackageManager.PERMISSION_GRANTED)
     }
 
     override fun onRequestPermissionsResult(
@@ -113,7 +133,9 @@ class MainActivity : BaseActivity() {
 
         when (requestCode) {
             READ_CONTACT_REQUEST_CODE -> {
-                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
                     makeSnackBar(
                         binding.mainContainer,
                         getString(R.string.permission_read_contacts_granted)
@@ -132,9 +154,20 @@ class MainActivity : BaseActivity() {
                 if (grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
                 ) {
+                    binding.bottomNavigationView.selectedItemId = R.id.home
+                    binding.allowLocationButton.visibility = View.GONE
+                    openFragment(location)
+
                     makeSnackBar(
                         binding.mainContainer,
-                        "Permissão para localização garantida"
+                        getString(R.string.permission_fine_location_granted)
+                    )
+                } else {
+                    makeActionSnackBar(
+                        binding.mainContainer,
+                        getString(R.string.permission_fine_location_denied),
+                        getString(R.string.retry),
+                        ::askForLocationPermission
                     )
                 }
             }
@@ -147,18 +180,17 @@ class MainActivity : BaseActivity() {
         buttonText: CharSequence,
         clickFunc: () -> Unit
     ) {
-        val snackBar = Snackbar.make(contextView, text, Snackbar.LENGTH_SHORT)
-        snackBar.setActionTextColor(
-            ContextCompat.getColor(
-                applicationContext,
-                R.color.rally_purple
+        Snackbar.make(contextView, text, Snackbar.LENGTH_LONG)
+            .setActionTextColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.rally_purple
+                )
             )
-        )
-        snackBar.setAnchorView(binding.fab)
-            .setAction(buttonText) {
-                clickFunc()
-            }
+            .setAnchorView(binding.fab)
+            .setAction(buttonText) { clickFunc() }
             .show()
+
 
     }
 
@@ -166,15 +198,23 @@ class MainActivity : BaseActivity() {
         contextView: View,
         text: CharSequence
     ) {
-        val snackBar = Snackbar.make(contextView, text, Snackbar.LENGTH_SHORT)
-        snackBar.setActionTextColor(
-            ContextCompat.getColor(
-                applicationContext,
-                R.color.rally_purple
+        Snackbar.make(contextView, text, Snackbar.LENGTH_SHORT)
+            .setActionTextColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.rally_purple
+                )
             )
-        )
-        snackBar.setAnchorView(binding.fab)
+            .setAnchorView(binding.fab)
             .show()
+    }
+
+    private fun askForLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            ACCESS_FINE_LOCATION_REQUEST_CODE
+        )
     }
 
     private fun askForReadContactPermission() {
@@ -207,4 +247,12 @@ class MainActivity : BaseActivity() {
 
         super.onSaveInstanceState(outState)
     }
+
+    companion object {
+        private const val STATE_HELPER = "helper"
+
+        private const val READ_CONTACT_REQUEST_CODE = 1
+        private const val ACCESS_FINE_LOCATION_REQUEST_CODE = 2
+    }
 }
+

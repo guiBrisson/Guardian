@@ -16,6 +16,7 @@
     <string name="or_socials_login">- ou entre com -</string>
     <string name="save">Salvar</string>
     <string name="retry">Novamente</string>
+    <string name="allow_location">Permitir localização</string>
 
     <string name="password_recovery">Recuperar a senha</string>
     <string name="type_your_email">Digite seu email\nEnviaremos um código de verificação</string>
@@ -27,6 +28,7 @@
     <string name="type_your_password">Digite sua senha</string>
     <string name="re_auth_dialog_text">Para editar seu email ou senha é necessário digitar sua senha atual</string>
 
+    //profile
     <string name="edit_profile">Editar perfil</string>
     <string name="my_guardians">Meus Guardians</string>
     <string name="settings">Configuração</string>
@@ -58,6 +60,8 @@
     //permissions
     <string name="permission_read_contacts_granted">Permissão para ler os contatos garantida</string>
     <string name="permission_read_contacts_denied">Permissão para ler os contatos negada</string>
+    <string name="permission_fine_location_granted">Permissão para localização garantida</string>
+    <string name="permission_fine_location_denied">Permissão para localização negada</string>
 
     //errors
     <string name="empty_field">Campo vazio</string>

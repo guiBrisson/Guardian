@@ -32,7 +32,7 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
 
         private val TAG = MapsFragment::class.java.simpleName
         private const val DEFAULT_ZOOM = 15
-        private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 1
+        private const val PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 2
 
         // Keys for storing activity state.
         private const val KEY_CAMERA_POSITION = "camera_position"
@@ -42,7 +42,7 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
         private const val M_MAX_ENTRIES = 5
     }
 
-    private lateinit var binding : FragmentMapsBinding
+    private lateinit var binding: FragmentMapsBinding
 
     private var lastKnownLocation: Location? = null
 
@@ -57,15 +57,16 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
     private var noLabelMapStyle: Boolean = false
 
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         binding = FragmentMapsBinding.inflate(inflater, container, false)
 
         setUpUi()
 
-        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(requireActivity())
+        fusedLocationProviderClient =
+            LocationServices.getFusedLocationProviderClient(requireActivity())
 
         return binding.root
     }
@@ -81,8 +82,10 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
 
         try {
             val success: Boolean = map!!.setMapStyle(
-                    MapStyleOptions.loadRawResourceStyle(
-                            requireContext(), R.raw.map_style_no_labels))
+                MapStyleOptions.loadRawResourceStyle(
+                    requireContext(), R.raw.map_style_no_labels
+                )
+            )
             if (!success) {
                 Log.e(TAG, "Style parsing failed.")
             }
@@ -116,10 +119,14 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
         }
     }
 
-    private fun setUpUi(){
+    private fun setUpUi() {
         binding.centerLocationFAB.setOnClickListener {
-            centerCamera(LatLng(lastKnownLocation!!.latitude,
-                    lastKnownLocation!!.longitude))
+            centerCamera(
+                LatLng(
+                    lastKnownLocation!!.latitude,
+                    lastKnownLocation!!.longitude
+                )
+            )
         }
 
         binding.noLabelsFAB.setOnClickListener {
@@ -128,8 +135,8 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
     }
 
 
-    private fun centerCamera(location: LatLng){
-            val cameraPosition = CameraPosition.Builder()
+    private fun centerCamera(location: LatLng) {
+        val cameraPosition = CameraPosition.Builder()
             .target(location)     // Sets the center of the map to Mountain View
             .zoom(17f)            // Sets the zoom
             .bearing(90f)         // Sets the orientation of the camera to east
@@ -145,13 +152,18 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
          * device. The result of the permission request is handled by a callback,
          * onRequestPermissionsResult.
          */
-        if (ContextCompat.checkSelfPermission(requireContext(),
-                        Manifest.permission.ACCESS_FINE_LOCATION)
-                == PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            )
+            == PackageManager.PERMISSION_GRANTED
+        ) {
             locationPermissionGranted = true
         } else {
-            ActivityCompat.requestPermissions(requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-                    2)
+            ActivityCompat.requestPermissions(
+                requireActivity(), arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION
+            )
         }
     }
 
@@ -184,15 +196,22 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
                         // Set the map's camera position to the current location of the device.
                         lastKnownLocation = task.result
                         if (lastKnownLocation != null) {
-                            map?.moveCamera(CameraUpdateFactory.newLatLngZoom(
-                                    LatLng(lastKnownLocation!!.latitude,
-                                            lastKnownLocation!!.longitude), DEFAULT_ZOOM.toFloat()))
+                            map?.moveCamera(
+                                CameraUpdateFactory.newLatLngZoom(
+                                    LatLng(
+                                        lastKnownLocation!!.latitude,
+                                        lastKnownLocation!!.longitude
+                                    ), DEFAULT_ZOOM.toFloat()
+                                )
+                            )
                         }
                     } else {
                         Log.d(TAG, "Current location is null. Using defaults.")
                         Log.e(TAG, "Exception: %s", task.exception)
-                        map?.moveCamera(CameraUpdateFactory
-                                .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat()))
+                        map?.moveCamera(
+                            CameraUpdateFactory
+                                .newLatLngZoom(defaultLocation, DEFAULT_ZOOM.toFloat())
+                        )
                         map?.uiSettings?.isMyLocationButtonEnabled = false
                     }
                 }
@@ -201,9 +220,6 @@ class MapsFragment : BaseFragment(), OnMapReadyCallback {
             Log.e("Exception: %s", e.message, e)
         }
     }
-
-
-
 
 
 }
