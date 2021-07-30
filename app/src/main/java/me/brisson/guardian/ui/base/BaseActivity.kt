@@ -8,6 +8,8 @@ import android.os.PersistableBundle
 import android.view.View
 import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.google.android.material.snackbar.Snackbar
 import me.brisson.guardian.R
 
 abstract class BaseActivity : AppCompatActivity() {
@@ -46,6 +48,36 @@ abstract class BaseActivity : AppCompatActivity() {
         startActivity(it)
     }
 
+    fun makeActionSnackBar(
+        contextView: View,
+        text: CharSequence,
+        buttonText: CharSequence,
+        clickFunc: () -> Unit
+    ) : Snackbar {
+        return Snackbar.make(contextView, text, Snackbar.LENGTH_LONG)
+            .setActionTextColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.rally_purple
+                )
+            )
+            .setAction(buttonText) { clickFunc() }
+
+
+    }
+
+    fun makeSnackBar(
+        contextView: View,
+        text: CharSequence
+    ) : Snackbar {
+        return Snackbar.make(contextView, text, Snackbar.LENGTH_SHORT)
+            .setActionTextColor(
+                ContextCompat.getColor(
+                    applicationContext,
+                    R.color.rally_purple
+                )
+            )
+    }
 
 
 

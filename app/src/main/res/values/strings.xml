@@ -16,7 +16,8 @@
     <string name="or_socials_login">- ou entre com -</string>
     <string name="save">Salvar</string>
     <string name="retry">Novamente</string>
-    <string name="allow_location">Permitir localização</string>
+    <string name="allow_location">Permitir minha localização</string>
+    <string name="allow_contacts">Permitir ver meus contatos</string>
 
     <string name="password_recovery">Recuperar a senha</string>
     <string name="type_your_email">Digite seu email\nEnviaremos um código de verificação</string>

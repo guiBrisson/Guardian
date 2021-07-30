@@ -80,7 +80,10 @@ class MainActivity : BaseActivity() {
 
                         binding.allowLocationButton.visibility = View.GONE
                     } else {
-                        binding.mainContainer.removeAllViews()
+                        //Removing the current fragment
+                        supportFragmentManager.findFragmentById(R.id.mainContainer)?.let {
+                            supportFragmentManager.beginTransaction().remove(it).commit()
+                        }
                         binding.allowLocationButton.visibility = View.VISIBLE
                     }
                     true
@@ -124,6 +127,14 @@ class MainActivity : BaseActivity() {
                 == PackageManager.PERMISSION_GRANTED)
     }
 
+    private fun askForLocationPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+            ACCESS_FINE_LOCATION_REQUEST_CODE
+        )
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -132,24 +143,6 @@ class MainActivity : BaseActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
 
         when (requestCode) {
-            READ_CONTACT_REQUEST_CODE -> {
-                if (grantResults.isNotEmpty() &&
-                    grantResults[0] == PackageManager.PERMISSION_GRANTED
-                ) {
-                    makeSnackBar(
-                        binding.mainContainer,
-                        getString(R.string.permission_read_contacts_granted)
-                    )
-                } else {
-                    makeActionSnackBar(
-                        binding.mainContainer,
-                        getString(R.string.permission_read_contacts_denied),
-                        getString(R.string.retry),
-                        ::askForReadContactPermission
-                    )
-                }
-                return
-            }
             ACCESS_FINE_LOCATION_REQUEST_CODE -> {
                 if (grantResults.isNotEmpty() &&
                     grantResults[0] == PackageManager.PERMISSION_GRANTED
@@ -161,68 +154,18 @@ class MainActivity : BaseActivity() {
                     makeSnackBar(
                         binding.mainContainer,
                         getString(R.string.permission_fine_location_granted)
-                    )
+                    ).setAnchorView(binding.fab).show()
+
                 } else {
                     makeActionSnackBar(
                         binding.mainContainer,
                         getString(R.string.permission_fine_location_denied),
                         getString(R.string.retry),
                         ::askForLocationPermission
-                    )
+                    ).setAnchorView(binding.fab).show()
                 }
             }
         }
-    }
-
-    private fun makeActionSnackBar(
-        contextView: View,
-        text: CharSequence,
-        buttonText: CharSequence,
-        clickFunc: () -> Unit
-    ) {
-        Snackbar.make(contextView, text, Snackbar.LENGTH_LONG)
-            .setActionTextColor(
-                ContextCompat.getColor(
-                    applicationContext,
-                    R.color.rally_purple
-                )
-            )
-            .setAnchorView(binding.fab)
-            .setAction(buttonText) { clickFunc() }
-            .show()
-
-
-    }
-
-    private fun makeSnackBar(
-        contextView: View,
-        text: CharSequence
-    ) {
-        Snackbar.make(contextView, text, Snackbar.LENGTH_SHORT)
-            .setActionTextColor(
-                ContextCompat.getColor(
-                    applicationContext,
-                    R.color.rally_purple
-                )
-            )
-            .setAnchorView(binding.fab)
-            .show()
-    }
-
-    private fun askForLocationPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
-            ACCESS_FINE_LOCATION_REQUEST_CODE
-        )
-    }
-
-    private fun askForReadContactPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.READ_CONTACTS),
-            1
-        )
     }
 
     override fun onBackPressed() {
@@ -251,7 +194,6 @@ class MainActivity : BaseActivity() {
     companion object {
         private const val STATE_HELPER = "helper"
 
-        private const val READ_CONTACT_REQUEST_CODE = 1
         private const val ACCESS_FINE_LOCATION_REQUEST_CODE = 2
     }
 }

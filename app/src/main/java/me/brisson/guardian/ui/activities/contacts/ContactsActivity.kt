@@ -1,14 +1,19 @@
 package me.brisson.guardian.ui.activities.contacts
 
+import android.Manifest
 import android.app.SearchManager
 import android.content.ContentResolver
 import android.content.Context
+import android.content.pm.PackageManager
 import android.database.Cursor
 import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -34,7 +39,6 @@ class ContactsActivity : BaseActivity() {
         binding.viewModel = viewModel
 
         setUpAppbar()
-        getContactList()
         setUpUI()
 
     }
@@ -118,29 +122,77 @@ class ContactsActivity : BaseActivity() {
 
     // Setting up UI
     private fun setUpUI() {
-        viewModel.getContacts().observe(this, Observer {
-            if (it.isNotEmpty()) {
-                adapter.addData(it)
-            } else {
-                //TODO make a placeholder when the list is empty
-            }
-        })
-        adapter.onAddGuardianClickListener = {
-            viewModel.setSelectedContacts(it)
-        }
+        if (checkReadContactPermission()){
+            binding.allowContactsButton.visibility = View.GONE
 
-        binding.recycler.layoutManager = LinearLayoutManager(
-                this,
-                LinearLayoutManager.VERTICAL,
-                false
-        )
-        binding.recycler.adapter = adapter
+            getContactList()
+
+            viewModel.getContacts().observe(this, Observer {
+                if (it.isNotEmpty()) {
+                    adapter.addData(it)
+                } else {
+                    //TODO make a placeholder when the list is empty
+                }
+            })
+            setupAdapter()
+
+        } else {
+            binding.allowContactsButton.visibility = View.VISIBLE
+        }
 
         binding.fab.setOnClickListener {
             Log.d("selectedContacts", "setUpUI: ${viewModel.getSelectedContacts()}")
             onBackPressed()
         }
 
+        binding.allowContactsButton.setOnClickListener {
+            askForReadContactPermission()
+        }
+
+    }
+
+    private fun setupAdapter() {
+        adapter.onAddGuardianClickListener = {
+            viewModel.setSelectedContacts(it)
+        }
+
+        binding.recycler.layoutManager = LinearLayoutManager(
+            this,
+            LinearLayoutManager.VERTICAL,
+            false
+        )
+        binding.recycler.adapter = adapter
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when(requestCode){
+            READ_CONTACT_REQUEST_CODE -> {
+                if (grantResults.isNotEmpty() &&
+                    grantResults[0] == PackageManager.PERMISSION_GRANTED
+                ) {
+                    setUpUI()
+
+                    makeSnackBar(
+                        binding.root,
+                        getString(R.string.permission_read_contacts_granted)
+                    ).setAnchorView(binding.fab).show()
+                } else {
+                    makeActionSnackBar(
+                        binding.root,
+                        getString(R.string.permission_read_contacts_denied),
+                        getString(R.string.retry),
+                        ::askForReadContactPermission
+                    ).setAnchorView(binding.fab).show()
+                }
+                return
+            }
+        }
     }
 
     // Handling AppBar (NavigationClick and SearchView)
@@ -156,7 +208,9 @@ class ContactsActivity : BaseActivity() {
 
             this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextChange(query: String?): Boolean {
-                    adapter.filter.filter(query)
+                    if (checkReadContactPermission()){
+                        adapter.filter.filter(query)
+                    }
                     return true
                 }
 
@@ -169,6 +223,25 @@ class ContactsActivity : BaseActivity() {
 
     }
 
+    private fun checkReadContactPermission(): Boolean {
+        val result = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CONTACTS
+        )
 
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun askForReadContactPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_CONTACTS),
+            1
+        )
+    }
+
+    companion object {
+        private const val READ_CONTACT_REQUEST_CODE = 1
+    }
 
 }
