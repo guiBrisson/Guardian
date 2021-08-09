@@ -48,21 +48,9 @@ class ContactAdapter :
             binding.contactName.text = item.name
             binding.contactPhoneNumber.text = item.phoneNo
 
-            if (item.isAdded){
-                binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.rally_green_300), android.graphics.PorterDuff.Mode.SRC_IN)
-            } else {
-                binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.gray), android.graphics.PorterDuff.Mode.SRC_IN)
-            }
+            binding.addGuardianCheckBox.isChecked = item.isAdded
 
-            binding.addGuardianImageView.setOnClickListener {
-                if (item.isAdded){
-                    item.isAdded = false
-                    binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.gray), android.graphics.PorterDuff.Mode.SRC_IN)
-                } else {
-                    item.isAdded = true
-                    binding.addGuardianImageView.setColorFilter(ContextCompat.getColor(parent.context, R.color.rally_green_300), android.graphics.PorterDuff.Mode.SRC_IN)
-                }
-
+            binding.addGuardianCheckBox.setOnClickListener {
                 onAddGuardianClickListener.invoke(item)
             }
 
