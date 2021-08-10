@@ -241,7 +241,7 @@ class ContactsActivity : BaseActivity() {
         ActivityCompat.requestPermissions(
             this,
             arrayOf(Manifest.permission.READ_CONTACTS),
-            1
+            READ_CONTACT_REQUEST_CODE
         )
     }
 

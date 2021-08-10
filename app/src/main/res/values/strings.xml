@@ -58,6 +58,11 @@
     //place holders
     <string name="notification_placeholder">Você não possui\nnenhuma notificação</string>
 
+    //alert dialog
+    <string name="add_image">Adicionar imagem</string>
+    <string name="camera">Camera</string>
+    <string name="gallery">Galeria</string>
+
     //permissions
     <string name="permission_read_contacts_granted">Permissão para ler os contatos garantida</string>
     <string name="permission_read_contacts_denied">Permissão para ler os contatos negada</string>
