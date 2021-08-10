@@ -288,10 +288,6 @@ class EditProfileActivity : BaseActivity() {
                     Log.d(TAG, "Image Error")
                 }
             })
-
-
-
-
     }
 
     override fun onRequestPermissionsResult(
