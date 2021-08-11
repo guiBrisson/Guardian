@@ -2,6 +2,7 @@ package me.brisson.guardian.ui.activities.editprofile
 
 import android.content.Intent
 import android.graphics.Bitmap
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -30,7 +31,7 @@ class EditProfileActivity : BaseActivity() {
 
     private val viewModel = EditProfileViewModel()
     private lateinit var binding: ActivityEditProfileBinding
-    private lateinit var imageHelper : ImageHelper
+    private lateinit var imageHelper: ImageHelper
 
     private val user = Firebase.auth.currentUser
 
@@ -266,15 +267,16 @@ class EditProfileActivity : BaseActivity() {
         overridePendingTransition(R.anim.stay_put, R.anim.exit_to_right)
     }
 
-    //todo() make the request to change the user image
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
-        if(requestCode == ImageHelper.GALLERY_REQUEST_CODE ||
-            requestCode == ImageHelper.PHOTO_REQUEST_CODE)
-            imageHelper.handleResult(requestCode, resultCode, data, object : ImageHelper.Callback{
-                override fun onImageCompressed(image64: String?, imageBitmap: Bitmap?) {
-//                viewModel.setImageThumb(image64)
+        //Getting the image from the camera/gallery and loading on the screen and updating the viewModel
+        if (requestCode == ImageHelper.GALLERY_REQUEST_CODE ||
+            requestCode == ImageHelper.PHOTO_REQUEST_CODE
+        )
+            imageHelper.handleResult(requestCode, resultCode, data, object : ImageHelper.Callback {
+                override fun onImageCompressed(imageURI: Uri?, imageBitmap: Bitmap?) {
+                    viewModel.photo.value = imageURI
                     binding.userImageView.setImageBitmap(imageBitmap)
 
                     Log.d(TAG, "Image Success")

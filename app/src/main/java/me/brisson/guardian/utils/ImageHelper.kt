@@ -7,15 +7,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
+import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
-import android.provider.OpenableColumns
-import android.util.Log
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import me.brisson.guardian.R
 import java.io.*
@@ -24,7 +22,6 @@ import java.util.*
 
 /*
     todo image from camera is coming rotated
-    todo export the image uri in the callback
  */
 class ImageHelper(private val activity: Activity) {
 
@@ -85,7 +82,6 @@ class ImageHelper(private val activity: Activity) {
                 }
             }
         }
-
 
 
     }
@@ -150,23 +146,28 @@ class ImageHelper(private val activity: Activity) {
     }
 
     fun handleResult(requestCode: Int, resultCode: Int, data: Intent?, callback: Callback) {
-        if (requestCode == GALLERY_REQUEST_CODE){
+        if (requestCode == GALLERY_REQUEST_CODE) {
             handleGalleryResult(requestCode, resultCode, data, callback)
-        }
-        else if (requestCode == PHOTO_REQUEST_CODE){
+        } else if (requestCode == PHOTO_REQUEST_CODE) {
             handlePhotoResult(requestCode, resultCode, callback)
         }
     }
 
-    private fun handleGalleryResult(requestCode: Int, resultCode: Int, data: Intent?, callback: Callback) {
+    private fun handleGalleryResult(
+        requestCode: Int,
+        resultCode: Int,
+        data: Intent?,
+        callback: Callback
+    ) {
         this.callback = callback
         if (data != null && requestCode == GALLERY_REQUEST_CODE) {
             when (resultCode) {
                 AppCompatActivity.RESULT_OK -> try {
                     photoURI = data.data
-                    val imageStream: InputStream? = activity.contentResolver.openInputStream(photoURI!!)
+                    val imageStream: InputStream? =
+                        activity.contentResolver.openInputStream(photoURI!!)
                     val selectedImage: Bitmap = BitmapFactory.decodeStream(imageStream)
-                    callback.onImageCompressed(null, selectedImage)
+                    callback.onImageCompressed(photoURI, selectedImage)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -181,9 +182,14 @@ class ImageHelper(private val activity: Activity) {
         if (photoURI != null && requestCode == PHOTO_REQUEST_CODE) {
             when (resultCode) {
                 AppCompatActivity.RESULT_OK -> try {
-                    val imageStream: InputStream? = activity.contentResolver.openInputStream(photoURI!!)
-                    val selectedImage: Bitmap = BitmapFactory.decodeStream(imageStream)
-                    callback.onImageCompressed(null, selectedImage)
+                    val imageStream: InputStream? =
+                        activity.contentResolver.openInputStream(photoURI!!)
+                    var selectedImage: Bitmap = BitmapFactory.decodeStream(imageStream)
+                    selectedImage = rotateImage(selectedImage)
+                    //todo() rotating only the bitmap image
+                    //todo() make the URI rotate as well
+
+                    callback.onImageCompressed(photoURI, selectedImage)
                 } catch (e: IOException) {
                     e.printStackTrace()
                 }
@@ -210,9 +216,18 @@ class ImageHelper(private val activity: Activity) {
     }
 
     interface Callback {
-        fun onImageCompressed(image64: String?, imageBitmap: Bitmap?)
+        fun onImageCompressed(imageURI: Uri?, imageBitmap: Bitmap?)
         fun onCanceled()
         fun onError()
+    }
+
+    private fun rotateImage(source: Bitmap): Bitmap {
+        val matrix = Matrix()
+        matrix.postRotate(90f)
+        return Bitmap.createBitmap(
+            source, 0, 0, source.width, source.height,
+            matrix, true
+        )
     }
 
     companion object {
