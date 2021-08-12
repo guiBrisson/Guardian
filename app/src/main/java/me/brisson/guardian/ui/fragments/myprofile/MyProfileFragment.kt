@@ -47,7 +47,7 @@ class MyProfileFragment : BaseFragment() {
             if (user.photoUrl != null){
                 Picasso.get()
                     .load(user.photoUrl)
-                    .fit()
+                    .resize(1000, 1000)
                     .centerCrop()
                     .into(binding.userImageView)
             }

@@ -6,6 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.isEmpty
+import androidx.core.view.isNotEmpty
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doOnTextChanged
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -74,13 +78,19 @@ class LoginFragment : BaseFragment() {
 
     private fun checkingEditTextErrors(): Boolean{
         viewModel.emailError.value = viewModel.email.value.isNullOrEmpty()
+        binding.emailInputEditText.doOnTextChanged { _, _, _, count ->
+            viewModel.emailError.value = count > 0
+            binding.emailTextField.error = null
+        }
+
         viewModel.passwordError.value = viewModel.password.value.isNullOrEmpty()
+        binding.passwordInputEditText.doOnTextChanged { _, _, _, count ->
+            viewModel.passwordError.value = count > 0
+            binding.passwordTextField.error = null
+        }
 
         if (viewModel.emailError.value!!) binding.emailTextField.error = getString(R.string.empty_field)
-        else binding.emailTextField.error = null
-
         if (viewModel.passwordError.value!!) binding.passwordTextField.error = getString(R.string.empty_field)
-        else binding.passwordTextField.error = null
 
         return viewModel.emailError.value!! ||
                 viewModel.passwordError.value!!

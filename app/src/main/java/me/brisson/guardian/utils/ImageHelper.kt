@@ -186,9 +186,8 @@ class ImageHelper(private val activity: Activity) {
                         activity.contentResolver.openInputStream(photoURI!!)
                     var selectedImage: Bitmap = BitmapFactory.decodeStream(imageStream)
                     selectedImage = rotateImage(selectedImage)
-                    //todo() rotating only the bitmap image
-                    //todo() make the URI rotate as well
 
+                    //todo() rotating only the bitmap image, make the URI rotate as well
                     callback.onImageCompressed(photoURI, selectedImage)
                 } catch (e: IOException) {
                     e.printStackTrace()

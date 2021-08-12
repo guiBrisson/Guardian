@@ -68,7 +68,7 @@ class EditProfileActivity : BaseActivity() {
                 if (vm.photo.value != null) {
                     Picasso.get()
                         .load(vm.photo.value)
-                        .fit()
+                        .resize(1000, 1000)
                         .centerCrop()
                         .into(binding.userImageView)
                 }

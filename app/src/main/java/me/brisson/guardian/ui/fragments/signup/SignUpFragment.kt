@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.widget.doOnTextChanged
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
@@ -91,18 +92,26 @@ class SignUpFragment : BaseFragment() {
 
     private fun checkingEditTextErrors() : Boolean{
         viewModel.nameError.value = viewModel.name.value.isNullOrEmpty()
+        binding.nameInputEditText.doOnTextChanged { _, _, _, count ->
+            viewModel.nameError.value = count > 0
+            binding.nameTextField.error = null
+        }
+
         viewModel.emailError.value = viewModel.email.value.isNullOrEmpty()
+        binding.emailInputEditText.doOnTextChanged { _, _, _, count ->
+            viewModel.emailError.value = count > 0
+            binding.emailTextField.error = null
+        }
+
         viewModel.passwordError.value = viewModel.password.value.isNullOrEmpty()
+        binding.passwordInputEditText.doOnTextChanged { _, _, _, count ->
+            viewModel.passwordError.value = count > 0
+            binding.passwordTextField.error = null
+        }
 
         if (viewModel.nameError.value!!) binding.nameTextField.error = getString(R.string.empty_field)
-        else binding.nameTextField.error = null
-
         if (viewModel.emailError.value!!) binding.emailTextField.error = getString(R.string.empty_field)
-        else binding.emailTextField.error = null
-
         if (viewModel.passwordError.value!!) binding.passwordTextField.error = getString(R.string.empty_field)
-        else binding.passwordTextField.error = null
-
 
         return viewModel.nameError.value!! ||
             viewModel.emailError.value!! ||
