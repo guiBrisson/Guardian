@@ -15,16 +15,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/appLogoImageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_gravity="center"
             android:paddingVertical="40dp"
-            android:src="@color/color_background"
+            android:src="@mipmap/ic_launcher_foreground"
             android:transitionName="logoTransition"
-            app:civ_border_color="@color/rally_purple"
-            app:civ_border_width="0.8dp"
             app:layout_constraintBottom_toBottomOf="@id/guideline"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintEnd_toEndOf="@id/guideline3"

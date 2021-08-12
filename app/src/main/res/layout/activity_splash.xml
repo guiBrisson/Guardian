@@ -20,14 +20,12 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:context=".ui.activities.splash.SplashActivity">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/appLogoImageView"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:src="@color/color_background"
+            android:src="@mipmap/ic_launcher_foreground"
             android:transitionName="logoTransition"
-            app:civ_border_color="@color/rally_purple"
-            app:civ_border_width="0.8dp"
             app:layout_constraintDimensionRatio="1:1"
             app:layout_constraintBottom_toBottomOf="@id/guideline4"
             app:layout_constraintTop_toTopOf="@id/guideline"
