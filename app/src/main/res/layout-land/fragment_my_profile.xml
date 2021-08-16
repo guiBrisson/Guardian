@@ -21,7 +21,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/my_profile"
-            app:layout_constraintStart_toStartOf="@id/guideline"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.constraintlayout.widget.Guideline
@@ -97,7 +97,7 @@
         <ScrollView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             app:layout_constraintEnd_toEndOf="@id/guideline3"
             app:layout_constraintStart_toStartOf="@id/guideline2"
             app:layout_constraintTop_toTopOf="@id/guideline4">
@@ -105,13 +105,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:paddingBottom="60dp">
+                android:orientation="vertical">
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/editProfileLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:paddingHorizontal="15dp">
 
                     <ImageView
@@ -122,17 +121,14 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/color_primary_variant" />
+                        app:tint="@color/rally_purple_200" />
 
                     <TextView
+                        style="@style/TextAppearance.Profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:fontFamily="@font/roboto_condensed_regular"
-                        android:letterSpacing="0.15"
                         android:text="@string/edit_profile"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/editIcon"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -142,6 +138,7 @@
                         android:layout_height="wrap_content"
                         android:rotation="180"
                         android:src="@drawable/ic_baseline_arrow_back_24"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -158,7 +155,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/myGuardiansLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:paddingHorizontal="15dp">
 
                     <ImageView
@@ -169,17 +166,14 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/color_primary_variant" />
+                        app:tint="@color/rally_purple_200" />
 
                     <TextView
+                        style="@style/TextAppearance.Profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:fontFamily="@font/roboto_condensed_regular"
-                        android:letterSpacing="0.15"
                         android:text="@string/my_guardians"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/myGuardiansIcon"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -189,6 +183,7 @@
                         android:layout_height="wrap_content"
                         android:rotation="180"
                         android:src="@drawable/ic_baseline_arrow_back_24"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -204,7 +199,7 @@
 
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:paddingHorizontal="15dp">
 
                     <ImageView
@@ -215,17 +210,14 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/color_primary_variant" />
+                        app:tint="@color/rally_purple_200" />
 
                     <TextView
+                        style="@style/TextAppearance.Profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:fontFamily="@font/roboto_condensed_regular"
-                        android:letterSpacing="0.15"
                         android:text="@string/settings"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/settingsIcon"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -235,6 +227,7 @@
                         android:layout_height="wrap_content"
                         android:rotation="180"
                         android:src="@drawable/ic_baseline_arrow_back_24"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -251,7 +244,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/notificationsLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="50dp"
+                    android:layout_height="60dp"
                     android:paddingHorizontal="15dp">
 
                     <ImageView
@@ -262,17 +255,14 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/color_primary_variant" />
+                        app:tint="@color/rally_purple_200" />
 
                     <TextView
+                        style="@style/TextAppearance.Profile"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="20dp"
-                        android:fontFamily="@font/roboto_condensed_regular"
-                        android:letterSpacing="0.15"
                         android:text="@string/notifications"
-                        android:textAllCaps="false"
-                        android:textSize="16sp"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/notificationIcon"
                         app:layout_constraintTop_toTopOf="parent" />
@@ -282,6 +272,7 @@
                         android:layout_height="wrap_content"
                         android:rotation="180"
                         android:src="@drawable/ic_baseline_arrow_back_24"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
@@ -305,15 +296,15 @@
                     android:paddingHorizontal="15dp">
 
                     <ImageView
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:src="@drawable/logout"
                         app:tint="@color/color_primary_variant" />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="20dp"
+                        android:layout_marginStart="10dp"
                         android:fontFamily="@font/roboto_condensed_regular"
                         android:letterSpacing="0.15"
                         android:text="@string/leave"

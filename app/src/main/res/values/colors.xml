@@ -11,11 +11,15 @@
     <color name="color_secondary">#2A2931</color>
     <color name="color_secondary_variant">#1D1D23</color>
 
-    <color name="color_surface">#373741</color>
-    <color name="color_background">#33333D</color>
-    <color name="color_error">#b00020</color>
+<!--    <color name="color_surface">#373741</color>-->
+    <color name="color_surface">#1F1F1F</color>
+<!--    <color name="color_background">#33333D</color>-->
+    <color name="color_background">#252525</color>
 
-    <color name="color_status_bar">#27272F</color>
+    <color name="color_error">#b00020</color>
+    <color name="color_correct_green">#2ECC71</color>
+
+    <color name="color_status_bar">#121212</color>
 
     <color name="rally_purple">#B15DFF</color>
     <color name="rally_purple_300">#9600FF</color>

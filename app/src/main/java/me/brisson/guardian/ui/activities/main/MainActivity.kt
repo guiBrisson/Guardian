@@ -52,6 +52,9 @@ class MainActivity : BaseActivity() {
     }
 
     private fun setupUI() {
+        //Change the color of navigation bar onCreate
+        window.navigationBarColor = ContextCompat.getColor(this, R.color.color_surface)
+
         binding.allowLocationButton.setOnClickListener {
             askForLocationPermission()
         }

@@ -75,6 +75,12 @@
         <item name="android:fontFamily">@font/roboto_condensed_regular</item>
     </style>
 
+    <style name="TextAppearance.Profile" parent="">
+        <item name="fontFamily">@font/roboto_medium</item>
+        <item name="android:fontFamily">@font/roboto_medium</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
 
     <style name="Widget.App.CircularProgressIndicator" parent="Widget.MaterialComponents.CircularProgressIndicator">
         <item name="materialThemeOverlay">@style/ThemeOverlay.App.CircularProgressIndicator</item>
