@@ -9,10 +9,11 @@ import android.view.View
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
-import androidx.lifecycle.Observer
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.squareup.picasso.Picasso
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.databinding.ActivityEditProfileBinding
@@ -20,6 +21,7 @@ import me.brisson.guardian.ui.activities.dialogs.ReAuthDialog
 import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.R
 import me.brisson.guardian.utils.ImageHelper
+import java.io.ByteArrayOutputStream
 
 
 @AndroidEntryPoint
@@ -68,12 +70,12 @@ class EditProfileActivity : BaseActivity() {
                 if (vm.photo.value != null) {
                     Picasso.get()
                         .load(vm.photo.value)
-                        .resize(1000, 1000)
+                        .resize(300, 300)
                         .centerCrop()
                         .into(binding.userImageView)
                 }
 
-                vm.changePassword.observe(this, Observer {
+                vm.changePassword.observe(this, {
                     if (it) {
                         binding.changePasswordLayout.visibility = View.VISIBLE
                     } else {
@@ -119,10 +121,12 @@ class EditProfileActivity : BaseActivity() {
         binding.saveFAB.setOnClickListener {
             if (!checkTextInputErrors()) {
 
-                if (viewModel.name.value != user!!.displayName ||
-                    viewModel.photo.value != user.photoUrl
-                ) {
-                    profileChangeRequest()
+                if (viewModel.name.value != user!!.displayName) {
+                    changeUserName()
+                }
+
+                if (viewModel.photoBitmap.value != null) {
+                    handleImageUpload(viewModel.photoBitmap.value!!)
                 }
 
                 if (viewModel.phoneNumber.value != user.phoneNumber) {
@@ -137,19 +141,23 @@ class EditProfileActivity : BaseActivity() {
                     changeUserEmail()
                 }
 
-                viewModel.reAuthRequest.observe(this, Observer {
+                viewModel.reAuthRequest.observe(this, {
                     when (it) {
                         true -> {
-                            callDialog()
+                            callReAuthDialog()
                         }
                         false -> {
                             onBackPressed()
                         }
-                        null -> {
-                        }
+                        null -> { }
                     }
                 })
 
+                if (viewModel.anyError.value!!) {
+                    Toast.makeText(this, "There was an error!", Toast.LENGTH_SHORT).show()
+                }
+
+                onBackPressed()
             }
         }
 
@@ -162,7 +170,7 @@ class EditProfileActivity : BaseActivity() {
         }
     }
 
-    private fun callDialog() {
+    private fun callReAuthDialog() {
         ReAuthDialog {
             if (it.isNotBlank()) {
                 reAuth(it)
@@ -188,6 +196,7 @@ class EditProfileActivity : BaseActivity() {
                             Toast.LENGTH_SHORT
                         ).show()
 
+                        viewModel.anyError.value = true
                         Log.w(TAG, e.message!!)
                     }
                 }
@@ -198,22 +207,30 @@ class EditProfileActivity : BaseActivity() {
         //todo ???
     }
 
-    private fun profileChangeRequest() {
+    private fun changeUserName() {
         val profileUpdates = UserProfileChangeRequest.Builder()
             .setDisplayName(viewModel.name.value!!)
-            .setPhotoUri(viewModel.photo.value)
             .build()
         user!!.updateProfile(profileUpdates)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     viewModel.reAuthRequest.value = false
-                    Log.d(TAG, "User name and photo updated.")
+                    Log.d(TAG, "User name updated.")
                 } else {
-                    Toast.makeText(
-                        this,
-                        task.exception!!.message,
-                        Toast.LENGTH_LONG
-                    ).show()
+                    try {
+                        throw task.exception!!
+                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
+                        viewModel.reAuthRequest.value = true
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this,
+                            task.exception!!.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        viewModel.anyError.value = true
+                        Log.e(TAG, e.message!!)
+                    }
                 }
             }
     }
@@ -235,6 +252,8 @@ class EditProfileActivity : BaseActivity() {
                             task.exception!!.message,
                             Toast.LENGTH_LONG
                         ).show()
+
+                        viewModel.anyError.value = true
                         Log.e(TAG, e.message!!)
                     }
 
@@ -262,6 +281,63 @@ class EditProfileActivity : BaseActivity() {
             }
     }
 
+    private fun handleImageUpload(bitmap: Bitmap) {
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val uid = user?.uid
+
+
+        val reference = FirebaseStorage.getInstance().reference
+            .child("profileImages")
+            .child("$uid.jpeg")
+
+        reference.putBytes(baos.toByteArray())
+            .addOnSuccessListener {
+                getDownloadUrl(reference)
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "onFailure: ", it.cause)
+            }
+
+    }
+
+    private fun getDownloadUrl(reference: StorageReference) {
+        reference.downloadUrl
+            .addOnSuccessListener {
+                Log.d(TAG, "getDownloadUrl Success: $it")
+                setUserProfileUrl(it)
+            }
+    }
+
+    private fun setUserProfileUrl(uri: Uri) {
+        val request = UserProfileChangeRequest.Builder()
+            .setPhotoUri(uri)
+            .build()
+
+        user!!.updateProfile(request)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Log.d(TAG, "setUserProfileUrl: Successfully")
+                } else {
+                    try {
+                        throw task.exception!!
+                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
+                        viewModel.reAuthRequest.value = true
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this,
+                            task.exception!!.message,
+                            Toast.LENGTH_LONG
+                        ).show()
+
+                        viewModel.anyError.value = true
+                        Log.e(TAG, e.message!!)
+                    }
+                }
+            }
+
+    }
+
     override fun onBackPressed() {
         super.onBackPressed()
         overridePendingTransition(R.anim.stay_put, R.anim.exit_to_right)
@@ -277,7 +353,14 @@ class EditProfileActivity : BaseActivity() {
             imageHelper.handleResult(requestCode, resultCode, data, object : ImageHelper.Callback {
                 override fun onImageCompressed(imageURI: Uri?, imageBitmap: Bitmap?) {
                     viewModel.photo.value = imageURI
-                    binding.userImageView.setImageBitmap(imageBitmap)
+
+                    Picasso.get()
+                        .load(imageURI)
+                        .resize(300, 300)
+                        .centerCrop()
+                        .into(binding.userImageView)
+
+                    viewModel.photoBitmap.value = imageBitmap
 
                     Log.d(TAG, "Image Success")
                 }

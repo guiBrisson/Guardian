@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -33,7 +34,7 @@ class MyProfileFragment : BaseFragment() {
         binding = FragmentMyProfileBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
-        setupUI(Firebase.auth.currentUser)
+        setupUI(FirebaseAuth.getInstance().currentUser)
         handleClickListeners()
 
         return binding.root
@@ -43,11 +44,12 @@ class MyProfileFragment : BaseFragment() {
         if (user != null){
             viewModel.name.value = user.displayName
             viewModel.email.value = user.email
+            viewModel.photo.value = user.photoUrl
 
-            if (user.photoUrl != null){
+            if (viewModel.photo.value != null){
                 Picasso.get()
                     .load(user.photoUrl)
-                    .resize(1000, 1000)
+                    .resize(300, 300)
                     .centerCrop()
                     .into(binding.userImageView)
             }

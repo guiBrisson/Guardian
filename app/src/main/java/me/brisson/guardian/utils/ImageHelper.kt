@@ -11,6 +11,8 @@ import android.graphics.Matrix
 import android.net.Uri
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
+import android.util.Log
 import androidx.annotation.NonNull
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,12 +22,13 @@ import java.io.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-/*
-    todo image from camera is coming rotated
- */
+
+//todo() image from camera is coming rotated
+
 class ImageHelper(private val activity: Activity) {
 
     private var photoURI: Uri? = null
+    private var selectedImage: Bitmap? = null
 
     private var callback: Callback? = null
 
@@ -164,9 +167,11 @@ class ImageHelper(private val activity: Activity) {
             when (resultCode) {
                 AppCompatActivity.RESULT_OK -> try {
                     photoURI = data.data
+
                     val imageStream: InputStream? =
                         activity.contentResolver.openInputStream(photoURI!!)
-                    val selectedImage: Bitmap = BitmapFactory.decodeStream(imageStream)
+                    selectedImage = BitmapFactory.decodeStream(imageStream)
+
                     callback.onImageCompressed(photoURI, selectedImage)
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -184,10 +189,9 @@ class ImageHelper(private val activity: Activity) {
                 AppCompatActivity.RESULT_OK -> try {
                     val imageStream: InputStream? =
                         activity.contentResolver.openInputStream(photoURI!!)
-                    var selectedImage: Bitmap = BitmapFactory.decodeStream(imageStream)
-                    selectedImage = rotateImage(selectedImage)
+                    selectedImage = BitmapFactory.decodeStream(imageStream)
+                    selectedImage = rotateImage(selectedImage!!)
 
-                    //todo() rotating only the bitmap image, make the URI rotate as well
                     callback.onImageCompressed(photoURI, selectedImage)
                 } catch (e: IOException) {
                     e.printStackTrace()
@@ -220,6 +224,7 @@ class ImageHelper(private val activity: Activity) {
         fun onError()
     }
 
+    //todo() rotating only the bitmap image, make the URI rotate as well
     private fun rotateImage(source: Bitmap): Bitmap {
         val matrix = Matrix()
         matrix.postRotate(90f)
