@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.view.isEmpty
 import androidx.core.view.isNotEmpty
@@ -50,6 +51,17 @@ class LoginFragment : BaseFragment() {
     }
 
     private fun handleClickListener() {
+        //When clicked on the 'keyboard OK', perform the enterButton
+        binding.passwordInputEditText.setOnEditorActionListener { _, i, _ ->
+            return@setOnEditorActionListener when (i){
+                EditorInfo.IME_ACTION_DONE -> {
+                    binding.enterButton.performClick()
+                    true
+                }
+                else -> false
+            }
+        }
+
         binding.enterButton.setOnClickListener {
             if (!checkingEditTextErrors()) {
                 signInFirebase()

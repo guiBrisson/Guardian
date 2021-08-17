@@ -55,6 +55,7 @@
                     android:id="@+id/passwordInputEditText"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:imeOptions="actionDone"
                     android:fontFamily="@font/roboto_condensed_regular"
                     android:inputType="textPassword"
                     android:text="@={viewModel.password}" />
