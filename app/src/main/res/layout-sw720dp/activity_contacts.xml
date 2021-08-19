@@ -65,7 +65,7 @@
                 app:layout_constraintStart_toStartOf="parent"/>
 
             <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/noContactsPlaceholder"
+                android:id="@+id/noContactsPlaceholderLayout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toBottomOf="@id/guideline3"
@@ -79,15 +79,15 @@
                     android:src="@drawable/ic_round_perm_contact_calendar_24"
                     app:tint="@android:color/darker_gray"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@id/xerecaText"
+                    app:layout_constraintBottom_toTopOf="@id/noContactsPlaceholder"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"/>
 
                 <TextView
-                    android:id="@+id/xerecaText"
+                    android:id="@+id/noContactsPlaceholder"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Você não possui contatos"
+                    android:text="@string/contacts_placeholder"
                     android:fontFamily="@font/roboto_condensed_bold"
                     android:textSize="20sp"
                     android:textAlignment="center"

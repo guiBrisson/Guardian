@@ -16,6 +16,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.data.model.Contact
@@ -31,6 +33,7 @@ class ContactsActivity : BaseActivity() {
     private val adapter = ContactAdapter()
     private var extraStringValue: String? = null
 
+    private var db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,15 +56,15 @@ class ContactsActivity : BaseActivity() {
                     binding.allowContactsButton.visibility = View.GONE
                     binding.fab.visibility = View.VISIBLE
 
-                    getContactList()
+                    getPhoneContactList()
 
                     viewModel.getContacts().observe(this, {
                         if (it.isNotEmpty()) {
                             adapter.addData(it)
-                            binding.noContactsPlaceholder.visibility = View.GONE
+                            binding.noContactsPlaceholderLayout.visibility = View.GONE
                         } else {
                             binding.fab.visibility = View.GONE
-                            binding.noContactsPlaceholder.visibility = View.VISIBLE
+                            binding.noContactsPlaceholderLayout.visibility = View.VISIBLE
                         }
                     })
                     setupAdapter()
@@ -79,13 +82,27 @@ class ContactsActivity : BaseActivity() {
                 Log.d(TAG, "ExtraStringValue: $SMS_CONTACTS")
             }
             APP_CONTACTS -> {
-                //todo() search for all the contacts in the app.
-                binding.noContactsPlaceholder.visibility = View.GONE
+                binding.noContactsPlaceholderLayout.visibility = View.GONE
+
+                getAppUserList()
+
+                viewModel.getContacts().observe(this, {
+                    if (it.isNotEmpty()) {
+                        adapter.addData(it)
+                    } else {
+                        binding.fab.visibility = View.GONE
+                    }
+                })
+
+                setupAdapter()
+
                 Log.d(TAG, "ExtraStringValue: $APP_CONTACTS")
             }
         }
 
         binding.fab.setOnClickListener {
+            //TODO() Add a collection inside the user called contacts and add selected contacts
+
             Log.d("selectedContacts", "setUpUI: ${viewModel.getSelectedContacts()}")
             onBackPressed()
         }
@@ -133,9 +150,35 @@ class ContactsActivity : BaseActivity() {
 
     }
 
-    // Getting all users phone contacts
-    private fun getContactList() {
-        showDialog()
+    // Getting all users on the app
+    private fun getAppUserList() {
+        db.collection("users")
+            .get()
+            .addOnSuccessListener { users ->
+                val contacts = ArrayList<Contact>()
+
+                for (user in users) {
+                    contacts.add(
+                        Contact(
+                            uid = user.data["uid"].toString(),
+                            name = user.data["name"].toString(),
+                            photo = user.data["userImage"].toString()
+                        )
+                    )
+                    Log.d(TAG, "$user.id ${user.data}")
+                }
+
+                //TODO() set contacts only when user hit the search button.
+                //TODO() not show user own profile.
+                viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "setUpUI: ", it.cause)
+            }
+    }
+
+    // Getting all user's phone contacts
+    private fun getPhoneContactList() {
         val cr: ContentResolver = this.contentResolver
         val cur: Cursor? = cr.query(
             ContactsContract.Contacts.CONTENT_URI,
@@ -202,7 +245,7 @@ class ContactsActivity : BaseActivity() {
             }
         }
         viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
-        hideDialog()
+
         cur?.close()
     }
 

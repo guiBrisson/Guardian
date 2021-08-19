@@ -19,6 +19,7 @@ import me.brisson.guardian.ui.activities.myguardians.MyGuardiansActivity
 import me.brisson.guardian.ui.activities.notifications.NotificationsActivity
 import me.brisson.guardian.ui.base.BaseFragment
 
+//TODO() Update the UI when the fragment is back from EditProfile
 @AndroidEntryPoint
 class MyProfileFragment : BaseFragment() {
 

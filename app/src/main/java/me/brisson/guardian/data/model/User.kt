@@ -7,7 +7,7 @@ data class User(
     var uid: String = "",
     var name: String = "",
     var email: String = "",
-    var userImage: Uri? = null,
+    var userImage: String? = null,
     var contacts: List<Contact> = emptyList()
 
 )
