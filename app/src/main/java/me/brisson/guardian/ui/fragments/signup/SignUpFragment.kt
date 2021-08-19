@@ -121,14 +121,11 @@ class SignUpFragment : BaseFragment() {
 
     private fun addNewUserToCollection(newUser: User) {
         FirebaseFirestore.getInstance().collection("users")
-            .add(newUser)
+            .document(newUser.uid) // document path
+            .set(newUser)
             .addOnCompleteListener { task2 ->
-                if (task2.isSuccessful) {
-
-                    Log.d(TAG, "User Added to users collection.")
-                } else {
-                    Log.w(TAG, "Error adding user to user collection: ", task2.exception)
-                }
+                if (task2.isSuccessful) { Log.d(TAG, "User Added to users collection.")
+                } else { Log.w(TAG, "Error adding user to user collection: ", task2.exception) }
             }
 
     }

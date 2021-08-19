@@ -11,6 +11,7 @@ import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
@@ -36,6 +37,8 @@ class EditProfileActivity : BaseActivity() {
     private lateinit var imageHelper: ImageHelper
 
     private val user = Firebase.auth.currentUser
+    private var db = Firebase.firestore
+    private val usersReference = db.collection("users").document(user!!.uid)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,7 +152,8 @@ class EditProfileActivity : BaseActivity() {
                         false -> {
                             onBackPressed()
                         }
-                        null -> { }
+                        null -> {
+                        }
                     }
                 })
 
@@ -215,6 +219,13 @@ class EditProfileActivity : BaseActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     viewModel.reAuthRequest.value = false
+
+                    // Updating the user name in the "users" collections.
+                    usersReference.update("name", viewModel.name.value)
+                        .addOnSuccessListener { Log.d(TAG,"DocumentSnapshot successfully updated!") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
+
                     Log.d(TAG, "User name updated.")
                 } else {
                     try {
@@ -240,6 +251,12 @@ class EditProfileActivity : BaseActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     viewModel.reAuthRequest.value = false
+
+                    // Updating the user email in the "users" collections.
+                    usersReference.update("email", viewModel.email.value)
+                        .addOnSuccessListener { Log.d(TAG,"DocumentSnapshot successfully updated!") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
                     Log.d(TAG, "User email updated")
                 } else {
                     try {
@@ -305,11 +322,11 @@ class EditProfileActivity : BaseActivity() {
         reference.downloadUrl
             .addOnSuccessListener {
                 Log.d(TAG, "getDownloadUrl Success: $it")
-                setUserProfileUrl(it)
+                setUserProfileImageUrl(it)
             }
     }
 
-    private fun setUserProfileUrl(uri: Uri) {
+    private fun setUserProfileImageUrl(uri: Uri) {
         val request = UserProfileChangeRequest.Builder()
             .setPhotoUri(uri)
             .build()
@@ -317,6 +334,11 @@ class EditProfileActivity : BaseActivity() {
         user!!.updateProfile(request)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
+                    // Updating the user image in the "users" collections.
+                    usersReference.update("userImage", uri.toString())
+                        .addOnSuccessListener { Log.d(TAG,"DocumentSnapshot successfully updated!") }
+                        .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
+
                     Log.d(TAG, "setUserProfileUrl: Successfully")
                 } else {
                     try {

@@ -26,12 +26,14 @@ class MyProfileFragment : BaseFragment() {
         fun newInstance() = MyProfileFragment()
     }
 
-    private lateinit var binding : FragmentMyProfileBinding
+    private lateinit var binding: FragmentMyProfileBinding
     private var viewModel = MyProfileViewModel()
 
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
         binding = FragmentMyProfileBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
@@ -41,11 +43,11 @@ class MyProfileFragment : BaseFragment() {
         return binding.root
     }
 
-    private fun setupUI(user: FirebaseUser?){
+    private fun setupUI(user: FirebaseUser?) {
         if (user != null){
             viewModel.name.value = user.displayName
             viewModel.email.value = user.email
-            viewModel.photo.value = user.photoUrl
+            viewModel.photo.value = user.photoUrl?.toString()
 
             if (viewModel.photo.value != null){
                 Picasso.get()
@@ -63,7 +65,7 @@ class MyProfileFragment : BaseFragment() {
         }
     }
 
-    private fun handleClickListeners(){
+    private fun handleClickListeners() {
         binding.editProfileLayout.setOnClickListener {
             startActivity(EditProfileActivity())
             requireActivity().overridePendingTransition(R.anim.enter_from_right, R.anim.stay_put)
@@ -81,13 +83,16 @@ class MyProfileFragment : BaseFragment() {
 
         binding.logoutLayout.setOnClickListener {
             Firebase.auth.signOut()
-            startActivity(FirstScreenActivity(), flag = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
+            startActivity(
+                FirstScreenActivity(),
+                flag = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+            )
         }
     }
 
     override fun onResume() {
         super.onResume()
-        setupUI(Firebase.auth.currentUser)
+        setupUI(FirebaseAuth.getInstance().currentUser)
     }
 
 
