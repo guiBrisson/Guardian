@@ -53,10 +53,12 @@
     <string name="app">App</string>
     <string name="Sms">Sms</string>
     <string name="add_contact_as_guardian">Adicionar contato como Guardian.</string>
+    <string name="add_guardians">Adicionar Guardian.</string>
     <string name="contacts">Contatos</string>
 
     //place holders
     <string name="notification_placeholder">Você não possui\nnenhuma notificação</string>
+    <string name="contacts_placeholder">Você não possui contatos</string>
 
     //alert dialog
     <string name="add_image">Adicionar imagem</string>

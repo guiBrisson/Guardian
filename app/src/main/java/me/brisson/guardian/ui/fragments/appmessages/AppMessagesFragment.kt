@@ -1,13 +1,14 @@
 package me.brisson.guardian.ui.fragments.appmessages
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.databinding.FragmentAppMessagesBinding
+import me.brisson.guardian.ui.activities.contacts.ContactsActivity
 import me.brisson.guardian.ui.adapters.MessageAdapter
 import me.brisson.guardian.ui.base.BaseFragment
 import me.brisson.guardian.utils.Status
@@ -21,7 +22,7 @@ class AppMessagesFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAppMessagesBinding
     private val viewModel = AppMessagesViewModel()
-    lateinit var adapter: MessageAdapter
+    private lateinit var adapter: MessageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -30,11 +31,19 @@ class AppMessagesFragment : BaseFragment() {
         binding = FragmentAppMessagesBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
-
         setUpRecycler()
-
+        handleClicks()
 
         return binding.root
+    }
+
+    private fun handleClicks() {
+        binding.addGuardianButton.setOnClickListener {
+            // Passing the extra APP_CONTACTS, since ContactsActivity is used for both sms and app contacts.
+            val mIntent = Intent(activity, ContactsActivity::class.java)
+            mIntent.putExtra(ContactsActivity.CONTACT, ContactsActivity.APP_CONTACTS)
+            startActivity(mIntent)
+        }
     }
 
     private fun setUpRecycler() {
@@ -43,7 +52,7 @@ class AppMessagesFragment : BaseFragment() {
         binding.recycler.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-        viewModel.getMessages().observe(viewLifecycleOwner, Observer {
+        viewModel.getMessages().observe(viewLifecycleOwner, {
             if (!it.data.isNullOrEmpty()) {
 
                 when (it.status) {

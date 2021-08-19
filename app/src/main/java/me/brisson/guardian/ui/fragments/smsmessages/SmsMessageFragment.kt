@@ -1,5 +1,6 @@
 package me.brisson.guardian.ui.fragments.smsmessages
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ class SmsMessageFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = SmsMessageFragment()
+
     }
 
     private lateinit var binding: FragmentSmsMessageBinding
@@ -28,16 +30,15 @@ class SmsMessageFragment : BaseFragment() {
         binding.viewModel = viewModel
 
 
-        binding.addGuardianTextView.setOnClickListener {
-            startActivity(ContactsActivity())
+        binding.addGuardianButton.setOnClickListener {
+            // Passing the extra SMS_CONTACTS, since ContactsActivity is used for both sms and app contacts.
+            val mIntent = Intent(activity, ContactsActivity::class.java)
+            mIntent.putExtra(ContactsActivity.CONTACT, ContactsActivity.SMS_CONTACTS)
+            startActivity(mIntent)
         }
 
         return binding.root
     }
-
-
-
-
 
 
 }

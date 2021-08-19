@@ -1,5 +1,6 @@
 package me.brisson.guardian.ui.fragments.signup
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -9,11 +10,14 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
+import me.brisson.guardian.data.model.User
 import me.brisson.guardian.databinding.FragmentSignUpBinding
 import me.brisson.guardian.ui.activities.forgotpassword.ForgotPasswordActivity
 import me.brisson.guardian.ui.activities.main.MainActivity
@@ -77,19 +81,10 @@ class SignUpFragment : BaseFragment() {
                     Log.d(TAG, "createUserWithEmail:success")
                     val user = auth.currentUser
 
-                    // Update user name
-                    val profileUpdates = UserProfileChangeRequest.Builder()
-                        .setDisplayName(viewModel.name.value!!)
-                        .build()
-                    user!!.updateProfile(profileUpdates)
-                        .addOnCompleteListener { task1 ->
-                            if (task1.isSuccessful) {
-                                Log.d(TAG, "User profile updated.")
-                            }
-                        }
+                    updateUserName(user)
 
                     //Move to MainActivity
-                    startActivity(MainActivity())
+                    startActivity(MainActivity(), flag = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
 
                 } else {
                     // If sign in fails
@@ -100,6 +95,42 @@ class SignUpFragment : BaseFragment() {
                     ).show()
                 }
             }
+    }
+
+    private fun updateUserName(user: FirebaseUser?) {
+        val profileUpdates = UserProfileChangeRequest.Builder()
+            .setDisplayName(viewModel.name.value!!)
+            .build()
+        user!!.updateProfile(profileUpdates)
+            .addOnCompleteListener { task1 ->
+                if (task1.isSuccessful) {
+
+                    // New user for adding to the collection.
+                    val newUser = User(
+                        uid = user.uid,
+                        name = viewModel.name.value!!
+                    )
+                    addNewUserToCollection(newUser)
+
+                    Log.d(TAG, "User profile updated.")
+                } else {
+                    Log.w(TAG, "updateUserName: ", task1.exception)
+                }
+            }
+    }
+
+    private fun addNewUserToCollection(newUser: User) {
+        FirebaseFirestore.getInstance().collection("users")
+            .add(newUser)
+            .addOnCompleteListener { task2 ->
+                if (task2.isSuccessful) {
+
+                    Log.d(TAG, "User Added to users collection.")
+                } else {
+                    Log.w(TAG, "Error adding user to user collection: ", task2.exception)
+                }
+            }
+
     }
 
     private fun checkingEditTextErrors() : Boolean{

@@ -57,10 +57,11 @@ dependencies {
     implementation "com.google.android.gms:play-services-location:18.0.0"
 
     // Firebase
-    implementation 'com.google.firebase:firebase-analytics:18.0.3'
+    implementation 'com.google.firebase:firebase-analytics:19.0.0'
     implementation platform('com.google.firebase:firebase-bom:26.8.0')
     implementation 'com.google.firebase:firebase-auth-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
 
     // Google Play Service
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
@@ -76,9 +77,6 @@ dependencies {
     implementation 'com.squareup.picasso:picasso:2.71828'
     implementation 'com.raycoarana.codeinputview:codeinputview:2.1.1'
 
-    //Page indicator
-    implementation 'com.romandanylyk:pageindicatorview:1.0.3'
-
     //Dagger-Hilt
     implementation "com.google.dagger:hilt-android:$hilt_version"
     kapt "com.google.dagger:hilt-android-compiler:$hilt_version"
@@ -87,7 +85,7 @@ dependencies {
 
     // Networking
     implementation "com.squareup.retrofit2:retrofit:2.9.0"
-    implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
+//    implementation "com.squareup.retrofit2:converter-moshi:2.6.2"
     implementation "com.squareup.okhttp3:okhttp:4.8.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.7.2"
 

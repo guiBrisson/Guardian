@@ -1,7 +1,5 @@
 <resources>
     <!--
-    TODO: Before you run your application, you need a Google Maps API key.
-
     To get one, follow this link, follow the directions and press "Create" at the end:
 
     https://console.developers.google.com/flows/enableapi?apiid=maps_android_backend&keyType=CLIENT_SIDE_ANDROID&r=B9:B5:B8:08:E2:1E:E6:FD:84:E6:C2:60:79:91:82:AB:19:F4:F1:DF%3Bme.brisson.guardian.ui.fragments.location

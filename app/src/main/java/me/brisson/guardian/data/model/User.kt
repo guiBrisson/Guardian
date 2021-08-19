@@ -1,12 +1,12 @@
 package me.brisson.guardian.data.model
 
-import com.squareup.moshi.Json
+import android.graphics.Bitmap
+
 
 data class User(
-    @Json(name = "_id")
-    val id: Int = 0,
-    val name: String = "",
-    val email: String = "",
-    @Json(name = "_v")
-    val v: Int = 0
+    var uid: String = "",
+    var name: String = "",
+    var userImage: Bitmap? = null,
+    var contacts: List<Contact> = emptyList()
+
 )

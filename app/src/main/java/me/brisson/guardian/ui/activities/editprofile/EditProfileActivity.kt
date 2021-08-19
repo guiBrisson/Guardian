@@ -23,7 +23,7 @@ import me.brisson.guardian.R
 import me.brisson.guardian.utils.ImageHelper
 import java.io.ByteArrayOutputStream
 
-
+//TODO() update the user in the collection as well.
 @AndroidEntryPoint
 class EditProfileActivity : BaseActivity() {
 

@@ -1,5 +1,6 @@
 package me.brisson.guardian.ui.fragments.login
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -77,7 +78,7 @@ class LoginFragment : BaseFragment() {
         auth.signInWithEmailAndPassword(viewModel.email.value!!, viewModel.password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    startActivity(MainActivity())
+                    startActivity(MainActivity(), flag = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
                 } else {
                     Log.w(TAG, "signInWithEmailAndPassword:failure", task.exception)
                     Toast.makeText(

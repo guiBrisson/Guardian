@@ -38,9 +38,12 @@ abstract class BaseFragment : Fragment() {
         dialog?.dismiss()
     }
 
-    fun startActivity(nextActivity: Activity, bundle: Bundle = Bundle()) {
+    fun startActivity(nextActivity: Activity, bundle: Bundle = Bundle(), flag: Int? = null ) {
         val it = Intent(activity, nextActivity::class.java)
         it.putExtra("", bundle)
+        if (flag != null){
+            it.flags = flag
+        }
         startActivity(it)
     }
 }

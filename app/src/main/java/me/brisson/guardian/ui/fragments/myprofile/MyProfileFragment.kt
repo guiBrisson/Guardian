@@ -1,5 +1,6 @@
 package me.brisson.guardian.ui.fragments.myprofile
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -79,8 +80,8 @@ class MyProfileFragment : BaseFragment() {
         }
 
         binding.logoutLayout.setOnClickListener {
-            startActivity(FirstScreenActivity())
             Firebase.auth.signOut()
+            startActivity(FirstScreenActivity(), flag = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
         }
     }
 

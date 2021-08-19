@@ -1,26 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
             name="viewModel"
             type="me.brisson.guardian.ui.fragments.appmessages.AppMessagesViewModel" />
     </data>
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         tools:context=".ui.fragments.appmessages.AppMessagesFragment">
 
+        <Button
+            android:id="@+id/addGuardianButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:icon="@drawable/ic_baseline_person_add_24"
+            android:fontFamily="@font/roboto_condensed_regular"
+            android:text="@string/add_guardians"
+            android:textAllCaps="false"
+            android:textColor="@android:color/darker_gray"
+            app:iconTint="@color/color_primary_variant"
+            style="@style/Widget.MaterialComponents.Button.TextButton.Icon"
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent"/>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="10dp"/>
+            android:layout_marginVertical="10dp"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/addGuardianButton" />
 
-
-
-
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

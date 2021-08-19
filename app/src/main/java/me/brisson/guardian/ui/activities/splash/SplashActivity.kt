@@ -50,6 +50,7 @@ class SplashActivity : BaseActivity() {
             binding.appLogoImageView,
             binding.appLogoImageView.transitionName
         )
+        intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK
         startActivity(intent, options.toBundle())
     }
 

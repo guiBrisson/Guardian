@@ -18,7 +18,7 @@
         tools:context=".ui.fragments.smsmessages.SmsMessageFragment">
 
         <Button
-            android:id="@+id/addGuardianTextView"
+            android:id="@+id/addGuardianButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_baseline_person_add_24"
