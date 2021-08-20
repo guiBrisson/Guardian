@@ -295,15 +295,18 @@ class ContactsActivity : BaseActivity() {
                                 ContactsContract.CommonDataKinds.Phone.NUMBER
                             )
                         )
-
-                        contacts.add(
-                            Contact(
-                                uid = id,
-                                name = name,
-                                phoneNo = phoneNo,
-                                photo = photo
-                            )
+                        val contact = Contact(
+                            uid = id,
+                            name = name,
+                            phoneNo = phoneNo,
+                            photo = photo
                         )
+
+                        // Avoiding duplicate
+                        val duplicate = contacts.filter { it.uid == contact.uid }
+                        if (duplicate.isEmpty()){
+                            contacts.add(contact)
+                        }
 
                     }
 
