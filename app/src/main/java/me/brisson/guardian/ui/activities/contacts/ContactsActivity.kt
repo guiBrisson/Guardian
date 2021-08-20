@@ -33,7 +33,6 @@ import me.brisson.guardian.utils.AlertHelper
     todo()
         - not show user own profile.
         - only finding when name is the exact as query
-        - phone contact list is doubled
         - differentiate sms contact from app contacts
 */
 
@@ -83,7 +82,7 @@ class ContactsActivity : BaseActivity() {
 
                 } else {
                     binding.allowContactsButton.visibility = View.VISIBLE
-                    binding.noContactsPlaceholder.visibility = View.GONE
+                    binding.noContactsPlaceholderLayout.visibility = View.GONE
                 }
 
                 binding.allowContactsButton.setOnClickListener {
@@ -109,10 +108,17 @@ class ContactsActivity : BaseActivity() {
 
     }
 
-    // Checking if user already has contacts added and show dialog
+    // Checking if user already has contacts added and show dialog,
+    // and checking if contacts is from phone or app.
     private fun handleContact(contact: Contact) {
         val userReference = db.collection("users").document(user!!.uid)
         val contactsCollection = userReference.collection("contacts")
+
+        // Check if  contacts from phone or app
+        when (extraStringValue){
+            SMS_CONTACTS -> { contact.isPhoneContact = true }
+            APP_CONTACTS -> { contact.isPhoneContact = false }
+        }
 
         // Check if the user is already a guardian
         contactsCollection.document(contact.uid)
@@ -139,7 +145,7 @@ class ContactsActivity : BaseActivity() {
 
     }
 
-    // Adding contact to user contacts collection
+    // Adding contact to user's contacts collection
     private fun addGuardian(
         contactsCollection: CollectionReference,
         contact: Contact
