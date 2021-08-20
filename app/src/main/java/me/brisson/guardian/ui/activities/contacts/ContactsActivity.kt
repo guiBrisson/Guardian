@@ -31,9 +31,7 @@ import me.brisson.guardian.utils.AlertHelper
 
 /*
     todo()
-        - not show user own profile.
         - only finding when name is the exact as query
-        - differentiate sms contact from app contacts
 */
 
 @AndroidEntryPoint
@@ -75,6 +73,7 @@ class ContactsActivity : BaseActivity() {
                             adapter.addData(it)
                             binding.noContactsPlaceholderLayout.visibility = View.GONE
                         } else {
+                            binding.noContactsPlaceholder.text = getString(R.string.contacts_placeholder)
                             binding.noContactsPlaceholderLayout.visibility = View.VISIBLE
                         }
                     })
@@ -97,6 +96,10 @@ class ContactsActivity : BaseActivity() {
                 viewModel.getContacts().observe(this, {
                     if (it.isNotEmpty()) {
                         adapter.addData(it)
+                        binding.noContactsPlaceholderLayout.visibility = View.GONE
+                    } else {
+                        binding.noContactsPlaceholder.text = getString(R.string.no_contacts_found)
+                        binding.noContactsPlaceholderLayout.visibility = View.VISIBLE
                     }
                 })
 
@@ -108,8 +111,7 @@ class ContactsActivity : BaseActivity() {
 
     }
 
-    // Checking if user already has contacts added and show dialog,
-    // and checking if contacts is from phone or app.
+    // Handling contacts after add clicked
     private fun handleContact(contact: Contact) {
         val userReference = db.collection("users").document(user!!.uid)
         val contactsCollection = userReference.collection("contacts")
@@ -242,6 +244,10 @@ class ContactsActivity : BaseActivity() {
 
                         Log.d(TAG, "$user.id ${user.data}")
                     }
+                    // Removing users own profile from the list
+                    val loggedUser = contacts.find { contact -> contact.uid == user!!.uid }
+                    contacts.remove(loggedUser)
+
                     viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
                 }
                 .addOnFailureListener {
