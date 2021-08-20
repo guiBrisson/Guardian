@@ -10,12 +10,15 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.widget.SearchView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,6 +27,15 @@ import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ActivityContactsBinding
 import me.brisson.guardian.ui.adapters.ContactAdapter
 import me.brisson.guardian.ui.base.BaseActivity
+import me.brisson.guardian.utils.AlertHelper
+
+/*
+    todo()
+        - not show user own profile.
+        - only finding when name is the exact as query
+        - phone contact list is doubled
+        - differentiate sms contact from app contacts
+*/
 
 @AndroidEntryPoint
 class ContactsActivity : BaseActivity() {
@@ -31,9 +43,11 @@ class ContactsActivity : BaseActivity() {
     private lateinit var binding: ActivityContactsBinding
     private val viewModel: ContactsViewModel by viewModels()
     private val adapter = ContactAdapter()
+
     private var extraStringValue: String? = null
 
     private var db = Firebase.firestore
+    private val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -54,7 +68,6 @@ class ContactsActivity : BaseActivity() {
             SMS_CONTACTS -> {
                 if (checkReadContactPermission()) {
                     binding.allowContactsButton.visibility = View.GONE
-                    binding.fab.visibility = View.VISIBLE
 
                     getPhoneContactList()
 
@@ -63,14 +76,12 @@ class ContactsActivity : BaseActivity() {
                             adapter.addData(it)
                             binding.noContactsPlaceholderLayout.visibility = View.GONE
                         } else {
-                            binding.fab.visibility = View.GONE
                             binding.noContactsPlaceholderLayout.visibility = View.VISIBLE
                         }
                     })
                     setupAdapter()
 
                 } else {
-                    binding.fab.visibility = View.GONE
                     binding.allowContactsButton.visibility = View.VISIBLE
                     binding.noContactsPlaceholder.visibility = View.GONE
                 }
@@ -84,13 +95,9 @@ class ContactsActivity : BaseActivity() {
             APP_CONTACTS -> {
                 binding.noContactsPlaceholderLayout.visibility = View.GONE
 
-                getAppUserList()
-
                 viewModel.getContacts().observe(this, {
                     if (it.isNotEmpty()) {
                         adapter.addData(it)
-                    } else {
-                        binding.fab.visibility = View.GONE
                     }
                 })
 
@@ -100,18 +107,60 @@ class ContactsActivity : BaseActivity() {
             }
         }
 
-        binding.fab.setOnClickListener {
-            //TODO() Add a collection inside the user called contacts and add selected contacts
+    }
 
-            Log.d("selectedContacts", "setUpUI: ${viewModel.getSelectedContacts()}")
-            onBackPressed()
-        }
+    // Checking if user already has contacts added and show dialog
+    private fun handleContact(contact: Contact) {
+        val userReference = db.collection("users").document(user!!.uid)
+        val contactsCollection = userReference.collection("contacts")
+
+        // Check if the user is already a guardian
+        contactsCollection.document(contact.uid)
+            .get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    Toast.makeText(this, R.string.guardian_already_added, Toast.LENGTH_SHORT).show()
+                } else {
+                    // Show dialog
+                    AlertHelper.alertTwoButtonsDialog(
+                        this,
+                        getString(R.string.add_as_guardian, contact.name),
+                        getString(R.string.yes),
+                        getString(R.string.no),
+                        { _, _ -> addGuardian(contactsCollection, contact) },
+                        { _, _ ->  }
+
+                    )
+                }
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "addGuardian: ", it)
+            }
 
     }
 
+    // Adding contact to user contacts collection
+    private fun addGuardian(
+        contactsCollection: CollectionReference,
+        contact: Contact
+    ) {
+        contactsCollection
+            .document(contact.uid)
+            .set(contact)
+            .addOnSuccessListener {
+                Toast.makeText(this, R.string.guardian_added, Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Adding contacts: Successfully.")
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "There was an error", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Adding contacts: ", it.cause)
+            }
+    }
+
+    // Set up the adapter and recycler view
     private fun setupAdapter() {
-        adapter.onAddGuardianClickListener = {
-            viewModel.setSelectedContacts(it)
+        adapter.onAddGuardianClickListener = { contact ->
+            handleContact(contact)
         }
 
         binding.recycler.layoutManager = LinearLayoutManager(
@@ -132,49 +181,67 @@ class ContactsActivity : BaseActivity() {
 
         (binding.topAppBar.menu.findItem(R.id.search).actionView as SearchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
+            when (extraStringValue) {
+                SMS_CONTACTS -> {
+                    this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextChange(query: String?): Boolean {
+                            if (checkReadContactPermission()) {
+                                adapter.filter.filter(query)
+                            }
+                            return true
+                        }
 
-            this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                override fun onQueryTextChange(query: String?): Boolean {
-                    if (checkReadContactPermission()) {
-                        adapter.filter.filter(query)
-                    }
-                    return true
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            return false
+                        }
+                    })
                 }
+                APP_CONTACTS -> {
+                    this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+                        override fun onQueryTextChange(query: String?): Boolean {
+                            return true
+                        }
 
-                override fun onQueryTextSubmit(query: String?): Boolean {
-                    return false
+                        override fun onQueryTextSubmit(query: String?): Boolean {
+                            getAppUserList(query)
+                            return false
+                        }
+                    })
                 }
-            })
+            }
+
 
         }
 
     }
 
-    // Getting all users on the app
-    private fun getAppUserList() {
-        db.collection("users")
-            .get()
-            .addOnSuccessListener { users ->
-                val contacts = ArrayList<Contact>()
+    // Getting the user on firebase with a query
+    private fun getAppUserList(queryValue: String?) {
+        if (!queryValue.isNullOrEmpty()) {
+            val usersRef = db.collection("users")
+            val query = usersRef.whereEqualTo("name", queryValue)
 
-                for (user in users) {
-                    contacts.add(
-                        Contact(
-                            uid = user.data["uid"].toString(),
-                            name = user.data["name"].toString(),
-                            photo = user.data["userImage"].toString()
+            query.get()
+                .addOnSuccessListener { users ->
+                    val contacts = ArrayList<Contact>()
+
+                    for (user in users) {
+                        contacts.add(
+                            Contact(
+                                uid = user.getString("uid")!!,
+                                name = user.getString("name")!!,
+                                photo = user.getString("userImage")
+                            )
                         )
-                    )
-                    Log.d(TAG, "$user.id ${user.data}")
-                }
 
-                //TODO() set contacts only when user hit the search button.
-                //TODO() not show user own profile.
-                viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
-            }
-            .addOnFailureListener {
-                Log.e(TAG, "setUpUI: ", it.cause)
-            }
+                        Log.d(TAG, "$user.id ${user.data}")
+                    }
+                    viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
+                }
+                .addOnFailureListener {
+                    Log.e(TAG, "setUpUI: ", it.cause)
+                }
+        }
     }
 
     // Getting all user's phone contacts
@@ -254,6 +321,25 @@ class ContactsActivity : BaseActivity() {
         return list.sortedBy { it.name }
     }
 
+    // Asking for read phone contact
+    private fun askForReadContactPermission() {
+        ActivityCompat.requestPermissions(
+            this,
+            arrayOf(Manifest.permission.READ_CONTACTS),
+            READ_CONTACT_REQUEST_CODE
+        )
+    }
+
+    // Checking if has permission to read phone contact
+    private fun checkReadContactPermission(): Boolean {
+        val result = ContextCompat.checkSelfPermission(
+            this,
+            Manifest.permission.READ_CONTACTS
+        )
+
+        return result == PackageManager.PERMISSION_GRANTED
+    }
+
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -271,35 +357,18 @@ class ContactsActivity : BaseActivity() {
                     makeSnackBar(
                         binding.root,
                         getString(R.string.permission_read_contacts_granted)
-                    ).setAnchorView(binding.fab).show()
+                    )
                 } else {
                     makeActionSnackBar(
                         binding.root,
                         getString(R.string.permission_read_contacts_denied),
                         getString(R.string.retry),
                         ::askForReadContactPermission
-                    ).setAnchorView(binding.fab).show()
+                    )
                 }
                 return
             }
         }
-    }
-
-    private fun checkReadContactPermission(): Boolean {
-        val result = ContextCompat.checkSelfPermission(
-            this,
-            Manifest.permission.READ_CONTACTS
-        )
-
-        return result == PackageManager.PERMISSION_GRANTED
-    }
-
-    private fun askForReadContactPermission() {
-        ActivityCompat.requestPermissions(
-            this,
-            arrayOf(Manifest.permission.READ_CONTACTS),
-            READ_CONTACT_REQUEST_CODE
-        )
     }
 
     companion object {

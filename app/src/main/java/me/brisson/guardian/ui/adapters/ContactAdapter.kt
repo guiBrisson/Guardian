@@ -1,10 +1,10 @@
 package me.brisson.guardian.ui.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Filter
 import android.widget.Filterable
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import me.brisson.guardian.R
@@ -23,34 +23,37 @@ class ContactAdapter :
     lateinit var onAddGuardianClickListener: (item: Contact) -> Unit?
 
     class ViewHolder(
-            private val binding: ItemContactBinding,
-            private val parent: ViewGroup,
-            private val onAddGuardianClickListener: (item: Contact) -> Unit?
+        private val binding: ItemContactBinding,
+        private val onAddGuardianClickListener: (item: Contact) -> Unit?
     ) : RecyclerView.ViewHolder(binding.root) {
 
         fun bind(item: Contact) {
-            if (!item.photo.isNullOrEmpty()) {
+            if (item.photo.isNullOrEmpty()) {
                 Picasso
-                        .get()
-                        .load(item.photo)
-                        .fit()
-                        .centerCrop()
-                        .into(binding.contactImage)
+                    .get()
+                    .load(R.drawable.person_placeholder)
+                    .resize(200, 200)
+                    .centerCrop()
+                    .into(binding.contactImage)
             } else {
                 Picasso
-                        .get()
-                        .load(R.drawable.person_placeholder)
-                        .fit()
-                        .centerCrop()
-                        .into(binding.contactImage)
+                    .get()
+                    .load(item.photo)
+                    .resize(200, 200)
+                    .centerCrop()
+                    .into(binding.contactImage)
             }
 
             binding.contactName.text = item.name
-            binding.contactPhoneNumber.text = item.phoneNo
 
-            binding.addGuardianCheckBox.isChecked = item.isAdded
+            if (item.phoneNo.isNotEmpty()){
+                binding.contactPhoneNumber.text = item.phoneNo
+                binding.contactPhoneNumber.visibility = View.VISIBLE
+            } else {
+                binding.contactPhoneNumber.visibility = View.GONE
+            }
 
-            binding.addGuardianCheckBox.setOnClickListener {
+            binding.addGuardianButton.setOnClickListener {
                 onAddGuardianClickListener.invoke(item)
             }
 
@@ -60,11 +63,11 @@ class ContactAdapter :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-                ItemContactBinding.inflate(
-                        LayoutInflater.from(parent.context),
-                        parent,
-                        false
-                ), parent ,onAddGuardianClickListener
+            ItemContactBinding.inflate(
+                    LayoutInflater.from(parent.context),
+                    parent,
+                    false
+            ), onAddGuardianClickListener
         )
     }
 

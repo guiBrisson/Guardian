@@ -29,6 +29,12 @@
     <string name="type_your_password">Digite sua senha</string>
     <string name="re_auth_dialog_text">Para editar seu email ou senha é necessário digitar sua senha atual</string>
 
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="guardian_added">Guardian adicionado</string>
+    <string name="guardian_already_added">Guardian já adicionado</string>
+    <string name="add_as_guardian">Deseja adicionar %s como Guadian?</string>
+
     //profile
     <string name="edit_profile">Editar perfil</string>
     <string name="my_guardians">Meus Guardians</string>

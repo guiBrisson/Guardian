@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginVertical="20dp"
-    android:paddingStart="30dp"
+    android:paddingHorizontal="30dp"
     tools:ignore="RtlSymmetry">
 
     <de.hdodenhof.circleimageview.CircleImageView
@@ -23,7 +23,7 @@
         android:layout_marginHorizontal="15dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/addGuardianCheckBox"
+        app:layout_constraintEnd_toStartOf="@id/addGuardianButton"
         app:layout_constraintStart_toEndOf="@id/contactImage"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -31,7 +31,7 @@
             android:id="@+id/contactName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            tools:text="Amadeu Camilo Rosmaninho" />
+            tools:text="Amadeu Camilo" />
 
         <TextView
             android:id="@+id/contactPhoneNumber"
@@ -42,15 +42,19 @@
 
     </LinearLayout>
 
-    <CheckBox
-        android:id="@+id/addGuardianCheckBox"
+    <ImageButton
+        android:id="@+id/addGuardianButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:button="@drawable/ic_baseline_add_moderator_24"
-        android:buttonTint="@drawable/checkbox_selector"
+        android:src="@drawable/ic_baseline_add_moderator_24"
+        android:background="@android:color/transparent"
+        android:tint="@color/gray"
+        android:padding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
