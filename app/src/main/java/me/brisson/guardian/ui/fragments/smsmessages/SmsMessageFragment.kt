@@ -10,7 +10,7 @@ import me.brisson.guardian.databinding.FragmentSmsMessageBinding
 import me.brisson.guardian.ui.activities.contacts.ContactsActivity
 import me.brisson.guardian.ui.base.BaseFragment
 
-
+//TODO() Make an sms adapter
 @AndroidEntryPoint
 class SmsMessageFragment : BaseFragment() {
 
