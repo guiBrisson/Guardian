@@ -2,12 +2,9 @@ package me.brisson.guardian.ui.activities.contacts
 
 import android.Manifest
 import android.app.SearchManager
-import android.content.ContentResolver
 import android.content.Context
 import android.content.pm.PackageManager
-import android.database.Cursor
 import android.os.Bundle
-import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -17,18 +14,12 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.CollectionReference
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
-import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ActivityContactsBinding
 import me.brisson.guardian.ui.adapters.ContactAdapter
 import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.utils.AlertHelper
-import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ContactsActivity : BaseActivity() {
@@ -37,18 +28,13 @@ class ContactsActivity : BaseActivity() {
     private val viewModel: ContactsViewModel by viewModels()
     private val adapter = ContactAdapter()
 
-    private var extraStringValue: String? = null
-
-    private var db = Firebase.firestore
-    private val user = FirebaseAuth.getInstance().currentUser
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_contacts)
 
         binding.viewModel = viewModel
 
-        extraStringValue = intent?.extras?.getString(CONTACT)
+        viewModel.setExtraStringValue(intent?.extras?.getString(CONTACT))
 
         setUpAppbar()
         setUpUI()
@@ -58,12 +44,12 @@ class ContactsActivity : BaseActivity() {
     // Setting up the user interface
     private fun setUpUI() {
         //Checking to see if the bundle passed is sms or app contacts.
-        when (extraStringValue) {
+        when (viewModel.getExtraStringValue()) {
             SMS_CONTACTS -> {
                 if (checkReadContactPermission()) {
                     binding.allowContactsButton.visibility = View.GONE
 
-                    getPhoneContactList()
+                    viewModel.getPhoneContactList()
 
                     viewModel.getContacts().observe(this, {
                         if (it.isNotEmpty()) {
@@ -91,7 +77,7 @@ class ContactsActivity : BaseActivity() {
             APP_CONTACTS -> {
                 binding.noContactsPlaceholderLayout.visibility = View.GONE
 
-                getAppUserList()
+                viewModel.getAppUserList()
 
                 viewModel.getContacts().observe(this, {
                     if (it.isNotEmpty()) {
@@ -109,12 +95,36 @@ class ContactsActivity : BaseActivity() {
             }
         }
 
+        viewModel.getAddContactSuccessListener().observe(this, {
+            if (it){
+                Toast.makeText(this, R.string.contact_added, Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(this, "There was an error", Toast.LENGTH_SHORT).show()
+            }
+        })
+
+        viewModel.getIsContactAdded().observe(this, {
+            if (it){
+                Toast.makeText(this, R.string.contact_already_added, Toast.LENGTH_SHORT).show()
+            } else {
+                // Show dialog
+                AlertHelper.alertTwoButtonsDialog(
+                    this,
+                    getString(R.string.add_as_contact, viewModel.getClickedContact().value!!.name),
+                    getString(R.string.yes),
+                    getString(R.string.no),
+                    { _, _ -> viewModel.addContact(viewModel.getClickedContact().value!!) },
+                    { _, _ -> }
+                )}
+        })
+
+
     }
 
     // Set up the adapter and recycler view
     private fun setupAdapter() {
         adapter.onAddGuardianClickListener = { contact ->
-            handleContact(contact)
+            viewModel.handleContact(contact)
         }
 
         binding.recycler.layoutManager = LinearLayoutManager(
@@ -135,7 +145,7 @@ class ContactsActivity : BaseActivity() {
 
         (binding.topAppBar.menu.findItem(R.id.search).actionView as SearchView).apply {
             setSearchableInfo(searchManager.getSearchableInfo(componentName))
-            when (extraStringValue) {
+            when (viewModel.getExtraStringValue()) {
                 SMS_CONTACTS -> {
                     this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                         override fun onQueryTextChange(query: String?): Boolean {
@@ -167,179 +177,6 @@ class ContactsActivity : BaseActivity() {
 
         }
 
-    }
-
-    // Getting the user on firebase with a query
-    private fun getAppUserList() {
-        viewModel.clearContacts()
-
-        val usersRef = db.collection("users")
-
-        // Getting all users
-        val allUsers = ArrayList<Contact>()
-        usersRef
-            .get()
-            .addOnSuccessListener { users ->
-                for (user in users) {
-                    allUsers.add(
-                        Contact(
-                            uid = user.getString("uid")!!,
-                            name = user.getString("name")!!,
-                            photo = user.getString("userImage")
-                        )
-                    )
-                }
-                // Removing user's own profile from the list
-                val loggedUser = allUsers.find { contact -> contact.uid == user!!.uid }
-                allUsers.remove(loggedUser)
-
-                viewModel.setContacts(allUsers)
-
-                Log.d(TAG, "getAppUserList: Success")
-            }
-            .addOnFailureListener {
-                Log.e(TAG, "getAppUserList: ", it.cause)
-            }
-
-
-    }
-
-    // Getting all user's phone contacts
-    private fun getPhoneContactList() {
-        val cr: ContentResolver = this.contentResolver
-        val cur: Cursor? = cr.query(
-            ContactsContract.Contacts.CONTENT_URI,
-            null, null, null, null
-        )
-
-        var id: String
-        var name: String
-        var photo: String?
-        var phoneNo: String
-
-        val contacts = ArrayList<Contact>()
-
-        if ((cur?.count ?: 0) > 0) {
-            while (cur != null && cur.moveToNext()) {
-                id = cur.getString(
-                    cur.getColumnIndex(ContactsContract.Contacts._ID)
-                )
-                name = cur.getString(
-                    cur.getColumnIndex(
-                        ContactsContract.Contacts.DISPLAY_NAME
-                    )
-                )
-
-                photo = cur.getString(
-                    cur.getColumnIndex(
-                        ContactsContract.CommonDataKinds.Photo.PHOTO_URI
-                    )
-                )
-
-                if (cur.getInt(
-                        cur.getColumnIndex(
-                            ContactsContract.Contacts.HAS_PHONE_NUMBER
-                        )
-                    ) > 0
-                ) {
-                    val pCur: Cursor? = cr.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        arrayOf(id),
-                        null
-                    )
-                    while (pCur!!.moveToNext()) {
-                        phoneNo = pCur.getString(
-                            pCur.getColumnIndex(
-                                ContactsContract.CommonDataKinds.Phone.NUMBER
-                            )
-                        )
-                        val contact = Contact(
-                            uid = id,
-                            name = name,
-                            phoneNo = phoneNo,
-                            photo = photo
-                        )
-
-                        // Avoiding duplicate
-                        val duplicate = contacts.filter { it.uid == contact.uid }
-                        if (duplicate.isEmpty()) {
-                            contacts.add(contact)
-                        }
-
-                    }
-
-                    pCur.close()
-                }
-            }
-        }
-        viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
-
-        cur?.close()
-    }
-
-    // Handling contacts after add clicked
-    private fun handleContact(contact: Contact) {
-        val userReference = db.collection("users").document(user!!.uid)
-        val contactsCollection = userReference.collection("contacts")
-
-        // Check if  contacts from phone or app
-        when (extraStringValue) {
-            SMS_CONTACTS -> {
-                contact.isPhoneContact = true
-            }
-            APP_CONTACTS -> {
-                contact.isPhoneContact = false
-            }
-        }
-
-        // Check if the user is already a guardian
-        contactsCollection.document(contact.uid)
-            .get()
-            .addOnSuccessListener {
-                if (it.exists()) {
-                    Toast.makeText(this, R.string.contact_already_added, Toast.LENGTH_SHORT).show()
-                } else {
-                    // Show dialog
-                    AlertHelper.alertTwoButtonsDialog(
-                        this,
-                        getString(R.string.add_as_contact, contact.name),
-                        getString(R.string.yes),
-                        getString(R.string.no),
-                        { _, _ -> addGuardian(contactsCollection, contact) },
-                        { _, _ -> }
-
-                    )
-                }
-            }
-            .addOnFailureListener {
-                Log.e(TAG, "addGuardian: ", it)
-            }
-
-    }
-
-    // Adding contact to user's contacts collection
-    private fun addGuardian(
-        contactsCollection: CollectionReference,
-        contact: Contact
-    ) {
-        contactsCollection
-            .document(contact.uid)
-            .set(contact)
-            .addOnSuccessListener {
-                Toast.makeText(this, R.string.contact_added, Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "Adding contacts: Successfully.")
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "There was an error", Toast.LENGTH_SHORT).show()
-                Log.e(TAG, "Adding contacts: ", it.cause)
-            }
-    }
-
-    // Sorting the list of contacts in alphabetical order
-    private fun sortListInAlphabeticalOrder(list: List<Contact>): List<Contact> {
-        return list.sortedBy { it.name }
     }
 
     // Asking for read phone contact
