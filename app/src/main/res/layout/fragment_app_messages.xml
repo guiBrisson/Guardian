@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             app:icon="@drawable/ic_baseline_person_add_24"
             android:fontFamily="@font/roboto_condensed_regular"
-            android:text="@string/add_guardians"
+            android:text="@string/add_contact"
             android:textAllCaps="false"
             android:textColor="@android:color/darker_gray"
             app:iconTint="@color/color_primary_variant"

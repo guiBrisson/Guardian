@@ -111,64 +111,6 @@ class ContactsActivity : BaseActivity() {
 
     }
 
-    // Handling contacts after add clicked
-    private fun handleContact(contact: Contact) {
-        val userReference = db.collection("users").document(user!!.uid)
-        val contactsCollection = userReference.collection("contacts")
-
-        // Check if  contacts from phone or app
-        when (extraStringValue) {
-            SMS_CONTACTS -> {
-                contact.isPhoneContact = true
-            }
-            APP_CONTACTS -> {
-                contact.isPhoneContact = false
-            }
-        }
-
-        // Check if the user is already a guardian
-        contactsCollection.document(contact.uid)
-            .get()
-            .addOnSuccessListener {
-                if (it.exists()) {
-                    Toast.makeText(this, R.string.guardian_already_added, Toast.LENGTH_SHORT).show()
-                } else {
-                    // Show dialog
-                    AlertHelper.alertTwoButtonsDialog(
-                        this,
-                        getString(R.string.add_as_guardian, contact.name),
-                        getString(R.string.yes),
-                        getString(R.string.no),
-                        { _, _ -> addGuardian(contactsCollection, contact) },
-                        { _, _ -> }
-
-                    )
-                }
-            }
-            .addOnFailureListener {
-                Log.e(TAG, "addGuardian: ", it)
-            }
-
-    }
-
-    // Adding contact to user's contacts collection
-    private fun addGuardian(
-        contactsCollection: CollectionReference,
-        contact: Contact
-    ) {
-        contactsCollection
-            .document(contact.uid)
-            .set(contact)
-            .addOnSuccessListener {
-                Toast.makeText(this, R.string.guardian_added, Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "Adding contacts: Successfully.")
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "There was an error", Toast.LENGTH_SHORT).show()
-                Log.e(TAG, "Adding contacts: ", it.cause)
-            }
-    }
-
     // Set up the adapter and recycler view
     private fun setupAdapter() {
         adapter.onAddGuardianClickListener = { contact ->
@@ -335,6 +277,64 @@ class ContactsActivity : BaseActivity() {
         viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
 
         cur?.close()
+    }
+
+    // Handling contacts after add clicked
+    private fun handleContact(contact: Contact) {
+        val userReference = db.collection("users").document(user!!.uid)
+        val contactsCollection = userReference.collection("contacts")
+
+        // Check if  contacts from phone or app
+        when (extraStringValue) {
+            SMS_CONTACTS -> {
+                contact.isPhoneContact = true
+            }
+            APP_CONTACTS -> {
+                contact.isPhoneContact = false
+            }
+        }
+
+        // Check if the user is already a guardian
+        contactsCollection.document(contact.uid)
+            .get()
+            .addOnSuccessListener {
+                if (it.exists()) {
+                    Toast.makeText(this, R.string.contact_already_added, Toast.LENGTH_SHORT).show()
+                } else {
+                    // Show dialog
+                    AlertHelper.alertTwoButtonsDialog(
+                        this,
+                        getString(R.string.add_as_contact, contact.name),
+                        getString(R.string.yes),
+                        getString(R.string.no),
+                        { _, _ -> addGuardian(contactsCollection, contact) },
+                        { _, _ -> }
+
+                    )
+                }
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "addGuardian: ", it)
+            }
+
+    }
+
+    // Adding contact to user's contacts collection
+    private fun addGuardian(
+        contactsCollection: CollectionReference,
+        contact: Contact
+    ) {
+        contactsCollection
+            .document(contact.uid)
+            .set(contact)
+            .addOnSuccessListener {
+                Toast.makeText(this, R.string.contact_added, Toast.LENGTH_SHORT).show()
+                Log.d(TAG, "Adding contacts: Successfully.")
+            }
+            .addOnFailureListener {
+                Toast.makeText(this, "There was an error", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "Adding contacts: ", it.cause)
+            }
     }
 
     // Sorting the list of contacts in alphabetical order

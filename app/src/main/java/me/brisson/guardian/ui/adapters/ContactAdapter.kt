@@ -14,8 +14,8 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 class ContactAdapter :
-        RecyclerView.Adapter<ContactAdapter.ViewHolder>(),
-        Filterable {
+    RecyclerView.Adapter<ContactAdapter.ViewHolder>(),
+    Filterable {
 
     private val contacts: ArrayList<Contact> = arrayListOf()
     private val contactsFiltered: ArrayList<Contact> = arrayListOf()
@@ -46,7 +46,7 @@ class ContactAdapter :
 
             binding.contactName.text = item.name
 
-            if (item.phoneNo.isNotEmpty()){
+            if (!item.phoneNo.isNullOrEmpty()) {
                 binding.contactPhoneNumber.text = item.phoneNo
                 binding.contactPhoneNumber.visibility = View.VISIBLE
             } else {
@@ -64,9 +64,9 @@ class ContactAdapter :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
             ItemContactBinding.inflate(
-                    LayoutInflater.from(parent.context),
-                    parent,
-                    false
+                LayoutInflater.from(parent.context),
+                parent,
+                false
             ), onAddGuardianClickListener
         )
     }
@@ -99,7 +99,9 @@ class ContactAdapter :
                 val filterPattern = constraint.toString().toLowerCase(Locale.ROOT).trim()
 
                 for (item in contactsFiltered) {
-                    if (item.name.toLowerCase(Locale.ROOT).contains(filterPattern) || item.phoneNo.toLowerCase(Locale.ROOT).contains(filterPattern)) {
+                    if (item.name.toLowerCase(Locale.ROOT).contains(filterPattern)
+//                        || item.phoneNo.toLowerCase(Locale.ROOT).contains(filterPattern)
+                    ) {
                         filteredList.add(item)
                     }
                 }

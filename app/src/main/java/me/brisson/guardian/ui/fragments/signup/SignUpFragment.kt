@@ -108,7 +108,9 @@ class SignUpFragment : BaseFragment() {
                     // New user for adding to the collection.
                     val newUser = User(
                         uid = user.uid,
-                        name = viewModel.name.value!!
+                        name = viewModel.name.value!!,
+                        email = viewModel.email.value!!,
+                        userImage = ""
                     )
                     addNewUserToCollection(newUser)
 

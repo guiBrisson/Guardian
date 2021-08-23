@@ -1,50 +1,61 @@
 package me.brisson.guardian.ui.fragments.appmessages
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import me.brisson.guardian.data.model.Message
+import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.ui.base.BaseViewModel
-import me.brisson.guardian.utils.Resource
 import javax.inject.Inject
 
 @HiltViewModel
 class AppMessagesViewModel @Inject constructor() : BaseViewModel() {
-    private val messages = MutableLiveData<Resource<List<Message>>>()
+    private val appContacts = MutableLiveData<ArrayList<Contact>>()
+    private val user = FirebaseAuth.getInstance().currentUser
+    private val db = Firebase.firestore
+    private val contactRef = db.collection("users").document(user!!.uid).collection("contacts")
 
-    fun getMessages() : LiveData<Resource<List<Message>>> = messages
+    fun getContacts(): LiveData<ArrayList<Contact>> = appContacts
 
     init {
-        messages.postValue(Resource.success(mockMessages()))
+        fetchContacts()
     }
 
-    private fun mockMessages() : List<Message>{
-        return listOf(
-            Message(
-                name = "Dwayne The Rock",
-                image = "",
-                message = "Recebi sua mensagem, ta tudo bem?",
-                timeAgo = "15 min",
-                newMessages = 1,
-                isGuardian = true
-            ),
-            Message(
-                name = "Ariana Grande",
-                image = "",
-                message = "Recebi sua mensagem, ta tudo bem?",
-                timeAgo = "5 horas",
-                newMessages = 0,
-                isGuardian = true
-            ),
-            Message(
-                name = "Mark Ruffalo",
-                image = "",
-                message = "Recebi sua mensagem, ta tudo bem?",
-                timeAgo = "50 min",
-                newMessages = 100,
-                isGuardian = false
-            )
+    private fun fetchContacts() {
+        contactRef
+            .whereEqualTo("isPhoneContact", false) // Filtering app contacts
+            .get()
+            .addOnSuccessListener { contacts ->
+                // Mapping and adding app contacts
+                val contactApp = ArrayList<Contact>()
+                for (contact in contacts) {
+                    contactApp.add(
+                        Contact(
+                            uid = contact.getString("uid")!!,
+                            name = contact.getString("name")!!,
+                            isPhoneContact = contact.getBoolean("isPhoneContact")!!,
+                            photo = contact.getString("photo"),
+                            phoneNo = contact.getString("phoneNo"),
+                            isGuardian = contact.getBoolean("isGuardian")!!,
+                            lastMessage = contact.getString("lastMessage"),
+                            lastMessageTimer = contact.getString("lastMessageTimer")
+                        )
+                    )
+                }
 
-        )
+                appContacts.value = contactApp
+                Log.d(TAG, "fetchContacts: Success")
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "fetchContacts: Failure", it.cause)
+            }
     }
+
+    companion object {
+        private val TAG = AppMessagesViewModel::class.java.simpleName
+    }
+
 }

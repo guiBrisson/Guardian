@@ -6,24 +6,25 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import me.brisson.guardian.R
-import me.brisson.guardian.data.model.Message
+import me.brisson.guardian.data.model.Contact
+//import me.brisson.guardian.data.model.Message
 import me.brisson.guardian.databinding.ItemMessageBinding
 
 class MessageAdapter(
-   private val messages: ArrayList<Message>
+   private val messages: ArrayList<Contact>
 ) : RecyclerView.Adapter<MessageAdapter.ViewHolder>(){
-    lateinit var onItemClickListener: (item: Message) -> Unit?
+    lateinit var onItemClickListener: (item: Contact) -> Unit?
 
     class ViewHolder(
         private val binding: ItemMessageBinding,
-        private val onItemClickListener: (item: Message) -> Unit?
+        private val onItemClickListener: (item: Contact) -> Unit?
     ) : RecyclerView.ViewHolder(binding.root){
 
-        fun bind(item: Message){
+        fun bind(item: Contact){
 
-            if (item.image.isNotEmpty()) {
+            if (item.photo!!.isNotEmpty()) {
                 Picasso.get()
-                    .load(item.image)
+                    .load(item.photo)
                     .centerCrop()
                     .fit()
                     .into(binding.image)
@@ -43,17 +44,17 @@ class MessageAdapter(
             }
 
             binding.nameTextField.text = item.name
-            binding.longAgoTextView.text = item.timeAgo
-            binding.messageText.text = item.message
+            binding.longAgoTextView.text = item.lastMessageTimer
+            binding.messageText.text = item.lastMessage
 
-            when(item.newMessages){
+            when(item.newMessagesCount){
                 0 -> binding.messagesCountLayout.visibility = View.GONE
                 else -> {
                     binding.messagesCountLayout.visibility = View.VISIBLE
-                    if(item.newMessages > 9){
+                    if(item.newMessagesCount!! > 9){
                         "9+".also { binding.recentMessagesCount.text = it }
                     }else {
-                        binding.recentMessagesCount.text = item.newMessages.toString()
+                        binding.recentMessagesCount.text = item.newMessagesCount.toString()
                     }
                 }
             }
@@ -83,7 +84,7 @@ class MessageAdapter(
         return messages.size
     }
 
-    fun addData(items: List<Message>){
+    fun addData(items: List<Contact>){
         messages.addAll(items)
         notifyDataSetChanged()
     }

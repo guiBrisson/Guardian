@@ -52,20 +52,14 @@ class AppMessagesFragment : BaseFragment() {
         binding.recycler.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
-        viewModel.getMessages().observe(viewLifecycleOwner, {
-            if (!it.data.isNullOrEmpty()) {
-
-                when (it.status) {
-                    Status.SUCCESS -> {
-                        hideDialog()
-                        adapter.addData(it.data)
-                    }
-                    Status.ERROR -> showDialog()
-                    Status.LOADING -> showDialog()
-                }
+        viewModel.getContacts().observe(viewLifecycleOwner, {
+            if (!it.isNullOrEmpty()) {
+                adapter.addData(it)
             }
 
-            adapter.onItemClickListener = { }
+            adapter.onItemClickListener = {
+                // TODO() open chat activity
+            }
         })
     }
 

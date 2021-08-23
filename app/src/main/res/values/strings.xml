@@ -29,20 +29,14 @@
     <string name="type_your_password">Digite sua senha</string>
     <string name="re_auth_dialog_text">Para editar seu email ou senha é necessário digitar sua senha atual</string>
 
-    <string name="yes">Sim</string>
-    <string name="no">Não</string>
-    <string name="guardian_added">Guardian adicionado</string>
-    <string name="guardian_already_added">Guardian já adicionado</string>
-    <string name="add_as_guardian">Deseja adicionar %s como Guadian?</string>
-
-    //profile
+    // profile
     <string name="edit_profile">Editar perfil</string>
     <string name="my_guardians">Meus Guardians</string>
     <string name="settings">Configuração</string>
     <string name="notifications">Notificações</string>
     <string name="leave">Sair</string>
 
-    //menu
+    // menu
     <string name="menu">Menu</string>
     <string name="tools">Ferramentas</string>
     <string name="messages">Mensagens</string>
@@ -51,33 +45,43 @@
     <string name="search_hint">Pesquisar…</string>
     <string name="my_profile">Meu perfil</string>
 
-    //notifications
+    // notifications
     <string name="recent">Recente</string>
     <string name="historic">Histórico</string>
 
-    //messages
+    // messages
     <string name="app">App</string>
     <string name="Sms">Sms</string>
     <string name="add_contact_as_guardian">Adicionar contato como Guardian.</string>
     <string name="add_guardians">Adicionar Guardian.</string>
+    <string name="add_contact">Adicionar contato.</string>
     <string name="contacts">Contatos</string>
 
-    //place holders
+    // place holders
     <string name="notification_placeholder">Você não possui\nnenhuma notificação</string>
     <string name="contacts_placeholder">Você não possui contatos</string>
     <string name="no_contacts_found">Nenhum usuário encontrado</string>
 
-    //alert dialog
+    // alert dialog
     <string name="add_image">Adicionar imagem</string>
     <string name="camera">Camera</string>
     <string name="gallery">Galeria</string>
 
-    //permissions
+    // contact dialog
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
+    <string name="guardian_added">Guardian adicionado</string>
+    <string name="contact_added">Contato adicionado</string>
+    <string name="contact_already_added">Contato já adicionado</string>
+    <string name="add_as_guardian">Deseja adicionar %s como Guadian?</string>
+    <string name="add_as_contact">Deseja adicionar %s como contato?</string>
+
+    // permissions
     <string name="permission_read_contacts_granted">Permissão para ler os contatos garantida</string>
     <string name="permission_read_contacts_denied">Permissão para ler os contatos negada</string>
     <string name="permission_fine_location_granted">Permissão para localização garantida</string>
     <string name="permission_fine_location_denied">Permissão para localização negada</string>
 
-    //errors
+    // errors
     <string name="empty_field">Campo vazio</string>
 </resources>
