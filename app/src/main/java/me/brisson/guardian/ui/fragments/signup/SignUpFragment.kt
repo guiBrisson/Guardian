@@ -2,22 +2,14 @@ package me.brisson.guardian.ui.fragments.signup
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
-import me.brisson.guardian.data.model.User
 import me.brisson.guardian.databinding.FragmentSignUpBinding
 import me.brisson.guardian.ui.activities.forgotpassword.ForgotPasswordActivity
 import me.brisson.guardian.ui.activities.main.MainActivity
@@ -28,13 +20,10 @@ class SignUpFragment : BaseFragment() {
 
     companion object {
         fun newInstance() = SignUpFragment()
-        private val TAG = SignUpFragment::class.java.simpleName
     }
 
     private lateinit var binding: FragmentSignUpBinding
     private val viewModel = SignUpViewModel()
-
-    private lateinit var auth: FirebaseAuth
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,17 +32,16 @@ class SignUpFragment : BaseFragment() {
         binding = FragmentSignUpBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
 
-        auth = Firebase.auth
-
-        handleClickListener()
+        setupUI()
 
         return binding.root
     }
 
-    private fun handleClickListener() {
+    // Setting up users interface
+    private fun setupUI() {
         //When clicked on the 'keyboard OK', perform the enterButton
         binding.passwordInputEditText.setOnEditorActionListener { _, i, _ ->
-            return@setOnEditorActionListener when (i){
+            return@setOnEditorActionListener when (i) {
                 EditorInfo.IME_ACTION_DONE -> {
                     binding.enterButton.performClick()
                     true
@@ -64,75 +52,32 @@ class SignUpFragment : BaseFragment() {
 
         binding.enterButton.setOnClickListener {
             if (!checkingEditTextErrors()) {
-                firebaseAuth()
+                viewModel.firebaseAuth()
             }
         }
 
         binding.forgotPasswordButton.setOnClickListener {
             startActivity(ForgotPasswordActivity())
         }
-    }
 
-    private fun firebaseAuth(){
-        auth.createUserWithEmailAndPassword(viewModel.email.value!!, viewModel.password.value!!)
-            .addOnCompleteListener(requireActivity()) { task ->
-                if (task.isSuccessful) {
-                    // Sign in success
-                    Log.d(TAG, "createUserWithEmail:success")
-                    val user = auth.currentUser
-
-                    updateUserName(user)
-
-                    //Move to MainActivity
-                    startActivity(MainActivity(), flag = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK))
-
-                } else {
-                    // If sign in fails
-                    Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                    Toast.makeText(
-                        requireContext(), "Authentication failed.",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+        viewModel.getUserCreatedSuccessListener().observe(viewLifecycleOwner, { success ->
+            if (success) {
+                //Move to MainActivity
+                startActivity(
+                    MainActivity(),
+                    flag = (Intent.FLAG_ACTIVITY_CLEAR_TASK or Intent.FLAG_ACTIVITY_NEW_TASK)
+                )
+            } else {
+                Toast.makeText(
+                    requireContext(), "Authentication failed.",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        })
     }
 
-    private fun updateUserName(user: FirebaseUser?) {
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName(viewModel.name.value!!)
-            .build()
-        user!!.updateProfile(profileUpdates)
-            .addOnCompleteListener { task1 ->
-                if (task1.isSuccessful) {
-
-                    // New user for adding to the collection.
-                    val newUser = User(
-                        uid = user.uid,
-                        name = viewModel.name.value!!,
-                        email = viewModel.email.value!!,
-                        userImage = ""
-                    )
-                    addNewUserToCollection(newUser)
-
-                    Log.d(TAG, "User profile updated.")
-                } else {
-                    Log.w(TAG, "updateUserName: ", task1.exception)
-                }
-            }
-    }
-
-    private fun addNewUserToCollection(newUser: User) {
-        FirebaseFirestore.getInstance().collection("users")
-            .document(newUser.uid) // document path
-            .set(newUser)
-            .addOnCompleteListener { task2 ->
-                if (task2.isSuccessful) { Log.d(TAG, "User Added to users collection.")
-                } else { Log.w(TAG, "Error adding user to user collection: ", task2.exception) }
-            }
-
-    }
-
-    private fun checkingEditTextErrors() : Boolean{
+    // Checking and handling errors on edit texts
+    private fun checkingEditTextErrors(): Boolean {
         viewModel.nameError.value = viewModel.name.value.isNullOrEmpty()
         binding.nameInputEditText.doOnTextChanged { _, _, _, count ->
             viewModel.nameError.value = count > 0
@@ -151,21 +96,24 @@ class SignUpFragment : BaseFragment() {
             binding.passwordTextField.error = null
         }
 
-        if (viewModel.nameError.value!!) binding.nameTextField.error = getString(R.string.empty_field)
-        if (viewModel.emailError.value!!) binding.emailTextField.error = getString(R.string.empty_field)
-        if (viewModel.passwordError.value!!) binding.passwordTextField.error = getString(R.string.empty_field)
+        if (viewModel.nameError.value!!) binding.nameTextField.error =
+            getString(R.string.empty_field)
+        if (viewModel.emailError.value!!) binding.emailTextField.error =
+            getString(R.string.empty_field)
+        if (viewModel.passwordError.value!!) binding.passwordTextField.error =
+            getString(R.string.empty_field)
 
         return viewModel.nameError.value!! ||
-            viewModel.emailError.value!! ||
-            viewModel.passwordError.value!!
+                viewModel.emailError.value!! ||
+                viewModel.passwordError.value!!
 
     }
 
     override fun onStart() {
         super.onStart()
         // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = auth.currentUser
-        if(currentUser != null){
+        val currentUser = viewModel.getAuth().currentUser
+        if (currentUser != null) {
             startActivity(MainActivity())
         }
     }

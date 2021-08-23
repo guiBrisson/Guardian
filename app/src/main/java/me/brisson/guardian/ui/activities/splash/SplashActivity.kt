@@ -24,15 +24,15 @@ class SplashActivity : BaseActivity() {
     private lateinit var binding: ActivitySplashBinding
     private val viewModel: SplashViewModel by viewModels()
 
-    private val user = Firebase.auth.currentUser
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         binding.viewModel = viewModel
 
+        // Checking if there is a logged user
         Handler(Looper.myLooper()!!).postDelayed({
-            if (user != null){
+            if (viewModel.getUser() != null){
                 startActivity(MainActivity())
             } else {
                 transition()
@@ -43,6 +43,7 @@ class SplashActivity : BaseActivity() {
 
     }
 
+    // Transition with animation to FirstScreenActivity()
     private fun transition() {
         val intent = Intent(this, FirstScreenActivity::class.java)
         val options: ActivityOptionsCompat = ActivityOptionsCompat.makeSceneTransitionAnimation(
