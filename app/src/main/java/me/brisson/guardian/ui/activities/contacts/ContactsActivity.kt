@@ -28,11 +28,7 @@ import me.brisson.guardian.databinding.ActivityContactsBinding
 import me.brisson.guardian.ui.adapters.ContactAdapter
 import me.brisson.guardian.ui.base.BaseActivity
 import me.brisson.guardian.utils.AlertHelper
-
-/*
-    todo()
-        - only finding when name is the exact as query
-*/
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class ContactsActivity : BaseActivity() {
@@ -59,6 +55,7 @@ class ContactsActivity : BaseActivity() {
 
     }
 
+    // Setting up the user interface
     private fun setUpUI() {
         //Checking to see if the bundle passed is sms or app contacts.
         when (extraStringValue) {
@@ -71,13 +68,14 @@ class ContactsActivity : BaseActivity() {
                     viewModel.getContacts().observe(this, {
                         if (it.isNotEmpty()) {
                             adapter.addData(it)
+                            setupAdapter()
                             binding.noContactsPlaceholderLayout.visibility = View.GONE
                         } else {
-                            binding.noContactsPlaceholder.text = getString(R.string.contacts_placeholder)
+                            binding.noContactsPlaceholder.text =
+                                getString(R.string.contacts_placeholder)
                             binding.noContactsPlaceholderLayout.visibility = View.VISIBLE
                         }
                     })
-                    setupAdapter()
 
                 } else {
                     binding.allowContactsButton.visibility = View.VISIBLE
@@ -93,9 +91,12 @@ class ContactsActivity : BaseActivity() {
             APP_CONTACTS -> {
                 binding.noContactsPlaceholderLayout.visibility = View.GONE
 
+                getAppUserList()
+
                 viewModel.getContacts().observe(this, {
                     if (it.isNotEmpty()) {
                         adapter.addData(it)
+                        setupAdapter()
                         binding.noContactsPlaceholderLayout.visibility = View.GONE
                     } else {
                         binding.noContactsPlaceholder.text = getString(R.string.no_contacts_found)
@@ -103,7 +104,6 @@ class ContactsActivity : BaseActivity() {
                     }
                 })
 
-                setupAdapter()
 
                 Log.d(TAG, "ExtraStringValue: $APP_CONTACTS")
             }
@@ -117,9 +117,13 @@ class ContactsActivity : BaseActivity() {
         val contactsCollection = userReference.collection("contacts")
 
         // Check if  contacts from phone or app
-        when (extraStringValue){
-            SMS_CONTACTS -> { contact.isPhoneContact = true }
-            APP_CONTACTS -> { contact.isPhoneContact = false }
+        when (extraStringValue) {
+            SMS_CONTACTS -> {
+                contact.isPhoneContact = true
+            }
+            APP_CONTACTS -> {
+                contact.isPhoneContact = false
+            }
         }
 
         // Check if the user is already a guardian
@@ -136,7 +140,7 @@ class ContactsActivity : BaseActivity() {
                         getString(R.string.yes),
                         getString(R.string.no),
                         { _, _ -> addGuardian(contactsCollection, contact) },
-                        { _, _ ->  }
+                        { _, _ -> }
 
                     )
                 }
@@ -207,11 +211,11 @@ class ContactsActivity : BaseActivity() {
                 APP_CONTACTS -> {
                     this.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                         override fun onQueryTextChange(query: String?): Boolean {
+                            adapter.filter.filter(query)
                             return true
                         }
 
                         override fun onQueryTextSubmit(query: String?): Boolean {
-                            getAppUserList(query)
                             return false
                         }
                     })
@@ -224,36 +228,38 @@ class ContactsActivity : BaseActivity() {
     }
 
     // Getting the user on firebase with a query
-    private fun getAppUserList(queryValue: String?) {
-        if (!queryValue.isNullOrEmpty()) {
-            val usersRef = db.collection("users")
-            val query = usersRef.whereEqualTo("name", queryValue)
+    private fun getAppUserList() {
+        viewModel.clearContacts()
 
-            query.get()
-                .addOnSuccessListener { users ->
-                    val contacts = ArrayList<Contact>()
+        val usersRef = db.collection("users")
 
-                    for (user in users) {
-                        contacts.add(
-                            Contact(
-                                uid = user.getString("uid")!!,
-                                name = user.getString("name")!!,
-                                photo = user.getString("userImage")
-                            )
+        // Getting all users
+        val allUsers = ArrayList<Contact>()
+        usersRef
+            .get()
+            .addOnSuccessListener { users ->
+                for (user in users) {
+                    allUsers.add(
+                        Contact(
+                            uid = user.getString("uid")!!,
+                            name = user.getString("name")!!,
+                            photo = user.getString("userImage")
                         )
-
-                        Log.d(TAG, "$user.id ${user.data}")
-                    }
-                    // Removing users own profile from the list
-                    val loggedUser = contacts.find { contact -> contact.uid == user!!.uid }
-                    contacts.remove(loggedUser)
-
-                    viewModel.setContacts(sortListInAlphabeticalOrder(contacts))
+                    )
                 }
-                .addOnFailureListener {
-                    Log.e(TAG, "setUpUI: ", it.cause)
-                }
-        }
+                // Removing user's own profile from the list
+                val loggedUser = allUsers.find { contact -> contact.uid == user!!.uid }
+                allUsers.remove(loggedUser)
+
+                viewModel.setContacts(allUsers)
+
+                Log.d(TAG, "getAppUserList: Success")
+            }
+            .addOnFailureListener {
+                Log.e(TAG, "getAppUserList: ", it.cause)
+            }
+
+
     }
 
     // Getting all user's phone contacts
@@ -316,7 +322,7 @@ class ContactsActivity : BaseActivity() {
 
                         // Avoiding duplicate
                         val duplicate = contacts.filter { it.uid == contact.uid }
-                        if (duplicate.isEmpty()){
+                        if (duplicate.isEmpty()) {
                             contacts.add(contact)
                         }
 
@@ -389,7 +395,7 @@ class ContactsActivity : BaseActivity() {
     companion object {
         private const val READ_CONTACT_REQUEST_CODE = 1
 
-        private val TAG = ContactsActivity::javaClass.name
+        private val TAG = ContactsActivity::class.java.simpleName
 
         // The APP_CONTACTS is a reference to the firebase contacts, and the SMS_CONTACTS is to the phone contacts.
         const val CONTACT = "contact"

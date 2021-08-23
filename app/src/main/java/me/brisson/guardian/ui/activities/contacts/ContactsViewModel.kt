@@ -8,14 +8,17 @@ import me.brisson.guardian.ui.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
-class ContactsViewModel @Inject constructor() : BaseViewModel()  {
-    // Contacts to show on screen
+class ContactsViewModel @Inject constructor() : BaseViewModel() {
     private val contacts = MutableLiveData<List<Contact>>()
 
     fun getContacts(): LiveData<List<Contact>> = contacts
 
-    fun setContacts(contacts : List<Contact>){
+    fun setContacts(contacts: List<Contact>) {
         this.contacts.postValue(contacts)
+    }
+
+    fun clearContacts() {
+        contacts.value = emptyList()
     }
 
 }
