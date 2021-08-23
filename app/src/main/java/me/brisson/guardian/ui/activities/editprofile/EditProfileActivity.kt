@@ -35,10 +35,6 @@ class EditProfileActivity : BaseActivity() {
     private lateinit var binding: ActivityEditProfileBinding
     private lateinit var imageHelper: ImageHelper
 
-    private val user = Firebase.auth.currentUser
-    private var db = Firebase.firestore
-    private val usersReference = db.collection("users").document(user!!.uid)
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_edit_profile)
@@ -49,13 +45,15 @@ class EditProfileActivity : BaseActivity() {
         handleClickListeners()
     }
 
+    // Setting up user interface
     private fun setupUI() {
-        if (user != null) {
+        if (viewModel.getUser() != null) {
             viewModel.let { vm ->
-                vm.photo.value = user.photoUrl
-                vm.name.value = user.displayName
-                vm.email.value = user.email
-                vm.phoneNumber.value = user.phoneNumber
+                // Todo()
+                vm.photo.value = vm.getUser()!!.photoUrl
+                vm.name.value = vm.getUser()!!.displayName
+                vm.email.value = vm.getUser()!!.email
+                vm.phoneNumber.value = vm.getUser()!!.phoneNumber
 
                 binding.nameEditText.addTextChangedListener {
                     vm.name.value = it.toString()
@@ -84,12 +82,21 @@ class EditProfileActivity : BaseActivity() {
                         binding.changePasswordLayout.visibility = View.GONE
                     }
                 })
+
+                vm.getAnyException().observe(this, { exception ->
+                    Toast.makeText(
+                        this,
+                        exception!!.message,
+                        Toast.LENGTH_SHORT
+                    ).show()
+                })
             }
 
 
         }
     }
 
+    // Checking and handling text input errors
     private fun checkTextInputErrors(): Boolean {
         viewModel.let {
             it.nameError.value = it.name.value.isNullOrBlank()
@@ -119,44 +126,40 @@ class EditProfileActivity : BaseActivity() {
 
     }
 
+    // Checking changes in users when save button is clicked
     private fun handleClickListeners() {
         binding.saveFAB.setOnClickListener {
             if (!checkTextInputErrors()) {
 
-                if (viewModel.name.value != user!!.displayName) {
-                    changeUserName()
+                if (viewModel.name.value != viewModel.getUser()!!.displayName) {
+                    viewModel.changeUserName()
                 }
 
                 if (viewModel.photoBitmap.value != null) {
-                    handleImageUpload(viewModel.photoBitmap.value!!)
+                    viewModel.handleImageUpload(viewModel.photoBitmap.value!!)
                 }
 
-                if (viewModel.phoneNumber.value != user.phoneNumber) {
-                    changePhoneNumber()
+                if (viewModel.phoneNumber.value != viewModel.getUser()!!.phoneNumber) {
+                    viewModel.changePhoneNumber()
                 }
 
                 if (viewModel.changePassword.value!!) {
-                    changePassword()
+                    viewModel.changePassword()
                 }
 
-                if (viewModel.email.value != user.email) {
-                    changeUserEmail()
+                if (viewModel.email.value != viewModel.getUser()!!.email) {
+                    viewModel.changeUserEmail()
                 }
 
-                viewModel.reAuthRequest.observe(this, {
+                viewModel.getReAuthRequest().observe(this, {
                     when (it) {
-                        true -> {
-                            callReAuthDialog()
-                        }
-                        false -> {
-                            onBackPressed()
-                        }
-                        null -> {
-                        }
+                        true -> { callReAuthDialog() }
+                        false -> { onBackPressed() }
+                        null -> {  }
                     }
                 })
 
-                if (viewModel.anyError.value!!) {
+                if (viewModel.getAnyError().value!!) {
                     Toast.makeText(this, "There was an error!", Toast.LENGTH_SHORT).show()
                 }
 
@@ -173,190 +176,13 @@ class EditProfileActivity : BaseActivity() {
         }
     }
 
+    // Calling re auth dialog when needed
     private fun callReAuthDialog() {
         ReAuthDialog {
             if (it.isNotBlank()) {
-                reAuth(it)
+                viewModel.reAuth(it)
             }
         }.show(supportFragmentManager, "ReAuthDialog")
-    }
-
-    private fun changePassword() {
-        user!!.updatePassword(viewModel.newPassword.value!!)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    viewModel.reAuthRequest.value = false
-                    Log.d(TAG, "User password updated.")
-                } else {
-                    try {
-                        throw task.exception!!
-                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
-                        viewModel.reAuthRequest.value = true
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            this,
-                            task.exception!!.message,
-                            Toast.LENGTH_SHORT
-                        ).show()
-
-                        viewModel.anyError.value = true
-                        Log.w(TAG, e.message!!)
-                    }
-                }
-            }
-    }
-
-    private fun changePhoneNumber() {
-        //todo ???
-    }
-
-    private fun changeUserName() {
-        val profileUpdates = UserProfileChangeRequest.Builder()
-            .setDisplayName(viewModel.name.value!!)
-            .build()
-        user!!.updateProfile(profileUpdates)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    viewModel.reAuthRequest.value = false
-
-                    // Updating the user name in the "users" collections.
-                    usersReference.update("name", viewModel.name.value)
-                        .addOnSuccessListener { Log.d(TAG,"DocumentSnapshot successfully updated!") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
-
-
-                    Log.d(TAG, "User name updated.")
-                } else {
-                    try {
-                        throw task.exception!!
-                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
-                        viewModel.reAuthRequest.value = true
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            this,
-                            task.exception!!.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                        viewModel.anyError.value = true
-                        Log.e(TAG, e.message!!)
-                    }
-                }
-            }
-    }
-
-    private fun changeUserEmail() {
-        user!!.updateEmail(viewModel.email.value!!)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    viewModel.reAuthRequest.value = false
-
-                    // Updating the user email in the "users" collections.
-                    usersReference.update("email", viewModel.email.value)
-                        .addOnSuccessListener { Log.d(TAG,"DocumentSnapshot successfully updated!") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
-
-                    Log.d(TAG, "User email updated")
-                } else {
-                    try {
-                        throw task.exception!!
-                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
-                        viewModel.reAuthRequest.value = true
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            this,
-                            task.exception!!.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                        viewModel.anyError.value = true
-                        Log.e(TAG, e.message!!)
-                    }
-
-                }
-            }
-    }
-
-    private fun reAuth(currentPassword: String) {
-        val credential = EmailAuthProvider
-            .getCredential(user!!.email!!, currentPassword)
-
-        // Prompt the user to re-provide their sign-in credentials
-        user.reauthenticate(credential)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d(TAG, "User re-authenticated.")
-                } else {
-                    Toast.makeText(
-                        this,
-                        task.exception!!.message,
-                        Toast.LENGTH_LONG
-                    ).show()
-                    Log.w(TAG, "User re-authenticated failed.", task.exception)
-                }
-            }
-    }
-
-    private fun handleImageUpload(bitmap: Bitmap) {
-        val baos = ByteArrayOutputStream()
-        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
-        val uid = user?.uid
-
-
-        val reference = FirebaseStorage.getInstance().reference
-            .child("profileImages")
-            .child("$uid.jpeg")
-
-        reference.putBytes(baos.toByteArray())
-            .addOnSuccessListener {
-                getDownloadUrl(reference)
-            }
-            .addOnFailureListener {
-                Log.e(TAG, "onFailure: ", it.cause)
-            }
-
-    }
-
-    private fun getDownloadUrl(reference: StorageReference) {
-        reference.downloadUrl
-            .addOnSuccessListener {
-                Log.d(TAG, "getDownloadUrl Success: $it")
-                setUserProfileImageUrl(it)
-            }
-    }
-
-    private fun setUserProfileImageUrl(uri: Uri) {
-        val request = UserProfileChangeRequest.Builder()
-            .setPhotoUri(uri)
-            .build()
-
-        user!!.updateProfile(request)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    // Updating the user image in the "users" collections.
-                    usersReference.update("userImage", uri.toString())
-                        .addOnSuccessListener { Log.d(TAG,"DocumentSnapshot successfully updated!") }
-                        .addOnFailureListener { e -> Log.w(TAG, "Error updating document", e) }
-
-                    Log.d(TAG, "setUserProfileUrl: Successfully")
-                } else {
-                    try {
-                        throw task.exception!!
-                    } catch (e: FirebaseAuthRecentLoginRequiredException) {
-                        viewModel.reAuthRequest.value = true
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            this,
-                            task.exception!!.message,
-                            Toast.LENGTH_LONG
-                        ).show()
-
-                        viewModel.anyError.value = true
-                        Log.e(TAG, e.message!!)
-                    }
-                }
-            }
-
     }
 
     override fun onBackPressed() {
