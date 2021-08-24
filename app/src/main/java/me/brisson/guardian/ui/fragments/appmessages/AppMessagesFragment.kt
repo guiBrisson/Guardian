@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.databinding.FragmentAppMessagesBinding
+import me.brisson.guardian.ui.activities.chat.ChatActivity
 import me.brisson.guardian.ui.activities.contacts.ContactsActivity
 import me.brisson.guardian.ui.adapters.MessageAdapter
 import me.brisson.guardian.ui.base.BaseFragment
@@ -58,7 +59,7 @@ class AppMessagesFragment : BaseFragment() {
             }
 
             adapter.onItemClickListener = {
-                // TODO() open chat activity
+                startActivity(ChatActivity())
             }
         })
     }

@@ -57,6 +57,9 @@
     <string name="add_contact">Adicionar contato.</string>
     <string name="contacts">Contatos</string>
 
+    // chat
+    <string name="type_message">Digite uma mensagem</string>
+
     // place holders
     <string name="notification_placeholder">Você não possui\nnenhuma notificação</string>
     <string name="contacts_placeholder">Você não possui contatos</string>

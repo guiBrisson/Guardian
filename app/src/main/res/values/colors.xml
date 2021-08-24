@@ -11,9 +11,7 @@
     <color name="color_secondary">#2A2931</color>
     <color name="color_secondary_variant">#1D1D23</color>
 
-<!--    <color name="color_surface">#373741</color>-->
     <color name="color_surface">#1F1F1F</color>
-<!--    <color name="color_background">#33333D</color>-->
     <color name="color_background">#252525</color>
 
     <color name="color_error">#b00020</color>
