@@ -10,7 +10,7 @@ import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ItemContactMessageBinding
 
 class ContactMessageAdapter(
-   private val messages: ArrayList<Contact>
+   private val contacts: ArrayList<Contact>
 ) : RecyclerView.Adapter<ContactMessageAdapter.ViewHolder>(){
     lateinit var onItemClickListener: (item: Contact) -> Unit?
 
@@ -76,15 +76,15 @@ class ContactMessageAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        return holder.bind(messages[position])
+        return holder.bind(contacts[position])
     }
 
     override fun getItemCount(): Int {
-        return messages.size
+        return contacts.size
     }
 
     fun addData(items: List<Contact>){
-        messages.addAll(items)
+        contacts.addAll(items)
         notifyDataSetChanged()
     }
 }

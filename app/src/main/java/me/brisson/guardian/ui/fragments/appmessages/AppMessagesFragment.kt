@@ -56,11 +56,15 @@ class AppMessagesFragment : BaseFragment() {
             if (!it.isNullOrEmpty()) {
                 adapterContact.addData(it)
             }
-
-            adapterContact.onItemClickListener = {
-                startActivity(ChatActivity())
-            }
         })
+
+        adapterContact.onItemClickListener = { contact ->
+            // Sending contact to ChatActivity as serializable
+            val intent = Intent(requireActivity(), ChatActivity::class.java)
+            intent.putExtra("contact", contact)
+            startActivity(intent)
+
+        }
     }
 
 

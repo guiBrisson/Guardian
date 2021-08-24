@@ -21,6 +21,7 @@
             android:layout_height="wrap_content">
 
             <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/toolBar"
                 style="@style/Widget.MaterialComponents.Toolbar.Primary"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -47,7 +48,7 @@
             <ImageView
                 android:id="@+id/editTextBackgroundView"
                 android:layout_width="0dp"
-                android:layout_height="80dp"
+                android:layout_height="70dp"
                 android:src="@color/color_surface"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -57,20 +58,21 @@
             <EditText
                 android:id="@+id/editText"
                 android:layout_width="0dp"
-                android:layout_height="60dp"
+                android:layout_height="50dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="8dp"
                 android:background="@drawable/bg_edittext_rounded"
                 android:hint="@string/type_message"
                 android:imeOptions="actionSend"
+                android:importantForAutofill="no"
                 android:inputType="textAutoComplete"
                 android:paddingHorizontal="20dp"
+                android:text="@={viewModel.messageEditText}"
                 android:textColorHint="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/sendButton"
-                app:layout_constraintStart_toStartOf="parent"
-                android:importantForAutofill="no" />
+                app:layout_constraintStart_toStartOf="parent" />
 
             <ImageButton
                 android:id="@+id/sendButton"
