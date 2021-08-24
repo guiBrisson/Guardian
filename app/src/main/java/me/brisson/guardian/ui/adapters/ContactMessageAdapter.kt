@@ -7,16 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import me.brisson.guardian.R
 import me.brisson.guardian.data.model.Contact
-//import me.brisson.guardian.data.model.Message
-import me.brisson.guardian.databinding.ItemMessageBinding
+import me.brisson.guardian.databinding.ItemContactMessageBinding
 
-class MessageAdapter(
+class ContactMessageAdapter(
    private val messages: ArrayList<Contact>
-) : RecyclerView.Adapter<MessageAdapter.ViewHolder>(){
+) : RecyclerView.Adapter<ContactMessageAdapter.ViewHolder>(){
     lateinit var onItemClickListener: (item: Contact) -> Unit?
 
     class ViewHolder(
-        private val binding: ItemMessageBinding,
+        private val binding: ItemContactMessageBinding,
         private val onItemClickListener: (item: Contact) -> Unit?
     ) : RecyclerView.ViewHolder(binding.root){
 
@@ -68,7 +67,7 @@ class MessageAdapter(
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         return ViewHolder(
-            ItemMessageBinding.inflate(
+            ItemContactMessageBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false

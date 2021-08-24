@@ -10,9 +10,8 @@ import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.databinding.FragmentAppMessagesBinding
 import me.brisson.guardian.ui.activities.chat.ChatActivity
 import me.brisson.guardian.ui.activities.contacts.ContactsActivity
-import me.brisson.guardian.ui.adapters.MessageAdapter
+import me.brisson.guardian.ui.adapters.ContactMessageAdapter
 import me.brisson.guardian.ui.base.BaseFragment
-import me.brisson.guardian.utils.Status
 
 @AndroidEntryPoint
 class AppMessagesFragment : BaseFragment() {
@@ -23,7 +22,7 @@ class AppMessagesFragment : BaseFragment() {
 
     private lateinit var binding: FragmentAppMessagesBinding
     private val viewModel = AppMessagesViewModel()
-    private lateinit var adapter: MessageAdapter
+    private lateinit var adapterContact: ContactMessageAdapter
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,17 +47,17 @@ class AppMessagesFragment : BaseFragment() {
     }
 
     private fun setUpRecycler() {
-        adapter = MessageAdapter(arrayListOf())
-        binding.recycler.adapter = adapter
+        adapterContact = ContactMessageAdapter(arrayListOf())
+        binding.recycler.adapter = adapterContact
         binding.recycler.layoutManager =
             LinearLayoutManager(activity, LinearLayoutManager.VERTICAL, false)
 
         viewModel.getContacts().observe(viewLifecycleOwner, {
             if (!it.isNullOrEmpty()) {
-                adapter.addData(it)
+                adapterContact.addData(it)
             }
 
-            adapter.onItemClickListener = {
+            adapterContact.onItemClickListener = {
                 startActivity(ChatActivity())
             }
         })
