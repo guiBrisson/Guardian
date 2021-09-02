@@ -99,6 +99,7 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
                 .collection(toId.value!!)
                 .add(message)
                 .addOnSuccessListener {
+                    lastMessage(message)
                     Log.d(
                         TAG,
                         "sendMessage: Document $fromId created successfully\n" +
@@ -132,12 +133,37 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    // Updating contact last message
+    // Updating chat last message
     private fun lastMessage(message: Message) {
         usersRef
             .document(toId.value!!)
             .collection("contacts")
             .document(fromId)
+            .apply {
+                // Updating last contact message
+                update("lastMessage", message.message)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "lastMessage: Success.")
+                    }
+                    .addOnFailureListener {
+                        anyException.value = it
+                        Log.e(TAG, "lastMessage: ", it.cause)
+                    }
+                // Updating last contact message time stamp
+                update("lastMessageTimer", message.timeStamp)
+                    .addOnSuccessListener {
+                        Log.d(TAG, "lastMessageTimer: Success.")
+                    }
+                    .addOnFailureListener {
+                        anyException.value = it
+                        Log.e(TAG, "lastMessageTimer: ", it.cause)
+                    }
+            }
+
+        usersRef
+            .document(fromId)
+            .collection("contacts")
+            .document(toId.value!!)
             .apply {
                 // Updating last contact message
                 update("lastMessage", message.message)
