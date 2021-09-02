@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.squareup.picasso.Picasso
 import me.brisson.guardian.R
 import me.brisson.guardian.data.model.Contact
+import me.brisson.guardian.data.model.User
 import me.brisson.guardian.databinding.ItemContactMessageBinding
 import kotlin.collections.ArrayList
 
