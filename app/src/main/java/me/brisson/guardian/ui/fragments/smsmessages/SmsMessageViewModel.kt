@@ -32,19 +32,10 @@ class SmsMessageViewModel @Inject constructor() : BaseViewModel() {
             .addOnSuccessListener { contacts ->
                 // Mapping and adding app contacts
                 val contactSms = ArrayList<Contact>()
-                for (contact in contacts) {
-                    contactSms.add(
-                        Contact(
-                            uid = contact.getString("uid")!!,
-                            name = contact.getString("name")!!,
-                            isPhoneContact = contact.getBoolean("isPhoneContact")!!,
-                            photo = contact.getString("photo"),
-                            phoneNo = contact.getString("phoneNo"),
-                            isGuardian = contact.getBoolean("isGuardian")!!,
-                            lastMessage = contact.getString("lastMessage"),
-                            lastMessageTimer = contact.getString("lastMessageTimer")
-                        )
-                    )
+                if (!contacts.isEmpty){
+                    for (contact in contacts) {
+                        contactSms.add(contact.toObject(Contact::class.java))
+                    }
                 }
 
                 smsContacts.value = contactSms

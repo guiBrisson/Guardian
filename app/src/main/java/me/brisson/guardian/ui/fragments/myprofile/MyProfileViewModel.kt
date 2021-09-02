@@ -1,6 +1,5 @@
 package me.brisson.guardian.ui.fragments.myprofile
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth

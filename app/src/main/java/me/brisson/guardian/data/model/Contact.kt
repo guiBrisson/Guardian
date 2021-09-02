@@ -14,7 +14,7 @@ data class Contact(
 
         // Message related
         val lastMessage: String? = "",
-        val lastMessageTimer: String? = "",
+        val lastMessageTimer: Long? = 0,
         val newMessagesCount: Int? = 0,
 
 ) : Serializable

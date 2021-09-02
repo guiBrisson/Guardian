@@ -17,6 +17,7 @@
         android:fitsSystemWindows="true">
 
         <com.google.android.material.appbar.AppBarLayout
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -84,7 +85,7 @@
                 android:background="@android:color/transparent"
                 android:paddingHorizontal="8dp"
                 android:src="@drawable/ic_baseline_send_24"
-                android:tint="@color/gray"
+                app:tint="@color/gray"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@id/editText"

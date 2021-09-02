@@ -39,6 +39,10 @@ class ChatActivity : BaseActivity() {
         // Setting the title bar as contact name
         binding.toolBar.title = viewModel.getContact().value?.name
 
+        binding.toolBar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         // When clicked on the 'keyboard SEND', perform the sendButton
         binding.editText.setOnEditorActionListener { _, i, _ ->
             return@setOnEditorActionListener when (i) {
@@ -59,6 +63,7 @@ class ChatActivity : BaseActivity() {
         binding.sendButton.setOnClickListener {
             viewModel.sendMessage()
             binding.editText.text.clear()
+            binding.editText.clearFocus()
         }
     }
 
