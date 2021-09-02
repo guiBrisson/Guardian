@@ -60,7 +60,7 @@ class SignUpViewModel @Inject constructor() : BaseViewModel() {
                         email = email.value!!,
                         userImage = ""
                     )
-                    addNewUserToCollection(newUser)
+                    addNewUserToUsersCollection(newUser)
 
                     Log.d(TAG, "User profile updated.")
                 } else {
@@ -69,7 +69,7 @@ class SignUpViewModel @Inject constructor() : BaseViewModel() {
             }
     }
 
-    private fun addNewUserToCollection(newUser: User) {
+    private fun addNewUserToUsersCollection(newUser: User) {
         FirebaseFirestore.getInstance().collection("users")
             .document(newUser.uid) // document path
             .set(newUser)
@@ -79,7 +79,8 @@ class SignUpViewModel @Inject constructor() : BaseViewModel() {
                     Log.d(
                         TAG, "User Added to users collection."
                     )
-                } else {
+                }
+                else {
                     userCreatedSuccessListener.value = false
                     Log.w(TAG, "Error adding user to user collection: ", task2.exception)
                 }

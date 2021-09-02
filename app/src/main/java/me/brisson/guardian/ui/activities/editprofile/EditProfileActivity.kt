@@ -159,7 +159,7 @@ class EditProfileActivity : BaseActivity() {
                     }
                 })
 
-                if (viewModel.getAnyError().value!!) {
+                if (viewModel.getAnyError().value == true) {
                     Toast.makeText(this, "There was an error!", Toast.LENGTH_SHORT).show()
                 }
 

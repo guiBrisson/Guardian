@@ -37,8 +37,10 @@ class MyProfileFragment : BaseFragment() {
     ): View {
         binding = FragmentMyProfileBinding.inflate(inflater, container, false)
         binding.viewModel = viewModel
+        viewModel.user.observe(viewLifecycleOwner) {
+            setupUI(it)
+        }
 
-        setupUI(FirebaseAuth.getInstance().currentUser)
         handleClickListeners()
 
         return binding.root
@@ -91,10 +93,6 @@ class MyProfileFragment : BaseFragment() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        setupUI(FirebaseAuth.getInstance().currentUser)
-    }
 
 
 }

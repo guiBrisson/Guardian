@@ -24,14 +24,14 @@ class LoginViewModel @Inject constructor() : BaseViewModel() {
 
     fun getSignInWithEmailAndPasswordSuccessListener(): LiveData<Boolean> = signInWithEmailAndPasswordSuccessListener
 
-    fun signInFirebase() {
+    fun firebaseAuth() {
         auth.signInWithEmailAndPassword(email.value!!, password.value!!)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     signInWithEmailAndPasswordSuccessListener.value = true
                     Log.d(TAG, "signInFirebase: Successfully")
                 } else {
-                    signInWithEmailAndPasswordSuccessListener.value = true
+                    signInWithEmailAndPasswordSuccessListener.value = false
                     Log.w(TAG, "signInFirebase: Failure", task.exception)
 
                 }

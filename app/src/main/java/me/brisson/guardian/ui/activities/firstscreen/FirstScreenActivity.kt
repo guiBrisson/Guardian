@@ -44,6 +44,7 @@ class FirstScreenActivity : BaseActivity() {
 
     }
 
+    // Todo: Fix the socials login
     private fun initializeSocialsLogin() {
         socialsLogin = SocialsLogin(this)
 

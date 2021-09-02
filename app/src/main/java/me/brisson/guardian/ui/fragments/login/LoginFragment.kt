@@ -51,12 +51,14 @@ class LoginFragment : BaseFragment() {
             }
         }
 
+        // Enter button listener
         binding.enterButton.setOnClickListener {
             if (!checkingEditTextErrors()) {
-                viewModel.signInFirebase()
+                viewModel.firebaseAuth()
             }
         }
 
+        // Forgot password button listener
         binding.forgotPasswordButton.setOnClickListener {
             startActivity(ForgotPasswordActivity())
         }

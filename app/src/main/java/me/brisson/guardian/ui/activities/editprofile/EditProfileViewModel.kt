@@ -33,8 +33,8 @@ class EditProfileViewModel @Inject constructor() : BaseViewModel() {
     val emailError = MutableLiveData<Boolean>().apply { value = false }
     val newPasswordError = MutableLiveData<Boolean>().apply { value = false }
 
-    private val anyError = MutableLiveData<Boolean>()
-    fun getAnyError(): LiveData<Boolean> = anyError
+    private val anyError = MutableLiveData<Boolean?>()
+    fun getAnyError(): LiveData<Boolean?> = anyError
 
     private val anyException = MutableLiveData<Exception>()
     fun getAnyException(): LiveData<Exception> = anyException
