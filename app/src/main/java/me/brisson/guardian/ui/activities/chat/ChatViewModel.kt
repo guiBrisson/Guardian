@@ -21,7 +21,6 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
     private val user = MutableLiveData<User>()
     private val fromId = Firebase.auth.currentUser!!.uid // current user uid
     private val toId = MutableLiveData<String>() // contact uid
-    private val timeStamp = System.currentTimeMillis() // current time
     val messageEditText = MutableLiveData<String>() // message from edit text
 
     private val db = Firebase.firestore
@@ -99,7 +98,7 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
                 .collection(toId.value!!)
                 .add(message)
                 .addOnSuccessListener {
-                    lastMessage(message)
+                    updateLastMessage(message)
                     Log.d(
                         TAG,
                         "sendMessage: Document $fromId created successfully\n" +
@@ -117,7 +116,7 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
                 .collection(fromId)
                 .add(message)
                 .addOnSuccessListener {
-                    lastMessage(message)
+                    updateLastMessage(message)
                     Log.d(
                         TAG,
                         "sendMessage: Document ${toId.value!!} created successfully\n" +
@@ -133,8 +132,8 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
         }
     }
 
-    // Updating chat last message
-    private fun lastMessage(message: Message) {
+    // Updating contact's last message
+    private fun updateLastMessage(message: Message) {
         usersRef
             .document(toId.value!!)
             .collection("contacts")
@@ -192,7 +191,7 @@ class ChatViewModel @Inject constructor() : BaseViewModel() {
                 fromId = fromId,
                 toId = toId.value!!,
                 message = messageEditText.value,
-                timeStamp = timeStamp,
+                timeStamp = System.currentTimeMillis() // current time
             )
         } else {
             null
