@@ -71,6 +71,15 @@
         <activity android:name=".ui.activities.firstscreen.FirstScreenActivity" />
         <activity android:name=".ui.activities.editprofile.EditProfileActivity" />
         <activity android:name=".ui.activities.chat.ChatActivity"/>
+        
+        <service
+            android:name=".utils.FirebaseCloudMessagingService"
+            android:stopWithTask="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+
     </application>
 
 </manifest>
