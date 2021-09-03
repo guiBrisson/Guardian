@@ -11,6 +11,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import me.brisson.guardian.App
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivityMainBinding
 import me.brisson.guardian.ui.base.BaseActivity

@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
+import me.brisson.guardian.App
 import me.brisson.guardian.R
 import me.brisson.guardian.data.model.Contact
 import me.brisson.guardian.databinding.ActivityChatBinding

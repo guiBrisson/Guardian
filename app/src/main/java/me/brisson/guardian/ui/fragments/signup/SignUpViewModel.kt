@@ -58,7 +58,8 @@ class SignUpViewModel @Inject constructor() : BaseViewModel() {
                         uid = user.uid,
                         name = name.value!!,
                         email = email.value!!,
-                        userImage = ""
+                        userImage = "",
+                        online = true
                     )
                     addNewUserToUsersCollection(newUser)
 

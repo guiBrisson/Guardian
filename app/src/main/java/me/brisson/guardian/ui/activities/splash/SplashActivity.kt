@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import dagger.hilt.android.AndroidEntryPoint
+import me.brisson.guardian.App
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.ActivitySplashBinding
 import me.brisson.guardian.ui.activities.firstscreen.FirstScreenActivity
@@ -29,6 +30,10 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash)
         binding.viewModel = viewModel
+
+        // Registering application lifecycle callbacks
+        val application: App = application as App
+        getApplication().registerActivityLifecycleCallbacks(application)
 
         // Checking if there is a logged user
         Handler(Looper.myLooper()!!).postDelayed({
