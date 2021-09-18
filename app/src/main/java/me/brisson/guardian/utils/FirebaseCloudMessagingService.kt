@@ -3,7 +3,7 @@ package me.brisson.guardian.utils
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.messaging.FirebaseMessagingService
-
+//todo: chat message notifications
 class FirebaseCloudMessagingService:  FirebaseMessagingService() {
 
     // Updating user's token
