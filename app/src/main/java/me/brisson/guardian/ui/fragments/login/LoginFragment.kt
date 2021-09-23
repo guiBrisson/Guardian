@@ -8,13 +8,13 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentLoginBinding
 import me.brisson.guardian.ui.activities.forgotpassword.ForgotPasswordActivity
 import me.brisson.guardian.ui.activities.main.MainActivity
 import me.brisson.guardian.ui.base.BaseFragment
-
 
 @AndroidEntryPoint
 class LoginFragment : BaseFragment() {
@@ -24,7 +24,7 @@ class LoginFragment : BaseFragment() {
     }
 
     private lateinit var binding: FragmentLoginBinding
-    private val viewModel = LoginViewModel()
+    private val viewModel: LoginViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

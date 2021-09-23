@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.viewModels
 import dagger.hilt.android.AndroidEntryPoint
 import me.brisson.guardian.R
 import me.brisson.guardian.databinding.FragmentSignUpBinding
@@ -23,7 +24,7 @@ class SignUpFragment : BaseFragment() {
     }
 
     private lateinit var binding: FragmentSignUpBinding
-    private val viewModel = SignUpViewModel()
+    private val viewModel: SignUpViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -109,12 +110,12 @@ class SignUpFragment : BaseFragment() {
 
     }
 
-    override fun onStart() {
-        super.onStart()
-        // Check if user is signed in (non-null) and update UI accordingly.
-        val currentUser = viewModel.getAuth().currentUser
-        if (currentUser != null) {
-            startActivity(MainActivity())
-        }
-    }
+//    override fun onStart() {
+//        super.onStart()
+//        // Check if user is signed in (non-null) and update UI accordingly.
+//        val currentUser = viewModel.getAuth().currentUser
+//        if (currentUser != null) {
+//            startActivity(MainActivity())
+//        }
+//    }
 }
