@@ -80,8 +80,6 @@ class SignUpViewModel @Inject constructor(
                 userCreatedSuccessListener.value = false
                 Log.w(TAG, "Error adding user to user collection: ", it)
             }
-
-
     }
 
     companion object {

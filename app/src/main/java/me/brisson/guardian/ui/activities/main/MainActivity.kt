@@ -66,6 +66,15 @@ class MainActivity : BaseActivity() {
         } else {
             binding.allowLocationButton.visibility = View.VISIBLE
         }
+
+        binding.fab.setOnClickListener {
+            makeActionSnackBar(
+                binding.mainContainer,
+                "Mensagem de socorro enviada para os Guarians",
+                "Ok",
+                clickFunc = {  }
+            ).setAnchorView(binding.fab).show()
+        }
     }
 
     private fun bottomNavigationSetUp() {

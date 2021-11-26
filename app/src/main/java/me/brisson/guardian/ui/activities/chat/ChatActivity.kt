@@ -55,11 +55,11 @@ class ChatActivity : BaseActivity() {
             }
         }
 
-        viewModel.getAnyException().observe(this, {
-            if (it != null) {
-                Toast.makeText(this, it.cause.toString(), Toast.LENGTH_SHORT).show()
-            }
-        })
+//        viewModel.getAnyException().observe(this, {
+//            if (it != null) {
+//                Toast.makeText(this, it.cause.toString(), Toast.LENGTH_SHORT).show()
+//            }
+//        })
 
         binding.sendButton.setOnClickListener {
             viewModel.sendMessage()
